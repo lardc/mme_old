@@ -28,17 +28,17 @@
         <ui:DvdtTestTypeToVisibilityUnConverter x:Key="DT2VB"/>
         <ui:QrrTqModeVisibilityConverter x:Key="QrrTqM2V" />
         <Style x:Key="WarningFaultLabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource CLabelStyle}">
-            <Setter Property="Height" Value="44" />
+            <Setter Property="Height" Value="30" />
             <Setter Property="Padding" Value="10,0" />
             <Setter Property="Margin" Value="10,1,0,0" />
             <Setter Property="BorderThickness" Value="0,0,0,0" />
             <Setter Property="BorderBrush" Value="{StaticResource xBlue1}" />
-            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextElement.FontSize" Value="12" />
         </Style>
         
         <customControl:ResultsDataTemplateDictionary x:Key="ResultsDataTemplateDictionary" >
             <DataTemplate DataType="gateParameters:TestParameters" x:Key="GateParametersTemplate">
-                <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Margin="0,-5,5,0" Padding="5,0,0,0">
                     <Grid >
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource MB2V}">
@@ -74,56 +74,56 @@
 
                         <customControls:LabelWithIndex Content="{x:Static res:Resources.Kelvin}" Grid.Column="0" Grid.Row="0" Height="Auto" />
                         <Label Name="labelKelvinResult1" Grid.Column="4" Grid.Row="0" Content="OK"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="8,1,-6,0"/>
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="8,0,-6,0"/>
                         <Label Name="labelKelvinResult2" Grid.Column="6" Grid.Row="0" Content="OK"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" />
 
                         <customControls:LabelWithIndex Content="Rg" Grid.Column="0" Grid.Row="1" Height="Auto" />
                         <TextBlock Text="Ом" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Label Name="labelRgResult1" Grid.Column="4" Grid.Row="1" Content="0"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto"  Margin="8,1,-6,0"/>
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto"  Margin="8,0,-6,0"/>
                         <Label Name="labelRgResult2" Grid.Column="6" Grid.Row="1" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" />
 
                         <customControls:LabelWithIndex Content="IGT" Grid.Column="0" Grid.Row="2" Height="Auto" />
                         <TextBlock Text="мА" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Label Name="labelIgtResult1" Grid.Column="4" Grid.Row="2" Content="0"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto"  Margin="8,1,-6,0"/>
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto"  Margin="8,0,-6,0"/>
                         <Label Name="labelIgtResult2" Grid.Column="6" Grid.Row="2" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" />
 
                         <customControls:LabelWithIndex Content="UGT" Grid.Column="0" Grid.Row="3" Height="Auto" />
                         <TextBlock Text="В" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Label Name="labelVgtResult1"  Grid.Column="4" Grid.Row="3" Content="0"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,1,-6,0" />
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,0,-6,0" />
                         <Label Name="labelVgtResult2"  Grid.Column="6" Grid.Row="3" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" />
 
                         <customControls:LabelWithIndex Content="IH" Grid.Column="0" Grid.Row="4" Height="Auto" Visibility="{Binding IsIhEnabled, Converter={StaticResource B2V}}"/>
                         <TextBlock Text="мА" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsIhEnabled, Converter={StaticResource B2V}}"/>
                         <Label Name="labelIhResult1"  Grid.Column="4" Grid.Row="4" Content="0"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,1,-6,0" Visibility="{Binding IsIhEnabled, Converter={StaticResource B2V}}"/>
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,0,-6,0" Visibility="{Binding IsIhEnabled, Converter={StaticResource B2V}}"/>
                         <Label Name="labelIhResult2"  Grid.Column="6" Grid.Row="4" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Visibility="{Binding IsIhEnabled, Converter={StaticResource B2V}}"/>
 
                         <customControls:LabelWithIndex Content="IL" Grid.Column="0" Grid.Row="5" Height="Auto" Visibility="{Binding IsIlEnabled, Converter={StaticResource B2V}}"/>
                         <TextBlock Text="мА" Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsIlEnabled, Converter={StaticResource B2V}}"/>
                         <Label Name="labelIlResult1"  Grid.Column="4" Grid.Row="5" Content="0"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,1,-6,0" Visibility="{Binding IsIlEnabled, Converter={StaticResource B2V}}"/>
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,0,-6,0" Visibility="{Binding IsIlEnabled, Converter={StaticResource B2V}}"/>
                         <Label Name="labelIlResult2"  Grid.Column="6" Grid.Row="5" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Visibility="{Binding IsIlEnabled, Converter={StaticResource B2V}}"/>
 
                         <customControls:LabelWithIndex Content="IGD" Grid.Column="0" Grid.Row="6" Height="Auto" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"/>
                         <TextBlock Text="мА" Grid.Column="2" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"/>
                         <Label Name="labelIgntResult1"  Grid.Column="4" Grid.Row="6" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,1,-6,0" />
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,0,-6,0" />
                         <Label Name="labelIgntResult2"  Grid.Column="6" Grid.Row="6" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" />
 
                         <customControls:LabelWithIndex Content="UGD" Grid.Column="0" Grid.Row="7" Height="Auto" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"/>
                         <TextBlock Text="мВ" Grid.Column="2" Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"/>
                         <Label Name="labelVgntResult1"  Grid.Column="4" Grid.Row="7" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,1,-6,0" />
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,0,-6,0" />
                         <Label Name="labelVgntResult2"  Grid.Column="6" Grid.Row="7" Visibility="{Binding UseVgnt, Converter={StaticResource B2V}}"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" />
 
@@ -143,7 +143,7 @@
                 </Border>
             </DataTemplate>
             <DataTemplate DataType="vtmParameters:TestParameters" x:Key="VtmParametersTemplate">
-                <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Margin="0,-5,5,0" Padding="5,0,0,0">
                     <Grid >
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource MB2V}">
@@ -173,12 +173,12 @@
                         
                         <customControls:LabelWithIndex Content="UTM" Grid.Column="0" Grid.Row="0" />
                         <TextBlock Text="В" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Name="labelVtmResult1" Grid.Column="4" Grid.Row="0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,1,-6,0"/>
+                        <Label Name="labelVtmResult1" Grid.Column="4" Grid.Row="0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,0,-6,0"/>
                         <Label Name="labelVtmResult2" Grid.Column="6" Grid.Row="0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto"/>
 
                         <customControls:LabelWithIndex Content="ITM" Grid.Column="0" Grid.Row="1"/>
                         <TextBlock Text="А" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Name="labelItmResult1" Grid.Column="4" Grid.Row="1" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,1,-6,0"/>
+                        <Label Name="labelItmResult1" Grid.Column="4" Grid.Row="1" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto" Margin="8,0,-6,0"/>
                         <Label Name="labelItmResult2" Grid.Column="6" Grid.Row="1" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto"/>
 
                         <Label Name="labelVtmWarning1"  Background="Gold" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="7"
@@ -197,177 +197,179 @@
             </DataTemplate>
             
             <DataTemplate DataType="bvtParameters:TestParameters" x:Key="BvtParametersTemplate">
-                <Grid >
-                    <Grid.Visibility>
-                    <MultiBinding Converter="{StaticResource MB2V}">
-                        <Binding Path="IsEnabled" />
-                        <Binding Source="{x:Static uiServiceConfig:Settings.Default}" Path="BvtIsVisible" />
-                    </MultiBinding>
-                </Grid.Visibility>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="130"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="80"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                <Border BorderThickness="1" BorderBrush="Black" Margin="0,-5,5,0" Padding="5,0,0,0">
+                    <Grid >
+                        <Grid.Visibility>
+                            <MultiBinding Converter="{StaticResource MB2V}">
+                                <Binding Path="IsEnabled" />
+                                <Binding Source="{x:Static uiServiceConfig:Settings.Default}" Path="BvtIsVisible" />
+                            </MultiBinding>
+                        </Grid.Visibility>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
 
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <Rectangle Fill="Black" Grid.Column="1" Grid.RowSpan="9" Width="1"/>
-                    <Rectangle Fill="Black" Grid.Column="3" Grid.RowSpan="9" Margin="0,0,-15,0" Width="1"/>
+                        <Rectangle Fill="Black" Grid.Column="1" Grid.RowSpan="9" Width="1"/>
+                        <Rectangle Fill="Black" Grid.Column="3" Grid.RowSpan="9" Margin="0,0,-15,0" Width="1"/>
 
-                    <customControls:LabelWithIndex Name="labelWithIndexBvtVdrmVResult1" Grid.Column="0" Grid.Row="0"
+                        <customControls:LabelWithIndex Name="labelWithIndexBvtVdrmVResult1" Grid.Column="0" Grid.Row="0"
                                                    Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=1}"/>
-                    <TextBlock Text="В" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Label Name="labelBvtVdrmResult1"  Grid.Column="4" Grid.Row="0" Content="0"
+                        <TextBlock Text="В" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Label Name="labelBvtVdrmResult1"  Grid.Column="4" Grid.Row="0" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}"
                        Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=1}"
                        Height="Auto"/>
 
-                    <customControls:LabelWithIndex Content="IDRM" Grid.Column="0" Grid.Row="1"
+                        <customControls:LabelWithIndex Content="IDRM" Grid.Column="0" Grid.Row="1"
                                                    Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=1}"/>
-                    <TextBlock Text="мА" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Label Name="labelBvtIdrmResult1" Grid.Column="4" Grid.Row="1" Content="0"
+                        <TextBlock Text="мА" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Label Name="labelBvtIdrmResult1" Grid.Column="4" Grid.Row="1" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}"
                        Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=1}"
                        Height="Auto"/>
 
-                    <customControls:LabelWithIndex Name="labelWithIndexBvtVrrmVResult1"   Grid.Column="0" Grid.Row="2"
+                        <customControls:LabelWithIndex Name="labelWithIndexBvtVrrmVResult1"   Grid.Column="0" Grid.Row="2"
                                                    Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=2}"
                                                    />
-                    <TextBlock Text="В" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Label Name="labelBvtVrrmResult1"  Grid.Column="4" Grid.Row="2" Content="0"
+                        <TextBlock Text="В" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Label Name="labelBvtVrrmResult1"  Grid.Column="4" Grid.Row="2" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}"
                        Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=2}"
                        Height="Auto"/>
 
-                    <customControls:LabelWithIndex Content="{x:Static res:Resources.Irrm_mA}" Grid.Column="0" Grid.Row="3"
+                        <customControls:LabelWithIndex Content="{x:Static res:Resources.Irrm_mA}" Grid.Column="0" Grid.Row="3"
                                                    Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=2}"
                                                    Grid.ColumnSpan="2" />
-                    <Label Name="labelBvtIrrmResult1"  Grid.Column="1" Grid.Row="3" Content="0"
+                        <Label Name="labelBvtIrrmResult1"  Grid.Column="1" Grid.Row="3" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}"
                        Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=2}"
                         />
 
 
-                    <customControls:LabelWithIndex Content="{x:Static res:Resources.VDSM_V}" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
-                        <customControls:LabelWithIndex.Resources>
-                            <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
-                        </customControls:LabelWithIndex.Resources>
-                        <customControls:LabelWithIndex.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
-                            </MultiBinding>
-                        </customControls:LabelWithIndex.Visibility>
-                    </customControls:LabelWithIndex>
-                    <Label Name="labelBvtVdsmResult1" Grid.Column="1" Grid.Row="4" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
-                        <Label.Resources>
-                            <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
-                        </Label.Resources>
-                        <Label.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
-                            </MultiBinding>
-                        </Label.Visibility>
-                    </Label>
+                        <customControls:LabelWithIndex Content="{x:Static res:Resources.VDSM_V}" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
+                            <customControls:LabelWithIndex.Resources>
+                                <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
+                            </customControls:LabelWithIndex.Resources>
+                            <customControls:LabelWithIndex.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
+                                </MultiBinding>
+                            </customControls:LabelWithIndex.Visibility>
+                        </customControls:LabelWithIndex>
+                        <Label Name="labelBvtVdsmResult1" Grid.Column="1" Grid.Row="4" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
+                            <Label.Resources>
+                                <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
+                            </Label.Resources>
+                            <Label.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
+                                </MultiBinding>
+                            </Label.Visibility>
+                        </Label>
 
-                    <customControls:LabelWithIndex Content="{x:Static res:Resources.IDSM_mA}" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
-                        <customControls:LabelWithIndex.Resources>
-                            <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
-                        </customControls:LabelWithIndex.Resources>
-                        <customControls:LabelWithIndex.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
-                            </MultiBinding>
-                        </customControls:LabelWithIndex.Visibility>
-                    </customControls:LabelWithIndex>
-                    <Label Name="labelBvtIdsmResult1" Grid.Column="1" Grid.Row="5" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
-                        <Label.Resources>
-                            <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
-                        </Label.Resources>
-                        <Label.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
-                            </MultiBinding>
-                        </Label.Visibility>
-                    </Label>
+                        <customControls:LabelWithIndex Content="{x:Static res:Resources.IDSM_mA}" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
+                            <customControls:LabelWithIndex.Resources>
+                                <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
+                            </customControls:LabelWithIndex.Resources>
+                            <customControls:LabelWithIndex.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
+                                </MultiBinding>
+                            </customControls:LabelWithIndex.Visibility>
+                        </customControls:LabelWithIndex>
+                        <Label Name="labelBvtIdsmResult1" Grid.Column="1" Grid.Row="5" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
+                            <Label.Resources>
+                                <sys:Int32 x:Key="IndexOfDirectInEnum">1</sys:Int32>
+                            </Label.Resources>
+                            <Label.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfDirectInEnum}"/>
+                                </MultiBinding>
+                            </Label.Visibility>
+                        </Label>
 
-                    <customControls:LabelWithIndex Content="{x:Static res:Resources.VRSM_V}" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
-                        <customControls:LabelWithIndex.Resources>
-                            <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
-                        </customControls:LabelWithIndex.Resources>
-                        <customControls:LabelWithIndex.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
-                            </MultiBinding>
-                        </customControls:LabelWithIndex.Visibility>
-                    </customControls:LabelWithIndex>
-                    <Label Name="labelBvtVrsmResult1" Grid.Column="1" Grid.Row="6" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
-                        <Label.Resources>
-                            <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
-                        </Label.Resources>
-                        <Label.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
-                            </MultiBinding>
-                        </Label.Visibility>
-                    </Label>
+                        <customControls:LabelWithIndex Content="{x:Static res:Resources.VRSM_V}" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
+                            <customControls:LabelWithIndex.Resources>
+                                <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
+                            </customControls:LabelWithIndex.Resources>
+                            <customControls:LabelWithIndex.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
+                                </MultiBinding>
+                            </customControls:LabelWithIndex.Visibility>
+                        </customControls:LabelWithIndex>
+                        <Label Name="labelBvtVrsmResult1" Grid.Column="1" Grid.Row="6" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
+                            <Label.Resources>
+                                <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
+                            </Label.Resources>
+                            <Label.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
+                                </MultiBinding>
+                            </Label.Visibility>
+                        </Label>
 
-                    <customControls:LabelWithIndex Content="{x:Static res:Resources.IRSM_mA}" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
-                        <customControls:LabelWithIndex.Resources>
-                            <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
-                        </customControls:LabelWithIndex.Resources>
-                        <customControls:LabelWithIndex.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
-                            </MultiBinding>
-                        </customControls:LabelWithIndex.Visibility>
-                    </customControls:LabelWithIndex>
-                    <Label Name="labelBvtIrsmResult1" Grid.Column="1" Grid.Row="7" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
-                      <Label.Resources>
-                            <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
-                        </Label.Resources>
-                        <Label.Visibility>
-                            <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
-                                <Binding Path="UdsmUrsmTestType"/>
-                                <Binding Path="UseUdsmUrsm"/>
-                                <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
-                            </MultiBinding>
-                        </Label.Visibility>  
-                    </Label>
+                        <customControls:LabelWithIndex Content="{x:Static res:Resources.IRSM_mA}" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
+                            <customControls:LabelWithIndex.Resources>
+                                <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
+                            </customControls:LabelWithIndex.Resources>
+                            <customControls:LabelWithIndex.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
+                                </MultiBinding>
+                            </customControls:LabelWithIndex.Visibility>
+                        </customControls:LabelWithIndex>
+                        <Label Name="labelBvtIrsmResult1" Grid.Column="1" Grid.Row="7" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}">
+                            <Label.Resources>
+                                <sys:Int32 x:Key="IndexOfReverseInEnum">2</sys:Int32>
+                            </Label.Resources>
+                            <Label.Visibility>
+                                <MultiBinding Converter="{StaticResource MBvtRSMTT2V}">
+                                    <Binding Path="UdsmUrsmTestType"/>
+                                    <Binding Path="UseUdsmUrsm"/>
+                                    <Binding Source="{StaticResource IndexOfReverseInEnum}"/>
+                                </MultiBinding>
+                            </Label.Visibility>
+                        </Label>
 
-                    <Label x:Name="labelBvtWarning1"  Background="Gold" Grid.Column="0" Grid.Row="8" Content="Warning" Grid.ColumnSpan="2" Style="{StaticResource WarningFaultLabelStyle}" Margin="-5,0,0,0"/>
-                    <Label x:Name="labelBvtFault1" Background="Tomato" Grid.Column="1" Grid.Row="8" Content="Fault" Style="{StaticResource WarningFaultLabelStyle}" Margin="-5,0,0,0"/>
-                </Grid>
+                        <Label x:Name="labelBvtWarning1"  Background="Gold" Grid.Column="0" Grid.Row="8" Content="Warning" Grid.ColumnSpan="2" Style="{StaticResource WarningFaultLabelStyle}" Margin="-5,0,0,0"/>
+                        <Label x:Name="labelBvtFault1" Background="Tomato" Grid.Column="1" Grid.Row="8" Content="Fault" Style="{StaticResource WarningFaultLabelStyle}" Margin="-5,0,0,0"/>
+                    </Grid>
+                </Border>
             </DataTemplate>
             
             <DataTemplate DataType="dVdtParameters:TestParameters" x:Key="dVdtParametersTemplate">
-                <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Margin="0,-5,5,0" Padding="5,0,0,0">
                     <Grid >
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource MB2V}">
@@ -395,9 +397,9 @@
                         <Rectangle Fill="Black" Grid.Column="3" Grid.RowSpan="2" Margin="0,0,-15,0" Width="1"/>
                         <Rectangle Fill="Black" Grid.Column="5" Grid.RowSpan="2" Margin="0,0,-15,0" Width="1"/>
 
-                        <customControls:LabelWithIndex Content="dVdt" Grid.Column="0" Grid.Row="0" Height="Auto" />
+                        <customControls:LabelWithIndex Content="dUdt" Grid.Column="0" Grid.Row="0" Height="Auto" />
                         <Label Name="labelResult1" Grid.Column="4" Grid.Row="0"
-                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="8,1,-6,0" />
+                       HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="8,0,-6,0" />
                         <Label Name="labelResult2" Grid.Column="6" Grid.Row="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" />
 
@@ -405,7 +407,7 @@
                               Visibility="{Binding Mode, Converter={StaticResource DT2VB}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                            />
                         <TextBlock Text="В" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Mode, Converter={StaticResource DT2VB}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Name="labelVoltageRate1" Grid.Column="4" Grid.Row="1"  Margin="8,1,-6,0"
+                        <Label Name="labelVoltageRate1" Grid.Column="4" Grid.Row="1"  Margin="8,0,-6,0"
                             Visibility="{Binding Mode, Converter={StaticResource DT2VB}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" />
                         <Label Name="labelVoltageRate2" Grid.Column="6" Grid.Row="1" 
@@ -422,7 +424,7 @@
                 </Border>
             </DataTemplate>
             <DataTemplate DataType="aTUParameters:TestParameters" x:Key="ATUParametersTemplate">
-                <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Margin="0,-5,5,0" Padding="5,0,0,0">
                     <Grid >
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource MB2V}">
@@ -454,22 +456,22 @@
 
                         <customControls:LabelWithIndex Content="UBR" Grid.Column="0" Grid.Row="0"/>
                         <TextBlock Text="В" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Name="lbAtuUBR1" Grid.Column="4" Grid.Row="0" Margin="8,1,-6,0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
+                        <Label Name="lbAtuUBR1" Grid.Column="4" Grid.Row="0" Margin="8,0,-6,0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
                         <Label Name="lbAtuUBR2" Grid.Column="6" Grid.Row="0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
 
                         <customControls:LabelWithIndex Content="U(PRSM)" Grid.Column="0" Grid.Row="1"/>
                         <TextBlock Text="В" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Name="lbAtuUPRSM1"  Grid.Column="4" Grid.Row="1" Margin="8,1,-6,0" Content="OK" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
+                        <Label Name="lbAtuUPRSM1"  Grid.Column="4" Grid.Row="1" Margin="8,0,-6,0" Content="OK" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
                         <Label Name="lbAtuUPRSM2"  Grid.Column="6" Grid.Row="1" Content="OK" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
 
                         <customControls:LabelWithIndex Content="I(PRSM)" Grid.Column="0" Grid.Row="2"/>
                         <TextBlock Text="А" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Name="lbAtuIPRSM1"  Grid.Column="4" Grid.Row="2" Margin="8,1,-6,0" Content="OK" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
-                        <Label Name="lbAtuIPRSM2"  Grid.Column="6" Grid.Row="2" Content="OK" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
+                        <Label Name="lbAtuIPRSM1"  Grid.Column="4" Grid.Row="2" Margin="8,0,-6,0" Content="OK" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
+                        <Label Name="lbAtuIPRSM2"  Grid.Column="6" Grid.Row="2" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
 
                         <customControls:LabelWithIndex Content="PRSM" Grid.Column="0" Grid.Row="3"/>
                         <TextBlock Text="кВТ" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Name="lbAtuPRSM1" Grid.Column="4" Grid.Row="3" Margin="8,1,-6,0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
+                        <Label Name="lbAtuPRSM1" Grid.Column="4" Grid.Row="3" Margin="8,0,-6,0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
                         <Label Name="lbAtuPRSM2" Grid.Column="6" Grid.Row="3" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
 
                         <Label Name="lbAtuWarning" Background="Gold" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="7" Content="Warning" Style="{StaticResource WarningFaultLabelStyle}" Margin="-5,0,0,0"/>
@@ -478,7 +480,7 @@
                 </Border>
             </DataTemplate>
             <DataTemplate DataType="qrrTqParameters:TestParameters" x:Key="QrrTqParametersTemplate">
-                <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Margin="0,-5,5,0" Padding="5,0,0,0">
                     <Grid >
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource MB2V}">
@@ -509,48 +511,48 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Rectangle Fill="Black" Grid.Column="1" Grid.RowSpan="7" Width="1"/>
-                        <Rectangle Fill="Black" Grid.Column="3" Grid.RowSpan="7" Margin="0,0,-15,0" Width="1"/>
-                        <Rectangle Fill="Black" Grid.Column="5" Grid.RowSpan="7" Margin="0,0,-15,0" Width="1"/>
+                        <Rectangle Fill="Black" Grid.Column="1" Grid.RowSpan="8" Width="1"/>
+                        <Rectangle Fill="Black" Grid.Column="3" Grid.RowSpan="8" Margin="0,0,-15,0" Width="1"/>
+                        <Rectangle Fill="Black" Grid.Column="5" Grid.RowSpan="8" Margin="0,0,-15,0" Width="1"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="0" Content="Uma" Visibility="{Binding Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="B" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Column="4" Grid.Row="0" Margin="8,1,-6,0" x:Name="lbOffStateVoltage1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
+                        <Label Grid.Column="4" Grid.Row="0" Margin="8,0,-6,0" x:Name="lbOffStateVoltage1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
                         <Label Grid.Column="6" Grid.Row="0" x:Name="lbOffStateVoltage2" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="1" Content="dU/dt" Visibility="{Binding Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="В/мкс" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Column="4" Grid.Row="1" Margin="8,1,-6,0" x:Name="lbOsvRate1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Column="4" Grid.Row="1" Margin="8,0,-6,0" x:Name="lbOsvRate1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="1" x:Name="lbOsvRate2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="2" Content="IDC"/>
                         <TextBlock Text="A" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Grid.Column="4" Grid.Row="4" Margin="8,1,-6,0" x:Name="lbIdc1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
-                        <Label Grid.Column="6" Grid.Row="4" x:Name="lbIdc2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
+                        <Label Grid.Column="4" Grid.Row="2" Margin="8,0,-6,0" x:Name="lbIdc1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
+                        <Label Grid.Column="6" Grid.Row="2" x:Name="lbIdc2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="3" Content="QRR" Visibility="{Binding Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="мкКл" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Column="4" Grid.Row="3" Margin="8,1,-6,0" x:Name="lbQrr1" HorizontalContentAlignment="Right" Height="Auto" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Column="4" Grid.Row="3" Margin="8,0,-6,0" x:Name="lbQrr1" HorizontalContentAlignment="Right" Height="Auto" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="3" x:Name="lbQrr2" HorizontalContentAlignment="Right" Height="Auto" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="4" Content="IRR" Visibility="{Binding Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="A" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Column="4" Grid.Row="4" Margin="8,1,-6,0" x:Name="lbIrr1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Column="4" Grid.Row="4" Margin="8,0,-6,0" x:Name="lbIrr1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="4" x:Name="lbIrr2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="5" Content="TRR" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="мкс" Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center"  Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
-                        <Label Grid.Column="4" Grid.Row="5" Margin="8,1,-6,0" x:Name="lbTrr1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Column="4" Grid.Row="5" Margin="8,0,-6,0" x:Name="lbTrr1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="5" x:Name="lbTrr2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="6" Content="dIDC/dt"/>
                         <TextBlock Text="А/мкс" Grid.Column="2" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Label Grid.Column="4" Grid.Row="6" Margin="8,1,-6,0" x:Name="lbDCFactFallRate1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
+                        <Label Grid.Column="4" Grid.Row="6" Margin="8,0,-6,0" x:Name="lbDCFactFallRate1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
                         <Label Grid.Column="6" Grid.Row="6" x:Name="lbDCFactFallRate2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="7" Content="Tq" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="мкс" Grid.Column="2" Grid.Row="7" HorizontalAlignment="Center" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
-                        <Label Grid.Column="4" Grid.Row="7" Margin="8,1,-6,0" Height="Auto" x:Name="lbTq1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Column="4" Grid.Row="7" Margin="8,0,-6,0" Height="Auto" x:Name="lbTq1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="7" Height="Auto" x:Name="lbTq2" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <Label Name="lbWarning" Background="Gold" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="8" Style="{StaticResource WarningFaultLabelStyle}" Margin="-5,0,0,0"/>
@@ -562,7 +564,7 @@
                 </Border>
             </DataTemplate>
             <DataTemplate DataType="touParameters:TestParameters" x:Key="TOUParametersTemplate">
-                <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Margin="0,-5,5,0" Padding="5,0,0,0">
                     <Grid >
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource MB2V}">
@@ -593,17 +595,17 @@
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="0" Content="ITM"/>
                         <TextBlock Text="A" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center"/>
-                        <Label Grid.Column="4" Grid.Row="0" Content="0" Margin="8,1,-6,0" x:Name="lbTOUITM1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
+                        <Label Grid.Column="4" Grid.Row="0" Content="0" Margin="8,0,-6,0" x:Name="lbTOUITM1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
                         <Label Grid.Column="6" Grid.Row="0" Content="0" x:Name="lbTOUITM2" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="1" Content="tGD"/>
                         <TextBlock Text="us" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center"/>
-                        <Label Grid.Column="4" Grid.Row="1" Content="0" Margin="8,1,-6,0" x:Name="lbTOUTGD1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
+                        <Label Grid.Column="4" Grid.Row="1" Content="0" Margin="8,0,-6,0" x:Name="lbTOUTGD1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
                         <Label Grid.Column="6" Grid.Row="1" Content="0" x:Name="lbTOUTGD2" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
 
                         <customControls:LabelWithIndex Grid.Column="0" Grid.Row="2" Content="tGT"/>
                         <TextBlock Text="us" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center"/>
-                        <Label Grid.Column="4" Grid.Row="2" Content="0" Margin="8,1,-6,0" x:Name="lbTOUTGT1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height=" Auto"/>
+                        <Label Grid.Column="4" Grid.Row="2" Content="0" Margin="8,0,-6,0" x:Name="lbTOUTGT1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height=" Auto"/>
                         <Label Grid.Column="6" Grid.Row="2" Content="0" x:Name="lbTOUTGT2" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height=" Auto"/>
 
                         <Label Name="lbWarning" Background="Gold" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="3" Style="{StaticResource WarningFaultLabelStyle}" Margin="-5,0,0,0"/>

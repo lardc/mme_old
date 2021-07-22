@@ -105,25 +105,6 @@ namespace SCME.UI.PagesUser
             _bvtDirectSolidColorBrush = (SolidColorBrush)FindResource("xRed1");
 
             m_TbBrush = tbPsdJob.BorderBrush;
-
-            ClearStatus(true, true);
-
-            if (Settings.Default.SinglePositionModuleMode)
-            {
-                chartPlotter2.Visibility = Visibility.Collapsed;
-                Grid.SetRow(chartPlotter1, 6);
-                Grid.SetColumnSpan(chartPlotter1, 3);
-                Grid.SetRowSpan(chartPlotter1, 2);
-                chartPlotter1.Margin = new Thickness(0, 8, 0, 10);
-
-                HeightBorder.HorizontalAlignment = HorizontalAlignment.Right;
-                HeightBorder.Width = 293;
-                HeightSeparator.Visibility = Visibility.Collapsed;
-                ListViewResults1.HorizontalAlignment = HorizontalAlignment.Right;
-                ListViewResults1.Width = 310;
-            }
-
-            SetChartPlotterSettings(Settings.Default.SinglePositionModuleMode);
         }
 
         private void SetChartPlotterSettings(bool SinglePositionModuleMode)
@@ -2626,6 +2607,7 @@ namespace SCME.UI.PagesUser
             _HasFault = false;
             wasCurrentMore = false;
             //Cache.Net.StopMeasuringTemp();
+            ClearStatus(true, true);
             StartFirst();
         }
 
@@ -2890,6 +2872,31 @@ namespace SCME.UI.PagesUser
 
         private void UserTestPage_OnLoaded(object Sender, RoutedEventArgs E)
         {
+            m_TwoPosRequested =
+    !(Profile.ParametersComm == Types.Commutation.ModuleCommutationType.MT1 ||
+      Profile.ParametersComm == Types.Commutation.ModuleCommutationType.MD1 ||
+      Profile.ParametersComm == Types.Commutation.ModuleCommutationType.Direct ||
+      Profile.ParametersComm == Types.Commutation.ModuleCommutationType.Reverse);
+            if (!m_TwoPosRequested)
+            {
+                chartPlotter2.Visibility = Visibility.Collapsed;
+                Grid.SetRowSpan(chartPlotter1, 2);
+                chartPlotter1.Margin = new Thickness(0, 8, 0, 10);
+
+                PositionBorder.HorizontalAlignment = HorizontalAlignment.Right;
+                PositionBorder.Width = 293;
+                PositionSeparator.Visibility = Visibility.Collapsed;
+                Position2Label.Visibility = Visibility.Collapsed;
+
+                HeightBorder.HorizontalAlignment = HorizontalAlignment.Right;
+                HeightBorder.Width = 293;
+                HeightSeparator.Visibility = Visibility.Collapsed;
+                ListViewResults1.HorizontalAlignment = HorizontalAlignment.Right;
+                ListViewResults1.Width = 310;
+            }
+
+            SetChartPlotterSettings(!m_TwoPosRequested);
+
 
             tbPsdJob.Text = "";
             tbPsdSerialNumber.Text = "";

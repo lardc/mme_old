@@ -35,7 +35,7 @@ namespace SCME.UI.PagesTech
                 CustomForce = 5,
                 IsHeightMeasureEnabled = false
             };
-            CommType = Settings.Default.SinglePositionModuleMode ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MT3;
+            CommType = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
             Temperature = 25;
             InitializeComponent();
             ColorGreen = (SolidColorBrush)FindResource("xGreen1");

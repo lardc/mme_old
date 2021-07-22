@@ -37,7 +37,7 @@ namespace SCME.UI.PagesTech
         {
             Parameters = new Types.QrrTq.TestParameters { IsEnabled = true };
             ClampParameters = new Types.Clamping.TestParameters { StandardForce = Types.Clamping.ClampingForceInternal.Custom, CustomForce = 5 };
-            CommType = Settings.Default.SinglePositionModuleMode ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MT3;
+            CommType = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
             Temperature = RoomTemp;
 
             InitializeComponent();

@@ -60,7 +60,7 @@ namespace SCME.UI.PagesTech
                 StandardForce = Types.Clamping.ClampingForceInternal.Custom,
                 CustomForce = 5
             };
-            CommType = Settings.Default.SinglePositionModuleMode ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MT3;
+            CommType = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
             Temperature = 25;
             InitializeComponent();
             m_XGreen = (SolidColorBrush)FindResource("xGreen1");

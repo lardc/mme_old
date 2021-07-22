@@ -103,6 +103,9 @@ namespace SCME.WpfControlLibrary.Pages
             ProfileVm.ProfileDeepDataCopy = new ProfileDeepData();
             ProfileVm.SelectedProfileNameCopy = _dbService.GetFreeProfileName();
             ProfileVm.IsEditModeActive = true;
+
+            ProfileVm.ProfileDeepDataCopy.CommutationType = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
+            ProfileVm.ProfileDeepDataCopy.Height = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? 0 : 1001;
         }
 
         private bool CheckName(string oldName)

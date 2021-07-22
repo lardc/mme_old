@@ -27,7 +27,8 @@ namespace SCME.UI.ViewModels
 
         
 
-        public Types.Commutation.ModuleCommutationType CommutationType { get; set; } = Settings.Default.SinglePositionModuleMode ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MT3;
+        public Types.Commutation.ModuleCommutationType CommutationType { get; set; } = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
+        
         public Types.Commutation.ModulePosition Position { get; set; }
 
         public int Temperature { get; set; } = RoomTemp;

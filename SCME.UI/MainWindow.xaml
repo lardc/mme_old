@@ -107,15 +107,15 @@
                         <Label Grid.Column="0"
                         Content="{Binding TopTitle}"
                        FontSize="28" 
-                       HorizontalAlignment="Center" Width="auto" 
-                       VerticalContentAlignment="Center"/>
+                       HorizontalAlignment="Left" Width="auto" 
+                       VerticalContentAlignment="Center" Margin="20,10,0,0"/>
                     </Grid>
 
 
                     <Label Grid.Column="1" Grid.Row="0"
                        Name="deviceLable" Content="{Binding MmeCode}"
-                       FontSize="28" Margin="0,0,15,0"
-                       HorizontalAlignment="Right" />
+                       FontSize="28" Margin="0,10,15,0"
+                       HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
 
                     <StackPanel Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Label Margin="0,8,16,0" Visibility="{Binding Source={x:Static uiServiceConfig:Settings.Default}, Path=ClampIsVisible, Converter={StaticResource B2V}}">

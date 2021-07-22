@@ -2673,7 +2673,6 @@ namespace SCME.UI.PagesUser
                 {
                     m_ResultsGate1.Add(new TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId });
                     m_ResultsGate2.Add(new TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId });
-                    parGate.IsEnabled &= options.Item3;
                     continue;
                 }
 
@@ -2893,6 +2892,23 @@ namespace SCME.UI.PagesUser
                 HeightSeparator.Visibility = Visibility.Collapsed;
                 ListViewResults1.HorizontalAlignment = HorizontalAlignment.Right;
                 ListViewResults1.Width = 310;
+            }
+            else
+            {
+                chartPlotter2.Visibility = Visibility.Visible;
+                Grid.SetRowSpan(chartPlotter1, 1);
+                chartPlotter1.Margin = new Thickness(0, 8, 90, 10);
+
+                PositionBorder.HorizontalAlignment = HorizontalAlignment.Stretch;
+                PositionBorder.Width = double.NaN;
+                PositionSeparator.Visibility = Visibility.Visible;
+                Position2Label.Visibility = Visibility.Visible;
+
+                HeightBorder.HorizontalAlignment = HorizontalAlignment.Stretch;
+                HeightBorder.Width = double.NaN;
+                HeightSeparator.Visibility = Visibility.Visible;
+                ListViewResults1.HorizontalAlignment = HorizontalAlignment.Stretch;
+                ListViewResults1.Width = double.NaN;
             }
 
             SetChartPlotterSettings(!m_TwoPosRequested);

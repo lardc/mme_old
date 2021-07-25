@@ -172,9 +172,9 @@
       <Project>{7734FC01-1628-4343-91DE-C9902563AEA2}</Project>
       <Name>SCME.InterfaceImplementations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SCME.Logger\SCME.LOGGER.csproj">
+    <ProjectReference Include="..\SCME.Logger\SCME.Logger.csproj">
       <Project>{cdee465e-8961-4d91-92fc-da2615683951}</Project>
-      <Name>SCME.LOGGER</Name>
+      <Name>SCME.Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\SCME.Types\SCME.Types.csproj">
       <Project>{64a797cf-b3b6-41ee-8598-f6bb07a59b17}</Project>

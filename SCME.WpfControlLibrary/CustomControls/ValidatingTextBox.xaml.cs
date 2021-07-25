@@ -95,7 +95,7 @@ namespace SCME.WpfControlLibrary.CustomControls
             {
                 badEntry =
                     !double.TryParse(Text, NumberStyles.Number,
-                        CultureInfo.GetCultureInfo("en-US"), out floatValue);
+                        CultureInfo.CurrentUICulture, out floatValue);
             }
             else
             {
@@ -103,7 +103,7 @@ namespace SCME.WpfControlLibrary.CustomControls
 
                 badEntry =
                     !int.TryParse(Text, NumberStyles.Number,
-                        CultureInfo.GetCultureInfo("en-US"), out value);
+                        CultureInfo.CurrentUICulture, out value);
                 floatValue = value;
             }
 

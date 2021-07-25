@@ -1,236 +1,263 @@
-﻿using System;
+﻿using NLogger = NLog.Logger;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using SCME.Types;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Threading;
-using SCME.Types;
-using ThreadState = System.Threading.ThreadState;
 
 namespace SCME.Logger
 {
     public class EventJournal
     {
-        private static readonly object ms_Locker = new object();
+        //private static readonly object ms_Locker = new object();
+        //private ConcurrentQueue<LogItem> m_MessageList;
+        //private readonly AutoResetEvent m_ListEvent;
+        //private SQLiteConnection m_Connection;
+        //private SQLiteCommand m_InsertCommand;
+        //private Thread m_LogWriteThread;
+        //private bool m_Detailed, m_ThreadStarted;
+        //private volatile bool m_IsThreadClosed, m_ShutdownRequest;
 
-        private readonly ConcurrentQueue<LogItem> m_MessageList;
-        private readonly AutoResetEvent m_ListEvent;
-        private SQLiteConnection m_Connection;
-        private SQLiteCommand m_InsertCommand;
-        private Thread m_LogWriteThread;
-        private bool m_Detailed, m_ThreadStarted;
+        //Логер
+        private readonly NLogger Logger;
+        //Месторасположения файлов логов
+        private string LogPath;
+        private string DirectoryLogPath;
 
-        private volatile bool m_IsThreadClosed, m_ShutdownRequest;
-
-        /// <summary>
-        ///     Event journal class
-        /// </summary>
+        /// <summary>Инициализирует новый экземпляр класса EventJournal</summary>
         public EventJournal()
         {
-            m_MessageList = new ConcurrentQueue<LogItem>();
-            m_ListEvent = new AutoResetEvent(false);
-        }
+            //m_MessageList = new ConcurrentQueue<LogItem>();
+            //m_ListEvent = new AutoResetEvent(false);
 
-        /// <summary>
-        /// Open journal to write logs
-        /// </summary>
-        /// <param name="LogDatabasePath">Path to database source</param>
-        /// <param name="LogDatabaseOptions">Additional connect options</param>
-        /// <param name="LogTracePath">Path to text log file</param>
-        /// <param name="ForceLogTraceFlush">Force flushing to disk after each write</param>
-        /// <param name="Detailed">Include info records</param>
-        public void Open(string LogDatabasePath, string LogDatabaseOptions, string LogTracePath, bool ForceLogTraceFlush = true, bool Detailed = false)
+            Logger = LogManager.GetCurrentClassLogger();
+    }
+
+        /// <summary>Открытие конфигурации логера</summary>
+        /// <param name="logDatabasePath">База данных</param>
+        /// <param name="logDatabaseOptions">Дополнительные настройки базы данных</param>
+        /// <param name="logTracePath">Перезаписываемый файл логов</param>
+        /// <param name="forceLogTraceFlush">Принудительная операция записи в файл</param>
+        /// <param name="detailed">Детализированные логи</param>
+        public void Open(string logDatabasePath, string logDatabaseOptions, string logTracePath, bool forceLogTraceFlush = true, bool detailed = false)
         {
-            m_Detailed = Detailed;
+            //m_Detailed = detailed;
+            //if (m_LogWriteThread != null)
+            //    m_LogWriteThread.Abort();
+            //m_LogWriteThread = new Thread(ThreadPoolCallback) { IsBackground = true, Priority = ThreadPriority.Lowest };
 
-            if (m_LogWriteThread != null)
-                m_LogWriteThread.Abort();
-            m_LogWriteThread = new Thread(ThreadPoolCallback) { IsBackground = true, Priority = ThreadPriority.Lowest };
+            //if (!string.IsNullOrWhiteSpace(logDatabasePath))
+            //{
+            //    m_Connection = new SQLiteConnection(String.Format("data source={0};{1}", logDatabasePath, logDatabaseOptions), false);
+            //    m_Connection.Open();
+            //    m_InsertCommand = m_Connection.CreateCommand();
+            //}
+            //Trace.Listeners.Clear();
+            //var listener = new TextWriterTraceListener(m_LogTracePath, @"FileLog") { IndentSize = 8 };
+            //Trace.Listeners.Add(listener);
+            //Trace.AutoFlush = m_ForceLogTraceFlush;
+            //m_IsThreadClosed = false;
+            //m_LogWriteThread.Start();
+            //m_ThreadStarted = true;
 
-            if (!String.IsNullOrWhiteSpace(LogDatabasePath))
+            LogPath = logTracePath;
+            DirectoryLogPath = Path.GetDirectoryName(LogPath);
+            //Перезаписываемый файл логов
+            FileTarget RollingLogFile = new FileTarget("RollingFileLog")
             {
-                m_Connection = new SQLiteConnection(String.Format("data source={0};{1}", LogDatabasePath, LogDatabaseOptions), false);
-                m_Connection.Open();
-                m_InsertCommand = m_Connection.CreateCommand();
-            }
-
-            Trace.Listeners.Clear();
-            var listener = new TextWriterTraceListener(LogTracePath, @"FileLog") { IndentSize = 8 };
-            Trace.Listeners.Add(listener);
-            Trace.AutoFlush = ForceLogTraceFlush;
-
-            m_IsThreadClosed = false;
-            m_LogWriteThread.Start();
-            m_ThreadStarted = true;
+                Layout = "${message}",
+                FileName = logTracePath,
+                ArchiveFileName = Path.Combine(DirectoryLogPath, "Archived", "LogsArchived.log"),
+                ArchiveAboveSize = 100000,
+                MaxArchiveFiles = 1
+            };
+            //Файл критических логов
+            FileTarget CriticalLogFile = new FileTarget("CriticalFileLog")
+            {
+                Layout = "${message}",
+                FileName = Path.Combine(DirectoryLogPath, "LogsServiceCritical.log")
+            };
+            //Конфигурация NLog
+            LoggingConfiguration Configuration = new LoggingConfiguration();
+            Configuration.AddRule(LogLevel.Info, LogLevel.Fatal, RollingLogFile);
+            Configuration.AddRule(LogLevel.Warn, LogLevel.Fatal, CriticalLogFile);
+            LogManager.Configuration = Configuration;
         }
 
-        /// <summary>
-        /// Close journal to write logs
-        /// </summary>
+        /// <summary>Закрытие конфигурации логера</summary>
         public void Close()
         {
-            try
-            {
-                m_ShutdownRequest = true;
-                m_ListEvent.Set();
-
-                if (m_ThreadStarted)
-                    while (!m_IsThreadClosed)
-                        Thread.Sleep(10);
-
-                Trace.Flush();
-
-                if (m_Connection != null && m_Connection.State == ConnectionState.Open)
-                    m_Connection.Close();
-            }
-            catch (Exception)
-            {
-            }
+            //try
+            //{
+            //    m_ShutdownRequest = true;
+            //    m_ListEvent.Set();
+            //    if (m_ThreadStarted)
+            //        while (!m_IsThreadClosed)
+            //            Thread.Sleep(10);
+            //    Trace.Flush();
+            //    if (m_Connection != null && m_Connection.State == ConnectionState.Open)
+            //        m_Connection.Close();
+            //}
+            //catch { }
         }
 
-        /// <summary>
-        ///     Append log file
-        /// </summary>
-        /// <param name="Device">Device that triggered log append</param>
-        /// <param name="Type">Type of log message</param>
-        /// <param name="Message">Message of log item</param>
-        public void AppendLog(ComplexParts Device, LogMessageType Type, string Message)
+        /// <summary>Добавление записи в лог</summary>
+        /// <param name="device">Устройство, вызвавшее событие</param>
+        /// <param name="messageType">Тип сообщения</param>
+        /// <param name="message">Текст сообщения</param>
+        public void AppendLog(ComplexParts device, LogMessageType messageType, string message)
         {
-            Message = Message.Replace("'", string.Empty);
-
-            m_MessageList.Enqueue(new LogItem
-                {
-                    Timestamp = DateTime.Now,
-                    Source = Device,
-                    MessageType = Type,
-                    Message = Message
-                });
-
-            m_ListEvent.Set();
+            string Message = message.Replace("'", string.Empty);
+            switch (messageType)
+            {
+                //Информационное сообщение
+                case LogMessageType.Note:
+                case LogMessageType.Info:
+                    Logger.Info(string.Format("{0} INFO - {1}: {2}", DateTime.Now, device, Message));
+                    break;
+                //Критическое сообщение
+                case LogMessageType.Warning:
+                case LogMessageType.Problem:
+                case LogMessageType.Error:
+                    Logger.Warn(string.Format("{0} CRITICAL - {1}: {2}", DateTime.Now, device, Message));
+                    //Создание копии при возникновении критического события
+                    string CriticalLogsPath = Path.Combine(DirectoryLogPath, "Critical");
+                    Directory.CreateDirectory(CriticalLogsPath);
+                    File.Copy(LogPath, Path.Combine(CriticalLogsPath, string.Format("LogsService {0:dd.MM.yyyy HH_mm}.log", DateTime.Now)), true);
+                    break;
+            }
+            
+            //m_MessageList.Enqueue(new LogItem
+            //    {
+            //        Timestamp = DateTime.Now,
+            //        Source = Device,
+            //        MessageType = Type,
+            //        Message = Message
+            //    });
+            
+            //m_ListEvent.Set();
         }
 
-        /// <summary>
-        /// Read log sequence from the end to the beginning
-        /// </summary>
+        /// <summary>Чтение логов с конца</summary>
         public List<LogItem> ReadFromEnd(long Tail, long Count)
         {
-            lock (ms_Locker)
-            {
-                var logs = new List<LogItem>();
+            return new List<LogItem>();
 
-                if (m_Connection == null || m_Connection.State != ConnectionState.Open)
-                    return logs;
+            //lock (ms_Locker)
+            //{
+            //    var logs = new List<LogItem>();
 
-                try
-                {
-                    var cmd = m_Connection.CreateCommand();
-                    cmd.CommandText =
-                        string.Format(
-                            "SELECT * FROM MainTable WHERE MainTable.ID < {0} ORDER BY MainTable.ID DESC LIMIT {1}",
-                            Tail, Count);
+            //    if (m_Connection == null || m_Connection.State != ConnectionState.Open)
+            //        return logs;
 
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            logs.Add(new LogItem
-                                {
-                                    ID = (Int64) reader[0],
-                                    Timestamp = DateTime.Parse((string) reader[1], CultureInfo.InvariantCulture),
-                                    Source = (ComplexParts)(byte) reader[2],
-                                    MessageType = (LogMessageType)(byte)reader[3],
-                                    Message = (string) reader[4]
-                                });
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logs.Add(new LogItem
-                        {
-                            ID = 0,
-                            Timestamp = DateTime.Now,
-                            Source = 0,
-                            MessageType = 0,
-                            Message = ex.Message
-                        });
-                }
+            //    try
+            //    {
+            //        var cmd = m_Connection.CreateCommand();
+            //        cmd.CommandText =
+            //            string.Format(
+            //                "SELECT * FROM MainTable WHERE MainTable.ID < {0} ORDER BY MainTable.ID DESC LIMIT {1}",
+            //                Tail, Count);
 
-                return logs;
-            }
+            //        using (var reader = cmd.ExecuteReader())
+            //        {
+            //            while (reader.Read())
+            //            {
+            //                logs.Add(new LogItem
+            //                    {
+            //                        ID = (Int64) reader[0],
+            //                        Timestamp = DateTime.Parse((string) reader[1], CultureInfo.InvariantCulture),
+            //                        Source = (ComplexParts)(byte) reader[2],
+            //                        MessageType = (LogMessageType)(byte)reader[3],
+            //                        Message = (string) reader[4]
+            //                    });
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        logs.Add(new LogItem
+            //            {
+            //                ID = 0,
+            //                Timestamp = DateTime.Now,
+            //                Source = 0,
+            //                MessageType = 0,
+            //                Message = ex.Message
+            //            });
+            //    }
+
+            //    return logs;
+            //}
         }
+        
+        //private void ThreadPoolCallback(object Parameter)
+        //{
+        //    try
+        //    {
+        //        while (!m_ShutdownRequest || (m_MessageList.Count > 0))
+        //        {
+        //            LogItem item;
 
-        #region Private methods
+        //            while (m_MessageList.TryDequeue(out item))
+        //            {
+        //                if (!m_Detailed && item.MessageType == LogMessageType.Note)
+        //                    continue;
 
-        private void ThreadPoolCallback(object Parameter)
-        {
-            try
-            {
-                while (!m_ShutdownRequest || (m_MessageList.Count > 0))
-                {
-                    LogItem item;
+        //                InsertIntoDatabase(item.Timestamp, item.Source,
+        //                                   item.MessageType, item.Message);
 
-                    while (m_MessageList.TryDequeue(out item))
-                    {
-                        if (!m_Detailed && item.MessageType == LogMessageType.Note)
-                            continue;
+        //                switch (item.MessageType)
+        //                {
+        //                    case LogMessageType.Note:
+        //                    case LogMessageType.Info:
+        //                        Trace.WriteLine(String.Format("{0} INFO - {1}: {2}", item.Timestamp,
+        //                                                      item.Source, item.Message));
+        //                        break;
+        //                    case LogMessageType.Warning:
+        //                    case LogMessageType.Problem:
+        //                    case LogMessageType.Error:
+        //                        Trace.WriteLine(String.Format("{0} CRITICAL - {1}: {2}", item.Timestamp,
+        //                                                      item.Source, item.Message));
+        //                        break;
+        //                }
+        //            }
+        //            if(!m_ShutdownRequest)
+        //                m_ListEvent.WaitOne();
+        //        }
+        //    }
+        //    finally
+        //    {
+        //        m_IsThreadClosed = true;
+        //    }
+        //}
 
-                        InsertIntoDatabase(item.Timestamp, item.Source,
-                                           item.MessageType, item.Message);
-
-                        switch (item.MessageType)
-                        {
-                            case LogMessageType.Note:
-                            case LogMessageType.Info:
-                                Trace.WriteLine(String.Format("{0} INFORMATION - {1}: {2}", item.Timestamp,
-                                                              item.Source, item.Message));
-                                break;
-                            case LogMessageType.Warning:
-                            case LogMessageType.Problem:
-                                Trace.WriteLine(String.Format("{0} WARNING - {1}: {2}", item.Timestamp,
-                                                              item.Source, item.Message));
-                                break;
-                            case LogMessageType.Error:
-                                Trace.WriteLine(String.Format("{0} ERROR - {1}: {2}", item.Timestamp,
-                                                              item.Source, item.Message));
-                                break;
-                        }
-                    }
-                    
-                    if(!m_ShutdownRequest)
-                        m_ListEvent.WaitOne();
-                }
-            }
-            finally
-            {
-                m_IsThreadClosed = true;
-            }
-        }
-
-        private void InsertIntoDatabase(DateTime Timestamp, ComplexParts Source, LogMessageType Type, string Message)
-        {
-            lock (ms_Locker)
-            {
-                if (m_Connection == null || m_Connection.State != ConnectionState.Open)
-                    return;
+        //private void InsertIntoDatabase(DateTime Timestamp, ComplexParts Source, LogMessageType Type, string Message)
+        //{
+        //    lock (ms_Locker)
+        //    {
+        //        if (m_Connection == null || m_Connection.State != ConnectionState.Open)
+        //            return;
                 
-                try
-                {
-                    m_InsertCommand.CommandText =
-                        string.Format(
-                            "INSERT INTO MainTable(ID, DateTimeStamp, SourceID, TypeID, Message) VALUES(NULL, '{0}', {1}, {2}, '{3}')",
-                            Timestamp.ToString(@"yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture), (byte)Source, (byte)Type, Message);
+        //        try
+        //        {
+        //            m_InsertCommand.CommandText =
+        //                string.Format(
+        //                    "INSERT INTO MainTable(ID, DateTimeStamp, SourceID, TypeID, Message) VALUES(NULL, '{0}', {1}, {2}, '{3}')",
+        //                    Timestamp.ToString(@"yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture), (byte)Source, (byte)Type, Message);
 
-                    m_InsertCommand.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
-
-        #endregion
+        //            m_InsertCommand.ExecuteNonQuery();
+        //        }
+        //        catch (Exception)
+        //        {
+        //        }
+        //    }
+        //}
     }
 }

@@ -601,7 +601,7 @@ namespace SCME.UIServiceConfig.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Logs\\LogsService {0}.log")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Logs\\LogsService.log")]
         public string LogsTracePathTemplate {
             get {
                 return ((string)(this["LogsTracePathTemplate"]));

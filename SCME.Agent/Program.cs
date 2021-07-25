@@ -8,7 +8,6 @@ using System.Windows.Forms;
 
 namespace SCME.Agent
 {
-
     internal static class Program
     {
         //Супервайзер и конфигурационные данные
@@ -91,7 +90,7 @@ namespace SCME.Agent
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) //Обработчик исключений
         {
-            File.WriteAllText("CRITICAL ERROR.txt", e.ExceptionObject.ToString());
+            File.WriteAllText("Critical error.txt", e.ExceptionObject.ToString());
         }
     }
 }

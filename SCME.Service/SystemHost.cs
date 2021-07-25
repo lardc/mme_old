@@ -108,7 +108,7 @@ namespace SCME.Service
             {
                 Journal = new EventJournal();
                 Journal.Open(Settings.Default.DisableLogDB ? String.Empty : Settings.Default.LogsDatabasePath, Settings.Default.DBOptionsLogs,
-                             String.Format(Settings.Default.LogsTracePathTemplate, DateTime.Now.ToString(CultureInfo.CurrentCulture).Replace('/', '_').Replace(':', '_')),
+                             Settings.Default.LogsTracePathTemplate,
                              Settings.Default.ForceLogFlush,
                              Settings.Default.IncludeDetailsInLog);
                 Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_SystemHost_Application_started);

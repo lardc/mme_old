@@ -47,6 +47,8 @@ namespace SCME.UI.CustomControl
                 languageComboBox.Items.Add(keyboards.Language);
 
             languageComboBox.SelectedIndex = 0;
+
+            DecimalPoint.Content = System.Globalization.CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator;
         }
 
         public void Show(bool IsAnimateEnabled)

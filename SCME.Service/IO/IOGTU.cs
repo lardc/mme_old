@@ -54,7 +54,7 @@ namespace SCME.Service.IO
             IsGraphRead = Settings.Default.GateReadGraph;
             Result = new TypeGTU.TestResults();
             //Сообщение в лог
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU created. Emulation mode: {0}", IsEmulated));
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Milestone, string.Format("GTU created. Emulation mode: {0}", IsEmulated));
         }
 
         /// <summary>Коммутация</summary>
@@ -76,7 +76,7 @@ namespace SCME.Service.IO
             if (IsEmulated)
             {
                 ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                ConnectionEvent_Fire(ConnectionState, "GTU initialized");
+                ConnectionEvent_Fire(ConnectionState, "GTU initialized", LogMessageType.Milestone);
                 return ConnectionState;
             }
             try
@@ -84,12 +84,12 @@ namespace SCME.Service.IO
                 //Очистка предупреждений
                 Warnings_Clear();
                 ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                ConnectionEvent_Fire(ConnectionState, "GTU initialized");
+                ConnectionEvent_Fire(ConnectionState, "GTU initialized", LogMessageType.Milestone);
             }
             catch (Exception error)
             {
                 ConnectionState = DeviceConnectionState.ConnectionFailed;
-                ConnectionEvent_Fire(ConnectionState, string.Format("GTU initialization error: {0}", error.Message));
+                ConnectionEvent_Fire(ConnectionState, string.Format("GTU initialization error: {0}", error.Message), LogMessageType.Error);
             }
             return ConnectionState;
         }
@@ -105,7 +105,7 @@ namespace SCME.Service.IO
             if (!IsEmulated && OldState == DeviceConnectionState.ConnectionSuccess)
                 Stop();
             ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-            ConnectionEvent_Fire(DeviceConnectionState.DisconnectionSuccess, "GTU disconnected");
+            ConnectionEvent_Fire(DeviceConnectionState.DisconnectionSuccess, "GTU disconnected", LogMessageType.Milestone);
         }
 
         /// <summary>Готовность блока к запуску</summary>
@@ -632,7 +632,7 @@ namespace SCME.Service.IO
 
         internal void WriteCalibrationParams(TypeGTU.CalibrationParameters parameters)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, "GTU @WriteCalibrationParams begin");
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU @WriteCalibrationParams begin");
             WriteRegisterS(REG_GATE_VGT_OFFSET, parameters.GateVGTOffset, true);
             WriteRegisterS(REG_GATE_IGT_OFFSET, parameters.GateIGTOffset, true);
             WriteRegisterS(REG_ADC_IG_FINE_P0, parameters.GateIHLOffset, true);
@@ -645,12 +645,12 @@ namespace SCME.Service.IO
             WriteRegister(REG_ADC_IG_FINE_P1, parameters.GateFineIHL_D, true);
             if (!IsEmulated)
                 CallAction(ACT_SAVE_TO_ROM);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, "GTU @WriteCalibrationParams end");
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU @WriteCalibrationParams end");
         }
 
         internal TypeGTU.CalibrationParameters ReadCalibrationParams()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info,
                                          "Gate @ReadCalibrationParams begin");
 
             var parameters = new Types.GTU.CalibrationParameters
@@ -668,7 +668,7 @@ namespace SCME.Service.IO
                 GateFineIHL_D = ReadRegister(REG_ADC_IG_FINE_P1, true),
             };
 
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Milestone,
                                          "Gate @ReadCalibrationParams end");
 
             return parameters;
@@ -678,13 +678,13 @@ namespace SCME.Service.IO
         internal void ClearFaults() //Очистка ошибок блока
         {
             CallAction(ACT_CLR_FAULT);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, "GTU faults cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU faults cleared");
         }
 
         internal void Warnings_Clear() //Очистка предупреждений блока
         {
             CallAction(ACT_CLR_WARNING);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, "GTU warnings cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU warnings cleared");
         }
 
         /// <summary>Чтение значения регистра</summary>
@@ -697,7 +697,7 @@ namespace SCME.Service.IO
             if (!IsEmulated)
                 Value = Adapter.Read16(Node, address);
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, string.Format("GTU @ReadRegister, address {0}, value {1}", address, Value));
+                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @ReadRegister, address {0}, value {1}", address, Value));
             return Value;
         }
 
@@ -711,7 +711,7 @@ namespace SCME.Service.IO
             if (!IsEmulated)
                 Value = Adapter.Read16S(Node, address);
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, string.Format("GTU @ReadRegisterS, address {0}, value {1}", address, Value));
+                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @ReadRegisterS, address {0}, value {1}", address, Value));
             return Value;
         }
 
@@ -770,7 +770,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort address, ushort value, bool skipJournal = false)
         {
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, string.Format("GTU @WriteRegister, address {0}, value {1}", address, value));
+                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @WriteRegister, address {0}, value {1}", address, value));
             if (IsEmulated)
                 return;
             Adapter.Write16(Node, address, value);
@@ -783,7 +783,7 @@ namespace SCME.Service.IO
         internal void WriteRegisterS(ushort address, short value, bool skipJournal = false)
         {
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, string.Format("GTU @WriteRegisterS, address {0}, value {1}", address, value));
+                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @WriteRegisterS, address {0}, value {1}", address, value));
             if (IsEmulated)
                 return;
             Adapter.Write16S(Node, address, value);
@@ -794,7 +794,7 @@ namespace SCME.Service.IO
         /// <returns>Значения эндпоинтов</returns>
         private IList<short> ReadArrayFastS(ushort address)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, string.Format("GTU @ReadArrayFastS, endpoint {0}", address));
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @ReadArrayFastS, endpoint {0}", address));
             if (IsEmulated)
                 return new List<short>();
             return Adapter.ReadArrayFast16S(Node, address);
@@ -804,7 +804,7 @@ namespace SCME.Service.IO
         /// <param name="action">Адрес функции</param>
         internal void CallAction(ushort action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note, string.Format("GTU @Call, action {0}", action));
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @Call, action {0}", action));
             if (IsEmulated)
                 return;
             Adapter.Call(Node, action);
@@ -812,10 +812,10 @@ namespace SCME.Service.IO
         #endregion
 
         #region Events
-        private void ConnectionEvent_Fire(DeviceConnectionState state, string message) //Оповещение о подключении
+        private void ConnectionEvent_Fire(DeviceConnectionState state, string message, LogMessageType type = LogMessageType.Info) //Оповещение о подключении
         {
             Communication.PostDeviceConnectionEvent(ComplexParts.Gate, state, message);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, message);
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, type, message);
         }
 
         private void AllEvents_Fire(DeviceState state) //Оповещение о тестировании
@@ -883,7 +883,7 @@ namespace SCME.Service.IO
         private void NotificationEvent_Fire(TypeGTU.HWFaultReason fault, TypeGTU.HWWarningReason warning, TypeGTU.HWDisableReason disable, TypeGTU.HWProblemReason problem)
         {
             Communication.PostGateNotificationEvent(problem, warning, fault, disable);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Warning, string.Format("GTU device notification: problem {0}, warning {1}, fault {2}, disable {3}", problem, warning, fault, disable));
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Error, string.Format("GTU device notification: problem {0}, warning {1}, fault {2}, disable {3}", problem, warning, fault, disable));
         }
 
         private void ExceptionEvent_Fire(string message) //Оповещение об исключении

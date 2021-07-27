@@ -47,7 +47,7 @@ namespace SCME.Service.IO
             m_Node = (ushort) Settings.Default.BVTNode;
             m_Result = new Types.BVT.TestResults();
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Milestone,
                 String.Format("BVT created. Emulation mode: {0}", Settings.Default.BVTEmulation));
         }
 
@@ -68,7 +68,7 @@ namespace SCME.Service.IO
             if (m_IsBVTEmulation)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                FireConnectionEvent(m_ConnectionState, "BVT initialized");
+                FireConnectionEvent(m_ConnectionState, "BVT initialized", LogMessageType.Milestone);
 
                 return m_ConnectionState;
             }
@@ -124,12 +124,12 @@ namespace SCME.Service.IO
 
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
 
-                FireConnectionEvent(m_ConnectionState, "BVT initialized");
+                FireConnectionEvent(m_ConnectionState, "BVT initialized", LogMessageType.Milestone);
             }
             catch (Exception ex)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionFailed;
-                FireConnectionEvent(m_ConnectionState, String.Format("BVT initialization error: {0}", ex.Message));
+                FireConnectionEvent(m_ConnectionState, String.Format("BVT initialization error: {0}", ex.Message), LogMessageType.Error);
             }
 
             return m_ConnectionState;
@@ -151,12 +151,12 @@ namespace SCME.Service.IO
                 }
 
                 m_ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "BVT disconnected");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "BVT disconnected", LogMessageType.Milestone);
             }
             catch (Exception)
             {
                 m_ConnectionState = DeviceConnectionState.DisconnectionError;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "BVT disconnection error");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "BVT disconnection error", LogMessageType.Error);
             }
         }
 
@@ -223,14 +223,14 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note, "BVT fault cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, "BVT fault cleared");
 
             CallAction(ACT_CLEAR_FAULT);
         }
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note, "BVT warning cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, "BVT warning cleared");
 
             CallAction(ACT_CLEAR_WARNING);
         }
@@ -243,7 +243,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                     string.Format("BVT @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
@@ -257,7 +257,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16S(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                     string.Format("BVT @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
@@ -271,7 +271,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                     string.Format("BVT @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsBVTEmulation)
@@ -282,7 +282,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 string.Format("BVT @Call, action {0}", Action));
 
             if (m_IsBVTEmulation)
@@ -565,7 +565,7 @@ namespace SCME.Service.IO
         {
             List<short> bufferArray;
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 "BVT @ReadArrays begin");
 
             Result.CurrentData.Clear();
@@ -590,10 +590,10 @@ namespace SCME.Service.IO
                 Result.VoltageData.Select(
                     Value => IsDirect ? (Value < 0 ? Math.Abs(Value) : (short) 0) : (Value > 0 ? (short) 0 : Value)).ToList();
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 string.Format("BVT @ReadArrays data length {0}", Result.VoltageData.Count));
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 "BVT @ReadArrays end");
         }
 
@@ -665,9 +665,9 @@ namespace SCME.Service.IO
 
         #region Events
 
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.BVT, State, Message);
         }
 
@@ -736,7 +736,7 @@ namespace SCME.Service.IO
         private void FireNotificationEvent(Types.BVT.HWProblemReason Problem, Types.BVT.HWWarningReason Warning,
             Types.BVT.HWFaultReason Fault, Types.BVT.HWDisableReason Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Warning,
+            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Error,
                 string.Format(
                     "BVT device notification: problem {0}, warning {1}, fault {2}, disable {3}",
                     Problem, Warning, Fault, Disable));

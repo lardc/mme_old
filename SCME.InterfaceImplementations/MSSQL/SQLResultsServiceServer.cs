@@ -16,8 +16,8 @@ namespace SCME.InterfaceImplementations
     {
         private readonly SqlConnection _connection;
         private readonly Dictionary<string, long> _errors = new Dictionary<string, long>(64);
-        private readonly Dictionary<string, long> _params= new Dictionary<string, long>(64);
-        private readonly Dictionary<string, long> _tests= new Dictionary<string, long>(20);
+        private readonly Dictionary<string, long> _params = new Dictionary<string, long>(64);
+        private readonly Dictionary<string, long> _tests = new Dictionary<string, long>(20);
         protected static readonly object MsLocker = new object();
 
         private SqlCommand _profileSelectCommand;
@@ -47,7 +47,7 @@ namespace SCME.InterfaceImplementations
             PrepareQueries();
             PopulateDictionaries();
         }
-        
+
         public SQLResultsServiceServer(SqlConnection sqlConnection)
         {
             _connection = sqlConnection;
@@ -80,10 +80,10 @@ namespace SCME.InterfaceImplementations
             _groupInsertCommand.Parameters.Add("@GROUP_NAME", SqlDbType.NChar, 32);
             _groupInsertCommand.Prepare();
 
-            _devErrInsertCommand = new SqlCommand("INSERT INTO [dbo].[DEV_ERR](DEV_ID, ERR_ID) VALUES(@DEV_ID, (SELECT ERR_ID FROM ERRORS  WHERE ERR_CODE = @ERR_CODE))",
+            _devErrInsertCommand = new SqlCommand("INSERT INTO [dbo].[DEV_ERR] (DEV_ID, ERR_ID) VALUES(@DEV_ID, @ERR_ID)",
                 _connection);
             _devErrInsertCommand.Parameters.Add("@DEV_ID", SqlDbType.Int);
-            _devErrInsertCommand.Parameters.Add("@ERR_CODE", SqlDbType.Int);
+            _devErrInsertCommand.Parameters.Add("@ERR_ID", SqlDbType.Int);
             _devErrInsertCommand.Prepare();
 
             _deviceSelectCmd =
@@ -314,17 +314,17 @@ namespace SCME.InterfaceImplementations
             _devInsertCommand.Parameters["@GROUP_ID"].Value = groupId;
             _devInsertCommand.Parameters["@PROFILE_ID"].Value = localItem.ProfileKey;
             _devInsertCommand.Parameters["@CODE"].Value = localItem.Code;
-            
+
             if (localItem.StructureOrd != null)
                 _devInsertCommand.Parameters["@SIL_N_1"].Value = localItem.StructureOrd;
             else
                 _devInsertCommand.Parameters["@SIL_N_1"].Value = DBNull.Value;
-            
+
             if (localItem.StructureId != null)
                 _devInsertCommand.Parameters["@SIL_N_2"].Value = localItem.StructureId;
             else
                 _devInsertCommand.Parameters["@SIL_N_2"].Value = DBNull.Value;
-            
+
             _devInsertCommand.Parameters["@TS"].Value = localItem.Timestamp;
             _devInsertCommand.Parameters["@USR"].Value = localItem.UserName;
             _devInsertCommand.Parameters["@POS"].Value = (localItem.Position == 2);
@@ -341,7 +341,7 @@ namespace SCME.InterfaceImplementations
 
             foreach (var errorCode in errorCodes.Distinct())
             {
-                _devErrInsertCommand.Parameters["@ERR_CODE"].Value = errorCode;
+                _devErrInsertCommand.Parameters["@ERR_ID"].Value = errorCode;
                 try
                 {
                     _devErrInsertCommand.ExecuteNonQuery();
@@ -353,12 +353,12 @@ namespace SCME.InterfaceImplementations
             }
         }
 
-        private void InsertParameters(Dictionary<TestTypeLocalItem, List<DeviceParametersLocalItem>> deviceParameters,Guid profileKey, long devId, SqlTransaction trans)
+        private void InsertParameters(Dictionary<TestTypeLocalItem, List<DeviceParametersLocalItem>> deviceParameters, Guid profileKey, long devId, SqlTransaction trans)
         {
-            foreach(var i in deviceParameters)
+            foreach (var i in deviceParameters)
             {
                 var testTypeId = CalcTestTypeID(profileKey, i.Key.Name, i.Key.Order, trans);
-                foreach(var j in i.Value)
+                foreach (var j in i.Value)
                     InsertParameterValue(devId, j.Name, j.Value, testTypeId, trans);
             }
         }
@@ -424,21 +424,21 @@ namespace SCME.InterfaceImplementations
                         var devId = InsertDevice(code, GetOrMakeGroupId(groupName, trans), result.ProfileKey, result, trans);
                         InsertErrors(errors, devId, trans);
                         InsertParameterValues(result, devId, trans);
-
                         trans.Commit();
                         return devId;
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         trans.Rollback();
                         throw;
                     }
                 }
+
                 throw new Exception("Connection null or not open");
             }
             catch (Exception ex)
             {
-                throw new FaultException<FaultData>(new FaultData(){}, new System.ServiceModel.FaultReason(ex.ToString()));
+                throw new FaultException<FaultData>(new FaultData() { }, new System.ServiceModel.FaultReason(ex.ToString()));
             }
         }
 
@@ -553,15 +553,15 @@ namespace SCME.InterfaceImplementations
             if (testTypeId == null)
                 throw new ArgumentException($@"No such PROF_TEST_TYPE.PTT_ID identifiers has been found for {testTypeName} test", nameof(profileKey));
 
-            return (int) testTypeId;
+            return (int)testTypeId;
         }
-        
+
 
         private void InsertErrors(IEnumerable<string> errors, long devId, SqlTransaction trans)
         {
             _devErrInsertCommand.Parameters["@DEV_ID"].Value = devId;
             _devErrInsertCommand.Transaction = trans;
-            
+
             foreach (var error in errors.Distinct())
             {
                 _devErrInsertCommand.Parameters["@ERR_ID"].Value = _errors[error];
@@ -818,7 +818,7 @@ namespace SCME.InterfaceImplementations
             _devParamInsertCommand.Parameters["@DEV_ID"].Value = device;
             _devParamInsertCommand.Parameters["@PARAM_ID"].Value = _params[name];
             _devParamInsertCommand.Parameters["@VALUE"].Value = value;
-            _devParamInsertCommand.Parameters["@TEST_TYPE_ID"].Value = testTypeId ;
+            _devParamInsertCommand.Parameters["@TEST_TYPE_ID"].Value = testTypeId;
             _devParamInsertCommand.Transaction = trans;
             _devParamInsertCommand.ExecuteNonQuery();
         }

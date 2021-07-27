@@ -36,7 +36,7 @@ namespace SCME.Service.IO
             m_Node = (ushort)Settings.Default.dVdtNode;
             m_Result = new TestResults();
 
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
+            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Milestone,
                                          String.Format("dVdt created. Emulation mode: {0}", Settings.Default.dVdtEmulation));
         }
 
@@ -58,7 +58,7 @@ namespace SCME.Service.IO
             if (m_IsdVdtEmulation)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                FireConnectionEvent(m_ConnectionState, "dVdt initialized");
+                FireConnectionEvent(m_ConnectionState, "dVdt initialized", LogMessageType.Milestone);
 
                 return m_ConnectionState;
             }
@@ -114,12 +114,12 @@ namespace SCME.Service.IO
 
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
 
-                FireConnectionEvent(m_ConnectionState, "dVdt initialized");
+                FireConnectionEvent(m_ConnectionState, "dVdt initialized", LogMessageType.Milestone);
             }
             catch (Exception ex)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionFailed;
-                FireConnectionEvent(m_ConnectionState, String.Format("dVdt initialization error: {0}", ex.Message));
+                FireConnectionEvent(m_ConnectionState, String.Format("dVdt initialization error: {0}", ex.Message), LogMessageType.Error);
             }
 
             return m_ConnectionState;
@@ -141,12 +141,12 @@ namespace SCME.Service.IO
                 }
 
                 m_ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "dVdt disconnected");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "dVdt disconnected", LogMessageType.Milestone);
             }
             catch (Exception)
             {
                 m_ConnectionState = DeviceConnectionState.DisconnectionError;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "dVdt disconnection error");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "dVdt disconnection error", LogMessageType.Error);
             }
         }
 
@@ -212,14 +212,14 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Note, "dVdt fault cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info, "dVdt fault cleared");
 
             CallAction(ACT_CLEAR_FAULT);
         }
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Note, "dVdt warning cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info, "dVdt warning cleared");
 
             CallAction(ACT_CLEAR_WARNING);
         }
@@ -232,7 +232,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
                                          string.Format("dVdt @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
@@ -246,7 +246,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16S(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
                                          string.Format("dVdt @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
@@ -255,7 +255,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
                                          string.Format("dVdt @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsdVdtEmulation)
@@ -266,7 +266,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
                                          string.Format("dVdt @Call, action {0}", Action));
 
             if (m_IsdVdtEmulation)
@@ -538,9 +538,9 @@ namespace SCME.Service.IO
 
         #region Events
 
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(ComplexParts.DvDt, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.DvDt, State, Message);
         }
 
@@ -557,7 +557,7 @@ namespace SCME.Service.IO
 
         private void FireNotificationEvent(HWWarningReason Warning, HWFaultReason Fault, HWDisableReason Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Warning,
+            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Error,
                                          string.Format(
                                              "dVdt device notification: problem None, warning {0}, fault {1}, disable {2}",
                                              Warning, Fault, Disable));

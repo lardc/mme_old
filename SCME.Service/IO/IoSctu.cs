@@ -660,21 +660,21 @@ namespace SCME.Service.IO
         #region Standart API
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, "Sctu fault cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, "Sctu fault cleared");
 
             CallAction(ACT_FAULT_CLEAR);
         }
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, "Sctu warning cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, "Sctu warning cleared");
 
             CallAction(ACT_WARNING_CLEAR);
         }
 
         internal ushort ActivationWorkPlace(ChannelByClumpType ChByClumpType, SctuWorkPlaceActivationStatuses ActivationStatus)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, "Sctu activation workplace");
+            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, "Sctu activation workplace");
 
             switch (ActivationStatus)
             {
@@ -748,7 +748,7 @@ namespace SCME.Service.IO
             ushort value = _ioAdapter.Read16((ushort)node, address);
 
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, string.Format("Sctu @ReadRegister, node {0}, address {1}, value {2}", node, address, value));
+                SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, string.Format("Sctu @ReadRegister, node {0}, address {1}, value {2}", node, address, value));
 
             return value;
         }
@@ -761,7 +761,7 @@ namespace SCME.Service.IO
                 value = _ioAdapter.Read16S(_node, address);
 
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, string.Format("Sctu @ReadRegisterS, address {0}, value {1}", address, value));
+                SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, string.Format("Sctu @ReadRegisterS, address {0}, value {1}", address, value));
 
             return value;
         }
@@ -769,7 +769,7 @@ namespace SCME.Service.IO
         private void ReadArrays(Types.SCTU.SctuTestResults Result)
         {
             //чтение массивов даннных тока и напряжения, это не сырые данные они уже готовы для отображения
-            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, "SCTU @ReadArrays begin");
+            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, "SCTU @ReadArrays begin");
 
             //читаем массив данных для построения графика напряжения
             Result.VoltageData.Clear();
@@ -783,7 +783,7 @@ namespace SCME.Service.IO
             if (!_isSctuEmulation)
                 Result.CurrentData = _ioAdapter.ReadArrayFast16S(_node, ARR_SCOPE_I).ToList();
 
-            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, "SCTU @ReadArrays end");
+            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, "SCTU @ReadArrays end");
         }
 
         internal ushort UshortByNum(int value, bool Num)
@@ -924,7 +924,7 @@ namespace SCME.Service.IO
         internal void WriteRegister16(ushort node, ushort address, ushort value, bool skipJournal = false)
         {
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone,
                                          string.Format("Sctu @WriteRegister, address {0}, value {1}, node {2}", address, value, node));
 
             if (_isSctuEmulation)
@@ -940,7 +940,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Note, string.Format("Sctu @Call, action {0}", action));
+            SystemHost.Journal.AppendLog(ComplexParts.Sctu, LogMessageType.Milestone, string.Format("Sctu @Call, action {0}", action));
 
             if (_isSctuEmulation)
                 return;

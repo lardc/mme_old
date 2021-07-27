@@ -33,7 +33,7 @@ namespace SCME.Service.IO
             m_IsATUEmulation = m_IsATUEmulationHard;
             m_Node = (ushort)Settings.Default.ATUNode;
             m_Result = new TestResults();
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU created. Emulation mode: {0}", Settings.Default.ATUEmulation));
+            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Milestone, string.Format("ATU created. Emulation mode: {0}", Settings.Default.ATUEmulation));
         }
 
         internal IOCommutation ActiveCommutation
@@ -53,7 +53,7 @@ namespace SCME.Service.IO
             if (m_IsATUEmulation)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                FireConnectionEvent(m_ConnectionState, "ATU initialized");
+                FireConnectionEvent(m_ConnectionState, "ATU initialized", LogMessageType.Milestone);
                 return m_ConnectionState;
             }
             try
@@ -94,7 +94,7 @@ namespace SCME.Service.IO
                                 //блок ATU перешёл в состояние DS_Ready - завершаем процесс инициализации
                                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
                                 End = true;
-                                FireConnectionEvent(m_ConnectionState, "ATU successfully initialized.");
+                                FireConnectionEvent(m_ConnectionState, "ATU initialized.", LogMessageType.Milestone);
                                 break;
                         }
                     }
@@ -123,7 +123,7 @@ namespace SCME.Service.IO
             catch (Exception e)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionFailed;
-                FireConnectionEvent(m_ConnectionState, String.Format("ATU initialization error: {0}.", e.Message));
+                FireConnectionEvent(m_ConnectionState, String.Format("ATU initialization error: {0}.", e.Message), LogMessageType.Error);
             }
 
             return m_ConnectionState;
@@ -144,12 +144,12 @@ namespace SCME.Service.IO
                 }
 
                 m_ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "ATU disconnected");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "ATU disconnected", LogMessageType.Milestone);
             }
             catch (Exception)
             {
                 m_ConnectionState = DeviceConnectionState.DisconnectionError;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "ATU disconnection error");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "ATU disconnection error", LogMessageType.Error);
             }
         }
 
@@ -396,7 +396,7 @@ namespace SCME.Service.IO
         private void EnablePower()
         //включение зарядки конденсаторов блока ATU
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Note, "ATU power is set to enable");
+            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Milestone, "ATU power is set to enable");
             CallAction(ACT_ENABLE_POWER);
         }
 
@@ -426,7 +426,7 @@ namespace SCME.Service.IO
 
             if (!m_IsATUEmulation) value = m_IOAdapter.Read16(m_Node, Address);
 
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Note, string.Format("ATU @ReadRegister, address {0}, value {1}", Address, value));
+            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -438,7 +438,7 @@ namespace SCME.Service.IO
 
             if (!m_IsATUEmulation) value = m_IOAdapter.Read16S(m_Node, Address);
 
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Note, string.Format("ATU @ReadRegisterS, address {0}, value {1}", Address, value));
+            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -448,7 +448,7 @@ namespace SCME.Service.IO
         //значение мощности в регистр надо писать в Вт/10, а интерфейс пользователя пишет в принимаемое на вход Value в кВт, поэтому данная реализация для случая записи значения мощности переводит принимаемое значение в Вт/10
         //принимаемое Value типа float только для возможности писать значение мощности с дробной частью
         {
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Note, string.Format("ATU @WriteRegister, address {0}, value {1}", Address, Value));
+            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsATUEmulation) return;
 
@@ -471,7 +471,7 @@ namespace SCME.Service.IO
 
         private IList<short> ReadArrayFastS(ushort Address)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info,
                                          string.Format("ATU @ReadArrayFastS, endpoint {0}", Address));
 
             if (m_IsATUEmulation)
@@ -482,7 +482,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Note, string.Format("ATU @Call, action {0}", Action));
+            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @Call, action {0}", Action));
 
             if (m_IsATUEmulation) return;
 
@@ -491,15 +491,15 @@ namespace SCME.Service.IO
         #endregion
 
         #region Events
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(ComplexParts.ATU, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.ATU, State, Message);
         }
 
         private void FireNotificationEvent(ushort Warning, ushort Fault, ushort Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Warning, string.Format("ATU device notification: warning {0}, fault {1}, disable {2}", Warning, Fault, Disable));
+            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Error, string.Format("ATU device notification: warning {0}, fault {1}, disable {2}", Warning, Fault, Disable));
             m_Communication.PostATUNotificationEvent(Warning, Fault, Disable);
         }
 

@@ -51,7 +51,7 @@ namespace SCME.Types.DatabaseServer
         [OperationContract]
         [FaultContract(typeof(FaultData))]
         new ProfileItem GetProfileByProfName(string profName, string mmmeCode, ref bool Found);
-        
+
         #endregion
 
 
@@ -66,7 +66,7 @@ namespace SCME.Types.DatabaseServer
         [OperationContract]
         [FaultContract(typeof(FaultData))]
         new void SaveConnections(List<MmeCode> mmeCodes);
-        
+
 
         /// <summary>
         /// Saving result in central db
@@ -77,7 +77,7 @@ namespace SCME.Types.DatabaseServer
         [FaultContract(typeof(FaultData))]
         long SaveResults(ResultItem results, List<string> errors);
 
-        
+
         /// <summary>
         /// Get groups from central db
         /// </summary>
@@ -114,7 +114,7 @@ namespace SCME.Types.DatabaseServer
         [OperationContract]
         [FaultContract(typeof(FaultData))]
         List<ParameterItem> ReadDeviceParameters(long internalId);
-        
+
         /// <summary>
         /// Get device conditions
         /// </summary>
@@ -148,7 +148,7 @@ namespace SCME.Types.DatabaseServer
         /// <returns>Result of inserting</returns>
         [OperationContract(IsOneWay = true)]
         void Check();
-        
+
         /// <summary>
         /// Read Device RT Class
         /// </summary>

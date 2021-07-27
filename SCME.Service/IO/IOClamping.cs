@@ -105,7 +105,7 @@ namespace SCME.Service.IO
             _defaultHeight = 0;
 
             m_Node = (ushort)Settings.Default.ClampingSystemNode;
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, String.Format("Clamping created. Emulation mode: {0}", m_IsClampingEmulation));
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Milestone, String.Format("Clamping created. Emulation mode: {0}", m_IsClampingEmulation));
         }
 
         internal IOCommutation ActiveCommutation
@@ -128,7 +128,7 @@ namespace SCME.Service.IO
 
                 m_Thread.StartCycle(OnTimedHeating, REQUEST_DELAY_MS);
 
-                FireConnectionEvent(m_ConnectionState, "Clamping initialized");
+                FireConnectionEvent(m_ConnectionState, "Clamping initialized", LogMessageType.Milestone);
 
                 return m_ConnectionState;
             }
@@ -184,7 +184,7 @@ namespace SCME.Service.IO
 
                 m_Thread.StartCycle(OnTimedHeating, REQUEST_DELAY_MS);
 
-                FireConnectionEvent(m_ConnectionState, "Clamping initialized");
+                FireConnectionEvent(m_ConnectionState, "Clamping initialized", LogMessageType.Milestone);
             }
             catch (Exception ex)
             {
@@ -230,12 +230,12 @@ namespace SCME.Service.IO
                 }
 
                 m_ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "Clamping disconnected");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "Clamping disconnected", LogMessageType.Milestone);
             }
             catch (Exception)
             {
                 m_ConnectionState = DeviceConnectionState.DisconnectionError;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "Clamping disconnection error");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "Clamping disconnection error", LogMessageType.Error);
             }
 
             m_ConnectionState = DeviceConnectionState.DisconnectionSuccess;
@@ -249,14 +249,14 @@ namespace SCME.Service.IO
             //при этом оно останавливается в текущей позиции, а если устройство в зажатом состоянии, то снимается усилие зажатия, но оно остаётся в том же положении
             CallAction(ACT_HALT);
 
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Stop method called");
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Milestone, "Stop method called");
         }
 
         #region Standart API
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note, "Clamping fault cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Clamping fault cleared");
 
             if (m_IsClampingEmulation)
                 return;
@@ -266,7 +266,7 @@ namespace SCME.Service.IO
 
         internal void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note, "Clamping warning cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Clamping warning cleared");
 
             if (m_IsClampingEmulation)
                 return;
@@ -277,7 +277,7 @@ namespace SCME.Service.IO
         internal void Clear_Halt()
         {
             //если пресс в состоянии Halt то данная реализация изменяет содержимое регистра состояния пресса на значение Ready
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note, "Clamping halt cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Clamping halt cleared");
 
             if (m_IsClampingEmulation)
                 return;
@@ -302,7 +302,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info,
                                          string.Format("Clamping @ReadRegister, address {0}, value {1}", Address,
                                                        value));
 
@@ -317,7 +317,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16S(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.SL, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.SL, LogMessageType.Info,
                                              string.Format("Clamping @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
@@ -326,7 +326,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info,
                                          string.Format("Clamping @WriteRegister, address {0}, value {1}", Address,
                                                        Value));
 
@@ -339,7 +339,7 @@ namespace SCME.Service.IO
         internal void WriteRegisterS(ushort Address, short Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info,
                                          string.Format("Clamping @WriteRegisterS, address {0}, value {1}", Address, Value));
 
             if (m_IsClampingEmulation)
@@ -350,7 +350,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info,
                                          string.Format("Clamping @Call, action {0}", Action));
 
             if (m_IsClampingEmulation)
@@ -367,7 +367,7 @@ namespace SCME.Service.IO
 
         private IList<ushort> ReadArrayFast(ushort Address)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info,
                                          string.Format("Clamping @ReadArrayFast, endpoint {0}", Address));
 
             if (m_IsClampingEmulation)
@@ -919,16 +919,16 @@ namespace SCME.Service.IO
 
         #region Events
 
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, type, Message);
 
             m_Communication.PostDeviceConnectionEvent(ComplexParts.Clamping, State, Message);
         }
 
         private void FireNotificationEvent(HWWarningReason Warning, HWProblemReason Problem, HWFaultReason Fault)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Warning, string.Format("Clamping device notification: warning {0}, problem {1}, fault {2}", Warning, Problem, Fault));
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Error, string.Format("Clamping device notification: warning {0}, problem {1}, fault {2}", Warning, Problem, Fault));
 
             m_Communication.PostClampingNotificationEvent(Warning, Problem, Fault);
         }

@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using System.Text;
 
 namespace SCME.Logger
 {
@@ -73,6 +74,7 @@ namespace SCME.Logger
             //Перезаписываемый файл логов
             FileTarget RollingLogFile = new FileTarget("RollingFileLog")
             {
+                Encoding = Encoding.UTF8,
                 Layout = "${message}",
                 FileName = logTracePath,
                 ArchiveFileName = Path.Combine(DirectoryLogPath, "Archived", "LogsArchived.log"),
@@ -82,6 +84,7 @@ namespace SCME.Logger
             //Файл критических логов
             FileTarget CriticalLogFile = new FileTarget("CriticalFileLog")
             {
+                Encoding = Encoding.UTF8,
                 Layout = "${message}",
                 FileName = Path.Combine(DirectoryLogPath, "LogsServiceCritical.log")
             };
@@ -119,15 +122,16 @@ namespace SCME.Logger
             switch (messageType)
             {
                 //Информационное сообщение
-                case LogMessageType.Note:
                 case LogMessageType.Info:
                     Logger.Info(string.Format("{0} INFO - {1}: {2}", DateTime.Now, device, Message));
                     break;
+                //Важная веха
+                case LogMessageType.Milestone:
+                    Logger.Warn(string.Format("{0} MILESTONE - {1}: {2}", DateTime.Now, device, Message));
+                    break;
                 //Критическое сообщение
-                case LogMessageType.Warning:
-                case LogMessageType.Problem:
                 case LogMessageType.Error:
-                    Logger.Warn(string.Format("{0} CRITICAL - {1}: {2}", DateTime.Now, device, Message));
+                    Logger.Fatal(string.Format("{0} CRITICAL - {1}: {2}", DateTime.Now, device, Message));
                     //Создание копии при возникновении критического события
                     string CriticalLogsPath = Path.Combine(DirectoryLogPath, "Critical");
                     Directory.CreateDirectory(CriticalLogsPath);
@@ -220,8 +224,8 @@ namespace SCME.Logger
         //                        Trace.WriteLine(String.Format("{0} INFO - {1}: {2}", item.Timestamp,
         //                                                      item.Source, item.Message));
         //                        break;
-        //                    case LogMessageType.Warning:
-        //                    case LogMessageType.Problem:
+        //                    case LogMessageType.Error:
+        //                    case LogMessageType.Error:
         //                    case LogMessageType.Error:
         //                        Trace.WriteLine(String.Format("{0} CRITICAL - {1}: {2}", item.Timestamp,
         //                                                      item.Source, item.Message));

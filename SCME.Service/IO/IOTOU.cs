@@ -36,7 +36,7 @@ namespace SCME.Service.IO
             _Node = (ushort)Settings.Default.TOUNode;
             _Result = new TestResults();
 
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info,
+            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Milestone,
                                          String.Format("TOU created. Emulation mode: {0}", _IsTOUEmulation));
         }
 
@@ -104,7 +104,7 @@ namespace SCME.Service.IO
             if (_IsTOUEmulation)
             {
                 _ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                FireConnectionEvent(_ConnectionState, "TOU initialized");
+                FireConnectionEvent(_ConnectionState, "TOU initialized", LogMessageType.Milestone);
 
                 return _ConnectionState;
             }
@@ -134,12 +134,12 @@ namespace SCME.Service.IO
                 
                 _ConnectionState = DeviceConnectionState.ConnectionSuccess;
 
-                FireConnectionEvent(_ConnectionState, "TOU initialized");
+                FireConnectionEvent(_ConnectionState, "TOU initialized", LogMessageType.Milestone);
             }
             catch (Exception ex)
             {
                 _ConnectionState = DeviceConnectionState.ConnectionFailed;
-                FireConnectionEvent(_ConnectionState, String.Format("TOU initialization error: {0}", ex.Message));
+                FireConnectionEvent(_ConnectionState, String.Format("TOU initialization error: {0}", ex.Message), LogMessageType.Error);
             }
 
             return _ConnectionState;
@@ -161,12 +161,12 @@ namespace SCME.Service.IO
                 }
 
                 _ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "TOU disconnected");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "TOU disconnected", LogMessageType.Milestone);
             }
             catch (Exception)
             {
                 _ConnectionState = DeviceConnectionState.DisconnectionError;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "TOU disconnection error");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "TOU disconnection error", LogMessageType.Error);
             }
         }
 
@@ -191,7 +191,7 @@ namespace SCME.Service.IO
                 if (devState != HWDeviceState.Ready)
                 {
                     string error = "Launch test, TOU State not Ready, function Start";
-                    SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note, error);
+                    SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Error, error);
                     throw new Exception(error);
                 }
             }
@@ -217,14 +217,14 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note, "TOU fault cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info, "TOU fault cleared");
 
             CallAction(ACT_CLEAR_FAULT);
         }
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note, "TOU warning cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info, "TOU warning cleared");
 
             CallAction(ACT_CLEAR_WARNING);
         }
@@ -237,7 +237,7 @@ namespace SCME.Service.IO
                 value = _IOAdapter.Read16(_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info,
                                          string.Format("TOU @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
@@ -246,7 +246,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info,
                                          string.Format("TOU @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (_IsTOUEmulation)
@@ -258,7 +258,7 @@ namespace SCME.Service.IO
         internal void CallAction(ushort Action, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info,
                                          string.Format("TOU @Call, action {0}", Action));
 
             if (_IsTOUEmulation)
@@ -522,9 +522,9 @@ namespace SCME.Service.IO
 
         #region Events
 
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(ComplexParts.TOU, type, Message);
             _Communication.PostDeviceConnectionEvent(ComplexParts.TOU, State, Message);
         }
 
@@ -541,7 +541,7 @@ namespace SCME.Service.IO
 
         private void FireNotificationEvent(HWProblemReason problem, HWWarningReason warning, HWFaultReason fault, HWDisableReason disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Warning,
+            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Error,
                                          string.Format(
                                              "TOU device notification: problem None, warning {0}, fault {1}, disable {2}",
                                              warning, fault, disable));

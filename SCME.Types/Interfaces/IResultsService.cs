@@ -27,7 +27,7 @@ namespace SCME.Types.Interfaces
         /// <param name="group"></param>
         /// <returns></returns>
         List<DeviceItem> GetDevices(string @group);
-        
+
         List<int> ReadDeviceErrors(long internalId);
 
         List<ParameterItem> ReadDeviceParameters(long internalId);
@@ -37,7 +37,7 @@ namespace SCME.Types.Interfaces
         List<ParameterNormativeItem> ReadDeviceNormatives(long internalId);
 
         List<DeviceLocalItem> GetUnsendedDevices();
-        
+
         int? ReadDeviceRTClass(string devCode, string profName);
 
         int? ReadDeviceClass(string devCode, string profName);

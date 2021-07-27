@@ -93,7 +93,7 @@ namespace SCME.Service.IO
             if (m_IsEmulation)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                FireConnectionEvent(m_ConnectionState, "QrrTq initialized");
+                FireConnectionEvent(m_ConnectionState, "QrrTq initialized", LogMessageType.Milestone);
 
                 return m_ConnectionState;
             }
@@ -136,7 +136,7 @@ namespace SCME.Service.IO
                                 //блок QrrTq перешёл в состояние DS_Ready - завершаем процесс инициализации
                                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
                                 End = true;
-                                FireConnectionEvent(m_ConnectionState, "QrrTq successfully initialized.");
+                                FireConnectionEvent(m_ConnectionState, "QrrTq successfully initialized.", LogMessageType.Milestone);
                                 break;
                         }
                     }
@@ -157,7 +157,7 @@ namespace SCME.Service.IO
                                 //сознательно не сбрасываем warning ибо это всегда делается в начале MeasurementLogicRoutine
                                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
                                 End = true;
-                                FireConnectionEvent(m_ConnectionState, "QrrTq successfully initialized.");
+                                FireConnectionEvent(m_ConnectionState, "QrrTq successfully initialized.", LogMessageType.Milestone);
                                 break;
 
                             case (ushort)HWDeviceState.DS_InProcess:
@@ -176,7 +176,7 @@ namespace SCME.Service.IO
             catch (Exception e)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionFailed;
-                FireConnectionEvent(m_ConnectionState, String.Format("QrrTq initialization error: {0}.", e.Message));
+                FireConnectionEvent(m_ConnectionState, String.Format("QrrTq initialization error: {0}.", e.Message), LogMessageType.Error);
             }
 
             return m_ConnectionState;
@@ -200,7 +200,7 @@ namespace SCME.Service.IO
             catch (Exception)
             {
                 m_ConnectionState = DeviceConnectionState.DisconnectionError;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "QrrTq disconnection error");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "QrrTq disconnection error", LogMessageType.Error);
             }
         }
 
@@ -460,14 +460,14 @@ namespace SCME.Service.IO
         internal void ClearFault()
         {
             //очистка ошибки блока QrrTq
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, "QrrTq try to clear fault");
+            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq try to clear fault");
             CallAction(ACT_CLR_FAULT);
         }
 
         private void ClearWarning()
         {
             //очистка предупреждения блока QrrTq
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, "QrrTq try to clear warning");
+            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq try to clear warning");
             CallAction(ACT_CLR_WARNING);
         }
 
@@ -480,7 +480,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, string.Format("QrrTq @ReadRegister, address {0}, value {1}", Address, value));
+                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -492,7 +492,7 @@ namespace SCME.Service.IO
 
             if (!m_IsEmulation) value = m_IOAdapter.Read16S(m_Node, Address);
 
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, string.Format("QrrTq @ReadRegisterS, address {0}, value {1}", Address, value));
+            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -502,7 +502,7 @@ namespace SCME.Service.IO
             if (Result != null)
             {
                 //чтение массивов даннных тока и напряжения
-                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, "QrrTq @ReadArrays begin");
+                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq @ReadArrays begin");
 
                 //читаем массив данных для построения графика тока и напряжения
                 Result.CurrentData.Clear();
@@ -514,14 +514,14 @@ namespace SCME.Service.IO
                     Result.VoltageData = m_IOAdapter.ReadArrayFast16S(m_Node, EP_Voltage).ToList();
                 }
 
-                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, "QrrTq @ReadArray end");
+                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq @ReadArray end");
             }
         }
 
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         //запись в регистр с номером Address ushort значения Value
         {
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, string.Format("QrrTq @WriteRegister, address {0}, value {1}", Address, Value));
+            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsEmulation) return;
 
@@ -530,7 +530,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, string.Format("QrrTq @Call, action {0}", Action));
+            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @Call, action {0}", Action));
 
             if (m_IsEmulation) return;
 
@@ -637,15 +637,15 @@ namespace SCME.Service.IO
         #endregion
 
         #region Events
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.QrrTq, State, Message);
         }
 
         private void FireNotificationEvent(ushort Problem, ushort Warning, ushort Fault, ushort Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Warning, string.Format("QrrTq device notification: problem {0}, warning {1}, fault {2}, disable {3}", Problem, Warning, Fault, Disable));
+            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Error, string.Format("QrrTq device notification: problem {0}, warning {1}, fault {2}, disable {3}", Problem, Warning, Fault, Disable));
             m_Communication.PostQrrTqNotificationEvent(Problem, Warning, Fault, Disable);
         }
 
@@ -666,7 +666,7 @@ namespace SCME.Service.IO
         private void FireKindOfFreezingEvent(ushort KindOfFreezing)
         {
             string message = string.Format("QrrTq KindOfFreezing {0}", KindOfFreezing);
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Note, message);
+            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, message);
             m_Communication.PostQrrTqKindOfFreezingEvent(KindOfFreezing);
         }
         #endregion

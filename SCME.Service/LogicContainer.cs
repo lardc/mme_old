@@ -154,7 +154,7 @@ namespace SCME.Service
             m_Param = Params;
             var state = DeviceConnectionState.ConnectionInProcess;
 
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info,
+            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone,
                                          string.Format(Resources.Log_LogicContainer_Requested_block_modes, m_Param.IsGateEnabled, m_Param.IsSLEnabled, m_Param.IsBVTEnabled, m_Param.IsClampEnabled, m_Param.IsdVdtEnabled, m_Param.IsATUEnabled, m_Param.IsQrrTqEnabled, m_Param.IsRACEnabled, m_Param.IsIHEnabled, m_Param.IsTOUEnabled));
 
             try
@@ -426,7 +426,7 @@ namespace SCME.Service
 
             GC.Collect();
 
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_LogicContainer_All_disconnected);
+            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_LogicContainer_All_disconnected);
 
             if (savedEx != null)
                 m_Communication.PostCommonConnectionEvent(DeviceConnectionState.DisconnectionError, string.Format(Resources.Error_LogicContainer_Exception, savedEx.Message));
@@ -944,7 +944,7 @@ namespace SCME.Service
 
             var message = string.Format("Start main test, state {0}; test enabled: Gate - {1}, VTM, - {2}, BVT - {3}, ATU - {4}, QrrTq - {5}, IH - {6}, RCC - {7}, TOU - {8}",
                                         m_State, m_ParametersGate.IsEnabled, m_ParametersSL.IsEnabled, m_ParametersBvt.IsEnabled, m_ParametersAtu.IsEnabled, m_ParametersQrrTq.IsEnabled, m_ParametersIH.IsEnabled, m_ParametersRCC.IsEnabled, m_ParametersTOU.IsEnabled);
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, message);
+            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, message);
 
             m_Communication.PostTestAllEvent(m_State, "Starting tests");
 
@@ -968,7 +968,7 @@ namespace SCME.Service
             SetSafetyState(m_IOCommutation, true);
             if (m_IOCommutation.IsSafetyAlarm() || SCME.UIServiceConfig.Properties.Settings.Default.AlarmEmulation)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Warning, "Safety alarm");
+                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Safety alarm");
                 m_State = DeviceState.None;
                 return false;
             }
@@ -1345,7 +1345,7 @@ namespace SCME.Service
             SetSafetyState(m_IOCommutation, true);
             if (m_IOCommutation.IsSafetyAlarm() || SCME.UIServiceConfig.Properties.Settings.Default.AlarmEmulation)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Warning, "Safety alarm");
+                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Safety alarm");
                 m_State = DeviceState.None;
                 return;
             }
@@ -1583,7 +1583,7 @@ namespace SCME.Service
         {
             try
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Note, $"Call Unsqueeze {m_ClampingSystemConnected} {m_Param.IsClampEnabled}");
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, $"Call Unsqueeze {m_ClampingSystemConnected} {m_Param.IsClampEnabled}");
                     if (m_ClampingSystemConnected && m_Param.IsClampEnabled)
                         m_Thread.StartSingle(Dummy => m_IOClamping.Unsqueeze(ClampingParameters));
             }
@@ -1894,7 +1894,7 @@ namespace SCME.Service
 
         private void FireStopEvent()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "StopEvent");
+            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, "StopEvent");
             m_Communication.PostStopEvent();
         }
 

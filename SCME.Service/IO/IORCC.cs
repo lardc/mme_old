@@ -256,7 +256,7 @@ namespace SCME.Service.IO
 
         private void FireNotificationEvent(ComplexParts Sender, ushort Problem, ushort Warning, ushort Fault, ushort Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.RCC, LogMessageType.Warning, string.Format("RCC device notification: {0} problem {1}, {0} warning {2}, {0} fault {3}, {0} disable {4}", Sender, Problem, Warning, Fault, Disable));
+            SystemHost.Journal.AppendLog(ComplexParts.RCC, LogMessageType.Error, string.Format("RCC device notification: {0} problem {1}, {0} warning {2}, {0} fault {3}, {0} disable {4}", Sender, Problem, Warning, Fault, Disable));
             m_Communication.PostRCCNotificationEvent(Problem, Warning, Fault, Disable);
         }
 

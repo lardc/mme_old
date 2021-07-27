@@ -23,7 +23,7 @@ namespace SCME.Service.IO
 
             m_IsAdapterEmulation = Settings.Default.AdapterEmulation;
 
-            SystemHost.Journal.AppendLog(ComplexParts.Adapter, LogMessageType.Info,
+            SystemHost.Journal.AppendLog(ComplexParts.Adapter, LogMessageType.Milestone,
                                          String.Format("Adapter created. Emulation mode: {0}", m_IsAdapterEmulation));
         }
 
@@ -37,7 +37,7 @@ namespace SCME.Service.IO
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
 
-                FireConnectionEvent(m_ConnectionState, "Adapter initialized");
+                FireConnectionEvent(m_ConnectionState, "Adapter initialized", LogMessageType.Milestone);
 
                 return m_ConnectionState;
             }
@@ -66,13 +66,13 @@ namespace SCME.Service.IO
 
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
 
-                FireConnectionEvent(m_ConnectionState, "Adapter initialized");
+                FireConnectionEvent(m_ConnectionState, "Adapter initialized", LogMessageType.Milestone);
             }
             catch (SerialConnectionException ex)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionFailed;
 
-                FireConnectionEvent(m_ConnectionState, String.Format("Adapter initialization error: {0}", ex.Message));
+                FireConnectionEvent(m_ConnectionState, String.Format("Adapter initialization error: {0}", ex.Message), LogMessageType.Error);
             }
 
             return m_ConnectionState;
@@ -90,7 +90,7 @@ namespace SCME.Service.IO
             }
 
             m_ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-            FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "Adapter closed");
+            FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "Adapter closed", LogMessageType.Milestone);
         }
 
         internal ushort Read16(ushort Node, ushort Address)
@@ -221,9 +221,9 @@ namespace SCME.Service.IO
             }
         }
 
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Adapter, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(ComplexParts.Adapter, type, Message);
 
             m_Communication.PostDeviceConnectionEvent(ComplexParts.Adapter, State, Message);
         }

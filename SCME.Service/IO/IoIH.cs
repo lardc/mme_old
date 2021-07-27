@@ -421,19 +421,19 @@ namespace SCME.Service.IO
         internal void ClearFault()
         {
             //очистка ошибки виртуального блока IH
-            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Note, "IH try to clear fault");
+            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Milestone, "IH try to clear fault");
             m_IOGate.ClearFaults();
             m_IOStLs.ClearFault();
-            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Note, "IH fault cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Milestone, "IH fault cleared");
         }
 
         private void ClearWarning()
         {
             //очистка предупреждения виртуального блока IH
-            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Note, "IH try to clear warning");
+            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Milestone, "IH try to clear warning");
             m_IOGate.Warnings_Clear();
             m_IOStLs.ClearWarning();
-            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Note, "IH warning cleared");
+            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Milestone, "IH warning cleared");
         }
         #endregion
 
@@ -446,7 +446,7 @@ namespace SCME.Service.IO
 
         private void FireNotificationEvent(ComplexParts Sender, ushort Problem, ushort Warning, ushort Fault, ushort Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Warning, string.Format("IH device notification: {0} problem {1}, {0} warning {2}, {0} fault {3}, {0} disable {4}", Sender, Problem, Warning, Fault, Disable));
+            SystemHost.Journal.AppendLog(ComplexParts.IH, LogMessageType.Error, string.Format("IH device notification: {0} problem {1}, {0} warning {2}, {0} fault {3}, {0} disable {4}", Sender, Problem, Warning, Fault, Disable));
             m_Communication.PostIHNotificationEvent(Problem, Warning, Fault, Disable);
         }
 

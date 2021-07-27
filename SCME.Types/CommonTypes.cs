@@ -190,11 +190,7 @@ namespace SCME.Types
     public enum LogMessageType
     {
         [EnumMember]
-        Note,
-        [EnumMember]
-        Warning,
-        [EnumMember]
-        Problem,
+        Milestone,
         [EnumMember]
         Error,
         [EnumMember]

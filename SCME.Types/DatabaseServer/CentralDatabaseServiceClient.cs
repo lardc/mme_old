@@ -11,7 +11,7 @@ namespace SCME.Types.DatabaseServer
 {
     public class CentralDatabaseServiceClient : ClientBase<ICentralDatabaseService>, ICentralDatabaseService
     {
-        public CentralDatabaseServiceClient(){}
+        public CentralDatabaseServiceClient() { }
         public CentralDatabaseServiceClient(string uri) : base(WcfClientBindings.DefaultNetTcpBinding, new EndpointAddress(uri))
         {
 
@@ -26,7 +26,7 @@ namespace SCME.Types.DatabaseServer
         {
             return Channel.ReadDeviceClass(devCode, profileName);
         }
-        
+
         public void Check()
         {
             Channel.Check();
@@ -67,7 +67,7 @@ namespace SCME.Types.DatabaseServer
             return Channel.GetGroups(from, to);
         }
 
-      
+
 
         public List<DeviceItem> GetDevices(string @group)
         {

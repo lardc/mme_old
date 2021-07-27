@@ -49,7 +49,7 @@ namespace SCME.Service.IO
             m_Node = (ushort)CommutationNode;
             m_Type6 = Type6;
 
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, String.Format("Commutation created. Emulation mode: {0}", m_IsCommutationEmulation));
+            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, String.Format("Commutation created. Emulation mode: {0}", m_IsCommutationEmulation));
         }
 
         internal DeviceConnectionState Initialize()
@@ -60,7 +60,7 @@ namespace SCME.Service.IO
             if (m_IsCommutationEmulation)
             {
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
-                FireConnectionEvent(m_ConnectionState, "Commutation initialized");
+                FireConnectionEvent(m_ConnectionState, "Commutation initialized", LogMessageType.Milestone);
 
                 return m_ConnectionState;
             }
@@ -138,7 +138,7 @@ namespace SCME.Service.IO
                         FireSafetyEvent(m_SafetyAlarm);
 
                         m_CheckSafetyThread.StartCycle(SafetyThreadWorker, REQUEST_DELAY_MS);
-                        SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Safety thread cycle started");
+                        SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Safety thread cycle started");
                     }
                 }
 
@@ -148,7 +148,7 @@ namespace SCME.Service.IO
 
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
 
-                FireConnectionEvent(m_ConnectionState, "Commutation initialized");
+                FireConnectionEvent(m_ConnectionState, "Commutation initialized", LogMessageType.Milestone);
             }
             catch (Exception ex)
             {
@@ -180,12 +180,12 @@ namespace SCME.Service.IO
                 }
 
                 m_ConnectionState = DeviceConnectionState.DisconnectionSuccess;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "Commutation disconnected");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionSuccess, "Commutation disconnected", LogMessageType.Milestone);
             }
             catch (Exception)
             {
                 m_ConnectionState = DeviceConnectionState.DisconnectionError;
-                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "Commutation disconnection error");
+                FireConnectionEvent(DeviceConnectionState.DisconnectionError, "Commutation disconnection error", LogMessageType.Error);
             }
         }
 
@@ -373,7 +373,7 @@ namespace SCME.Service.IO
 
                 CheckSafetyOn();
 
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Commutation optical safety is on");
+                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Commutation optical safety is on");
             }
         }
 
@@ -384,7 +384,7 @@ namespace SCME.Service.IO
                 //деактивация датчика безопасности
                 CheckSafetyOff();
 
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Try to commutation optical safety set to off");
+                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Try to commutation optical safety set to off");
 
 
 
@@ -411,7 +411,7 @@ namespace SCME.Service.IO
                      throw new Exception(string.Format("Device is in a bad state. WaitedState={0}, factstate={1}.", (((ushort)WaitedState)).ToString(), FactState.ToString()));
                     
 
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Commutation optical safety is off");
+                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Commutation optical safety is off");
             }
         }
 
@@ -427,7 +427,7 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Note, "Commutation fault cleared");
+            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Commutation fault cleared");
 
             if (m_IsCommutationEmulation)
                 return;
@@ -437,7 +437,7 @@ namespace SCME.Service.IO
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Note, "Commutation warning cleared");
+            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Commutation warning cleared");
 
             if (m_IsCommutationEmulation)
                 return;
@@ -458,7 +458,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info,
                                          string.Format("Commutation @ReadRegister, address {0}, value {1}", Address,
                                                        value));
 
@@ -468,7 +468,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Note,
+                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info,
                                          string.Format("Commutation @WriteRegister, address {0}, value {1}", Address,
                                                        Value));
 
@@ -480,7 +480,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Note,
+            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info,
                                          string.Format("Commutation @Call, action {0}", Action));
 
             if (m_IsCommutationEmulation)
@@ -572,16 +572,16 @@ namespace SCME.Service.IO
             }
         }
 
-        private void FireConnectionEvent(DeviceConnectionState State, string Message)
+        private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, Message);
+            SystemHost.Journal.AppendLog(m_ID, type, Message);
 
             m_Communication.PostDeviceConnectionEvent(m_ID, State, Message);
         }
 
         private void FireNotificationEvent(Types.Commutation.HWWarningReason Warning, Types.Commutation.HWFaultReason Fault)
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Warning,
+            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Error,
                                          string.Format("Commutation device notification: warning {0}, fault {1}",
                                                        Warning, Fault));
 

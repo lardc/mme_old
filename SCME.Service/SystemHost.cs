@@ -36,7 +36,7 @@ namespace SCME.Service
                 case true:
                     //если принятый notSyncedReason пуст - синхронизация успешно выполнена
                     IsSyncedWithServer = true;
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "Local database was successfully synced with a central database");
+                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, "Local database was successfully synced with a central database");
                     break;
 
                 default:
@@ -96,7 +96,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Warning, $"New implement db local service not host: {ex.Message}");
+                Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, $"New implement db local service not host: {ex.Message}");
             }
             
             Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "New implement db local service run");
@@ -111,7 +111,7 @@ namespace SCME.Service
                              Settings.Default.LogsTracePathTemplate,
                              Settings.Default.ForceLogFlush,
                              Settings.Default.IncludeDetailsInLog);
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_SystemHost_Application_started);
+                Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_SystemHost_Application_started);
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace SCME.Service
 //            }
 //            catch (Exception ex)
 //            {
-//                Journal.AppendLog(ComplexParts.Service, LogMessageType.Warning, String.Format("Migrate database error: {0}", ex.Message));
+//                Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Migrate database error: {0}", ex.Message));
 //                return false;
 //            }
 
@@ -175,7 +175,7 @@ namespace SCME.Service
                 {
                     File.AppendAllText(@"SCME.Service error.txt",
                     $"\n\n{DateTime.Now}\nEXCEPTION: {ex}\nINNER EXCEPTION: {ex.InnerException ?? new Exception("No additional information - InnerException is null")}\n");
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Warning, $"SQLite database error: {ex?.InnerException?.ToString() ?? ex.ToString()}");
+                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, $"SQLite database error: {ex?.InnerException?.ToString() ?? ex.ToString()}");
                     return false;
                 }
                
@@ -186,7 +186,7 @@ namespace SCME.Service
                 }
                 catch (Exception ex)
                 {
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Warning, String.Format("Can't open external database service port: {0}", ex.Message));
+                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Can't open external database service port: {0}", ex.Message));
                 }
 
                 ms_DatabaseServiceHost.Open();
@@ -200,7 +200,7 @@ namespace SCME.Service
                 }
                 catch (Exception ex)
                 {
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Warning, String.Format("Can't open external maintenance service port: {0}", ex.Message));
+                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Can't open external maintenance service port: {0}", ex.Message));
                 }
 
                 ms_MaintenanceServiceHost.Open();
@@ -290,7 +290,7 @@ namespace SCME.Service
 
             if (Journal != null)
             {
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_SystemHost_Application_closed);
+                Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_SystemHost_Application_closed);
                 Journal.Close();
             }
         }

@@ -9,15 +9,18 @@ using Application = System.Windows.Application;
 
 namespace SCME.ProfileBuilder
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            //Подгрузка конфигурации
             UIServiceConfig.Settings.LoadSettings();
-
+            //Проверка наличия файла параметров блоков
+            if (!File.Exists("SCME.ParamsConfig.xml"))
+            {
+                MessageBox.Show("Файл с параметрами блоков не существует", "Ошибка");
+                Current.Shutdown(1);
+            }
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             Thread.CurrentThread.CurrentCulture = new CultureInfo(Settings.Default.CurrentCulture);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(Settings.Default.CurrentCulture);

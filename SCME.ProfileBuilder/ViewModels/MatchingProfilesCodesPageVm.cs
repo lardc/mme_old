@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using PropertyChanged;
-using SCME.InterfaceImplementations.Common.DbService;
-using SCME.InterfaceImplementations.NewImplement.SQLite;
+﻿using PropertyChanged;
 using SCME.Types;
+using SCME.Types.BaseTestParams;
 using SCME.Types.Database;
 using SCME.Types.Profiles;
 using SCME.WpfControlLibrary.Commands;
 using SCME.WpfControlLibrary.CustomControls;
-using SCME.WpfControlLibrary.ViewModels;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Data;
+using System.Xml.Linq;
 
 namespace SCME.ProfileBuilder.ViewModels
 {
@@ -172,15 +167,224 @@ namespace SCME.ProfileBuilder.ViewModels
         
         public RelayCommand AddProfileToMmeCode => new RelayCommand(o =>
         {
-            foreach (var i in SelectedProfilesForMmeCode.ToList())
+            //Парсинг параметров нужного комплекса
+            XDocument ParamsConfig = XDocument.Load("SCME.ParamsConfig.xml");
+            XElement CurrentMme = ParamsConfig.Element("mmes").Elements("mme").FirstOrDefault(mme => mme.Attribute("name").Value == SelectedMmeCode);
+            //Перебор всех добавляемыхк комплексу профилей
+            foreach (MyProfile Profile in SelectedProfilesForMmeCode.ToList())
             {
-                _dbService.InsertMmeCodeToProfile(i.Id, SelectedMmeCode);
-                
-                ProfilesForMmeCodeSource.Remove(i);
-                ProfilesFromMmeCodeSource.Add(i);
+                //Флаг корректности профиля
+                bool IsProfileCorrect = true;
+                //Перебор всех типов тестирования в профиле
+                foreach (BaseTestParametersAndNormatives Parameter in Profile.DeepData.TestParametersAndNormatives)
+                {
+                    if (Parameter.TestParametersType == TestParametersType.GTU)
+                        if (!GTUParameters_Compare(CurrentMme, Parameter))
+                        {
+                            MessageBox.Show("Параметры тестирования GTU не соответствуют данному КИП", "Ошибка добавления");
+                            IsProfileCorrect = false;
+                            break;
+                        }
+                    if (Parameter.TestParametersType == TestParametersType.SL)
+                        if (!SLParameters_Compare(CurrentMme, Parameter))
+                        {
+                            MessageBox.Show("Параметры тестирования SL не соответствуют данному КИП", "Ошибка добавления");
+                            IsProfileCorrect = false; 
+                            break;
+                        }
+                    if (Parameter.TestParametersType == TestParametersType.BVT)
+                        if (!BVTParameters_Compare(CurrentMme, Parameter))
+                        {
+                            MessageBox.Show("Параметры тестирования BVT не соответствуют данному КИП", "Ошибка добавления");
+                            IsProfileCorrect = false; 
+                            break;
+                        }
+                    if (Parameter.TestParametersType == TestParametersType.dVdt)
+                        if (!dUdtParameters_Compare(CurrentMme, Parameter))
+                        {
+                            MessageBox.Show("Параметры тестирования dUdt не соответствуют данному КИП", "Ошибка добавления");
+                            IsProfileCorrect = false; 
+                            break;
+                        }
+                    if (Parameter.TestParametersType == TestParametersType.ATU)
+                        if (!ATUParameters_Compare(CurrentMme, Parameter))
+                        {
+                            MessageBox.Show("Параметры тестирования ATU не соответствуют данному КИП", "Ошибка добавления");
+                            IsProfileCorrect = false; 
+                            break;
+                        }
+                    if (Parameter.TestParametersType == TestParametersType.QrrTq)
+                        if (!QrrTqParameters_Compare(CurrentMme, Parameter))
+                        {
+                            MessageBox.Show("Параметры тестирования QrrTq не соответствуют данному КИП", "Ошибка добавления");
+                            IsProfileCorrect = false; 
+                            break;
+                        }
+                    if (Parameter.TestParametersType == TestParametersType.TOU)
+                        if (!TOUParameters_Compare(CurrentMme, Parameter))
+                        {
+                            MessageBox.Show("Параметры тестирования TOU не соответствуют данному КИП", "Ошибка добавления");
+                            IsProfileCorrect = false; 
+                            break;
+                        }
+                }
+                //Некорректный профиль, проверка следующего
+                if (!IsProfileCorrect)
+                    continue;
+                _dbService.InsertMmeCodeToProfile(Profile.Id, SelectedMmeCode);
+                ProfilesForMmeCodeSource.Remove(Profile);
+                ProfilesFromMmeCodeSource.Add(Profile);
             }
         }, o => SelectedProfilesForMmeCode.Count > 0);
         
+        private bool GTUParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров GTU
+        {
+            Types.GTU.TestParameters Parameters = (Types.GTU.TestParameters)parameters;
+            //Требуемый блок
+            XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "GTU");
+            if (!Parameters_Compare(NeededBlock, "Itm", Parameters.Itm))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "CurrentLimit", Parameters.CurrentLimit))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "VoltageLimit", Parameters.VoltageLimitD))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "PlateTime", Parameters.PlateTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "RampUpVoltage", Parameters.RampUpVoltage))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "StartVoltage", Parameters.StartVoltage))
+                return false;
+            return true;
+        }
+
+        private bool SLParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров SL
+        {
+            Types.VTM.TestParameters Parameters = (Types.VTM.TestParameters)parameters;
+            //Требуемый блок
+            XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "SL");
+            if (!Parameters_Compare(NeededBlock, "RampCurrent", Parameters.RampCurrent))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "RampTime", Parameters.RampTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "RampOpeningCurrent", Parameters.RampOpeningCurrent))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "RampOpeningTime", Parameters.RampOpeningTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "SinusCurrent", Parameters.SinusCurrent))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "SinusTime", Parameters.SinusTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "CurveCurrent", Parameters.CurveCurrent))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "CurveTime", Parameters.CurveTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "CurveFactor", Parameters.CurveFactor))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "CurveAddTime", Parameters.CurveAddTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "Count", Parameters.Count))
+                return false;
+            return true;
+        }
+
+        private bool BVTParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров BVT
+        {
+            Types.BVT.TestParameters Parameters = (Types.BVT.TestParameters)parameters;
+            //Требуемый блок
+            XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "BVT");
+            if (!Parameters_Compare(NeededBlock, "CurrentLimit", Parameters.CurrentLimit))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "VoltageLimitD", Parameters.VoltageLimitD))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "VoltageLimitR", Parameters.VoltageLimitR))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "PlateTime", Parameters.PlateTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "RampUpVoltage", Parameters.RampUpVoltage))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "StartVoltage", Parameters.StartVoltage))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "UdsmUrsmCurrentLimit", Parameters.UdsmUrsmCurrentLimit))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "UdsmUrsmVoltageLimitD", Parameters.UdsmUrsmVoltageLimitD))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "UdsmUrsmVoltageLimitR", Parameters.UdsmUrsmVoltageLimitR))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "UdsmUrsmPlateTime", Parameters.UdsmUrsmPlateTime))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "UdsmUrsmRampUpVoltage", Parameters.UdsmUrsmRampUpVoltage))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "UdsmUrsmStartVoltage", Parameters.UdsmUrsmStartVoltage))
+                return false;
+            return true;
+        }
+
+        private bool dUdtParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров dUdt
+        {
+            Types.dVdt.TestParameters Parameters = (Types.dVdt.TestParameters)parameters;
+            //Требуемый блок
+            XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "dUdt");
+            if (!Parameters_Compare(NeededBlock, "Voltage", Parameters.Voltage))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "ConfirmationCount", Parameters.ConfirmationCount))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "VoltageRateOffset", Parameters.VoltageRateOffSet))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "VoltageRateLimit", Parameters.VoltageRateLimit))
+                return false;
+            return true;
+        }
+
+        private bool ATUParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров ATU
+        {
+            Types.ATU.TestParameters Parameters = (Types.ATU.TestParameters)parameters;
+            //Требуемый блок
+            XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "ATU");
+            if (!Parameters_Compare(NeededBlock, "PrePulseValue", Parameters.PrePulseValue))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "PowerValue", Parameters.PowerValue))
+                return false;
+            return true;
+        }
+
+        private bool QrrTqParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров QrrTq
+        {
+            Types.QrrTq.TestParameters Parameters = (Types.QrrTq.TestParameters)parameters;
+            //Требуемый блок
+            XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "QrrTq");
+            if (!Parameters_Compare(NeededBlock, "DirectCurrent", Parameters.DirectCurrent))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "DCPulseWidth", Parameters.DCPulseWidth))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "DCRiseRate", Parameters.DCRiseRate))
+                return false;
+            if (!Parameters_Compare(NeededBlock, "OffStateVoltage", Parameters.OffStateVoltage))
+                return false;
+            return true;
+        }
+
+        private bool TOUParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров TOU
+        {
+            Types.TOU.TestParameters Parameters = (Types.TOU.TestParameters)parameters;
+            //Требуемый блок
+            XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "TOU");
+            if (!Parameters_Compare(NeededBlock, "CurrentAmplitude", Parameters.CurrentAmplitude))
+                return false;
+            return true;
+        }
+
+        private bool Parameters_Compare(XElement neededBlock, string parameterName, double value) //Сравнение параметров с нормативными по данному комплексу
+        {
+            //Требуемый параметр
+            XElement Parameter = neededBlock.Element("block.parameters").Elements("parameter").FirstOrDefault(parameter => parameter.Attribute("name").Value == parameterName);
+            //Граничащие значения
+            double MinValue = double.Parse(Parameter.Attribute("minValue").Value);
+            double MaxValue = double.Parse(Parameter.Attribute("maxValue").Value);
+            if (value < MinValue || value > MaxValue)
+                return false;
+            return true;
+        }
+
         public RelayCommand RemoveProfileFromMmeCode => new RelayCommand(o =>
         {
             foreach (var i in SelectedProfilesFromMmeCode.ToList())
@@ -190,7 +394,6 @@ namespace SCME.ProfileBuilder.ViewModels
                 ProfilesForMmeCodeSource.Add(i);
             }
         }, o => SelectedProfilesFromMmeCode.Count > 0);
-        
         
         #endregion
 

@@ -15,7 +15,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ExitButtonIsVisible" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ScrollBarButtonIsVisible" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
@@ -33,7 +33,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="PlotUserBVT" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="IsTechPasswordEnabled" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
@@ -57,7 +57,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="AccountsPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\..\UIServiceData\Accounts.xml</Value>
+      <Value Profile="(Default)">C:\Users\evgeny\Desktop\SCME.BaseData\UIServiceData\Accounts.xml</Value>
     </Setting>
     <Setting Name="ClampIsVisible" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
@@ -90,10 +90,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="PlotUserQrrTq" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="RACIsVisible" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="IHIsVisible" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>

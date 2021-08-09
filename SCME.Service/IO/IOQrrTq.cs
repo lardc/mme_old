@@ -394,11 +394,6 @@ namespace SCME.Service.IO
                             m_Result.VoltageData.Add(600);
                         }
                     }
-
-                    //проверяем отображение Problem, Warning, Fault
-                    FireNotificationEvent(7, (ushort)HWWarningReason.None, (ushort)HWFaultReason.None, (ushort)HWDisableReason.None);
-                    FireNotificationEvent((ushort)HWProblemReason.None, 2, (ushort)HWFaultReason.None, (ushort)HWDisableReason.None);
-                    FireNotificationEvent((ushort)HWProblemReason.None, (ushort)HWWarningReason.None, 1, (ushort)HWDisableReason.None);
                 }
                 else
                 {

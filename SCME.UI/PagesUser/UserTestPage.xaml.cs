@@ -1120,21 +1120,18 @@ namespace SCME.UI.PagesUser
 
             bool isNewlyRealized;
 
-            if (m_CurrentPos == 1)
+            for (int i = 0; i < ListViewResults1.Items.Count; i++)
             {
-                for (int i = 0; i < ListViewResults1.Items.Count; i++)
+                if (ListViewResults1.Items[i] is Types.BVT.TestParameters)
                 {
-                    if (ListViewResults1.Items[i] is Types.BVT.TestParameters)
-                    {
-                        IItemContainerGenerator generator = ListViewResults1.ItemContainerGenerator;
+                    IItemContainerGenerator generator = ListViewResults1.ItemContainerGenerator;
 
-                        var position = generator.GeneratorPositionFromIndex(i);
-                        using (generator.StartAt(position, GeneratorDirection.Forward, true))
-                        {
-                            var child = generator.GenerateNext(out isNewlyRealized);
-                            generator.PrepareItemContainer(child);
-                            gateResults.Add(child);
-                        }
+                    var position = generator.GeneratorPositionFromIndex(i);
+                    using (generator.StartAt(position, GeneratorDirection.Forward, true))
+                    {
+                        var child = generator.GenerateNext(out isNewlyRealized);
+                        generator.PrepareItemContainer(child);
+                        gateResults.Add(child);
                     }
                 }
             }
@@ -1152,7 +1149,6 @@ namespace SCME.UI.PagesUser
         {
             m_StateBvt = state;
 
-
             if (m_CurrentPos == 1)
             {
                 ResultsBVT1[bvtCounter].IDRM = result.IDRM;
@@ -1167,34 +1163,34 @@ namespace SCME.UI.PagesUser
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
 
-            if ((Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeV)
+            if (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeV)
             {
-                var labelBvtIdrmResult = FindChild<Label>(presenter, "labelBvtIdrmResult1");
+                var labelBvtIdrmResult = FindChild<Label>(presenter, "labelBvtIdrmResult" + m_CurrentPos);
                 if (labelBvtIdrmResult != null)
                     labelBvtIdrmResult.Content = result.IDRM.ToString(CultureInfo.InvariantCulture);
 
-                var labelBvtVdrmResult = FindChild<Label>(presenter, "labelBvtVdrmResult1");
+                var labelBvtVdrmResult = FindChild<Label>(presenter, "labelBvtVdrmResult" + m_CurrentPos);
                 if (labelBvtVdrmResult != null)
-                    SetLabel(labelBvtVdrmResult, state, result.VDRM > (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].VDRM, result.VDRM.ToString(CultureInfo.InvariantCulture));
+                    SetLabel(labelBvtVdrmResult, state, result.VDRM > Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VDRM, result.VDRM.ToString(CultureInfo.InvariantCulture));
 
                 if (state != Types.DeviceState.InProcess)
-                    if (result.VDRM <= (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].VDRM)
+                    if (result.VDRM <= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VDRM)
                         ((m_CurrentPos == 1) ? m_Errors1 : m_Errors2).Add("ERR_VDRM");
             }
-            if ((Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeI)
+            if (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeI)
             {
-                var labelBvtVdrmResult = FindChild<Label>(presenter, "labelBvtVdrmResult1");
+                var labelBvtVdrmResult = FindChild<Label>(presenter, "labelBvtVdrmResult" + m_CurrentPos);
                 if (labelBvtVdrmResult != null)
                     labelBvtVdrmResult.Content = result.VDRM.ToString(CultureInfo.InvariantCulture);
 
-                var labelBvtIdrmResult = FindChild<Label>(presenter, "labelBvtIdrmResult1");
+                var labelBvtIdrmResult = FindChild<Label>(presenter, "labelBvtIdrmResult" + m_CurrentPos);
                 if (labelBvtIdrmResult != null)
-                    SetLabel(labelBvtIdrmResult, state, result.IDRM <= (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IDRM &&
+                    SetLabel(labelBvtIdrmResult, state, result.IDRM <= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IDRM &&
                                                         result.IDRM > 0,
                          result.IDRM.ToString(CultureInfo.InvariantCulture));
 
                 if (state != Types.DeviceState.InProcess)
-                    if (result.IDRM > (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IDRM)
+                    if (result.IDRM > Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IDRM)
                         ((m_CurrentPos == 1) ? m_Errors1 : m_Errors2).Add("ERR_IDRM");
             }
 
@@ -1220,36 +1216,36 @@ namespace SCME.UI.PagesUser
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
 
-            if ((Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeV)
+            if (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeV)
             {
-                var labelBvtIrrmResult = FindChild<Label>(presenter, "labelBvtIrrmResult1");
+                var labelBvtIrrmResult = FindChild<Label>(presenter, "labelBvtIrrmResult" + m_CurrentPos);
                 if (labelBvtIrrmResult != null)
                     labelBvtIrrmResult.Content = result.IRRM.ToString(CultureInfo.InvariantCulture);
 
 
-                var labelBvtVrrmResult = FindChild<Label>(presenter, "labelBvtVrrmResult1");
+                var labelBvtVrrmResult = FindChild<Label>(presenter, "labelBvtVrrmResult" + m_CurrentPos);
                 if (labelBvtVrrmResult != null)
-                    SetLabel(labelBvtVrrmResult, state, result.VRRM > (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].VRRM,
+                    SetLabel(labelBvtVrrmResult, state, result.VRRM > Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VRRM,
                          result.VRRM.ToString(CultureInfo.InvariantCulture));
 
                 if (state != Types.DeviceState.InProcess)
-                    if (result.VRRM <= (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].VRRM)
+                    if (result.VRRM <= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VRRM)
                         ((m_CurrentPos == 1) ? m_Errors1 : m_Errors2).Add("ERR_VRRM");
             }
-            if ((Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeI)
+            if (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].MeasurementMode == Types.BVT.BVTMeasurementMode.ModeI)
             {
-                var labelBvtVrrmResult = FindChild<Label>(presenter, "labelBvtVrrmResult1");
+                var labelBvtVrrmResult = FindChild<Label>(presenter, "labelBvtVrrmResult" + m_CurrentPos);
                 if (labelBvtVrrmResult != null)
                     labelBvtVrrmResult.Content = result.VRRM.ToString(CultureInfo.InvariantCulture);
 
-                var labelBvtIrrmResult = FindChild<Label>(presenter, "labelBvtIrrmResult1");
+                var labelBvtIrrmResult = FindChild<Label>(presenter, "labelBvtIrrmResult" + m_CurrentPos);
                 if (labelBvtIrrmResult != null)
-                    SetLabel(labelBvtIrrmResult, state, result.IRRM <= (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IRRM &&
+                    SetLabel(labelBvtIrrmResult, state, result.IRRM <= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IRRM &&
                                                         result.IRRM > 0,
                          result.IRRM.ToString(CultureInfo.InvariantCulture));
 
                 if (state != Types.DeviceState.InProcess)
-                    if (result.IRRM > (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IRRM)
+                    if (result.IRRM > Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IRRM)
                         ((m_CurrentPos == 1) ? m_Errors1 : m_Errors2).Add("ERR_IRRM");
             }
 
@@ -1259,7 +1255,6 @@ namespace SCME.UI.PagesUser
 
         internal void SetBvtWarning(Types.BVT.HWWarningReason Warning)
         {
-            return;
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
 
@@ -1274,7 +1269,6 @@ namespace SCME.UI.PagesUser
 
         internal void SetBvtProblem(Types.BVT.HWProblemReason Problem)
         {
-            return;
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
             var labelBvtWarning = FindChild<Label>(presenter, "labelBvtWarning1");
@@ -1288,7 +1282,6 @@ namespace SCME.UI.PagesUser
 
         internal void SetBvtFault(Types.BVT.HWFaultReason Fault)
         {
-            return;
             _HasFault = true;
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
@@ -1328,16 +1321,16 @@ namespace SCME.UI.PagesUser
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
 
-            var labelBvtVdsmResult = FindChild<Label>(presenter, "labelBvtVdsmResult1");
+            var labelBvtVdsmResult = FindChild<Label>(presenter, "labelBvtVdsmResult" + m_CurrentPos);
             if (labelBvtVdsmResult != null)
                 labelBvtVdsmResult.Content = result.VDSM.ToString(CultureInfo.InvariantCulture);
 
-            var labelBvtIdsmResult = FindChild<Label>(presenter, "labelBvtIdsmResult1");
+            var labelBvtIdsmResult = FindChild<Label>(presenter, "labelBvtIdsmResult" + m_CurrentPos);
             if (labelBvtIdsmResult != null)
-                SetLabel(labelBvtIdsmResult, state, result.IDSM < (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IDSM, result.IDSM.ToString(CultureInfo.InvariantCulture));
+                SetLabel(labelBvtIdsmResult, state, result.IDSM < Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IDSM, result.IDSM.ToString(CultureInfo.InvariantCulture));
 
             if (state != Types.DeviceState.InProcess)
-                if (result.IDSM >= (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IDSM)
+                if (result.IDSM >= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IDSM)
                     ((m_CurrentPos == 1) ? m_Errors1 : m_Errors2).Add("ERR_IDSM");
         }
 
@@ -1359,16 +1352,16 @@ namespace SCME.UI.PagesUser
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
 
-            var labelBvtVrsmResult = FindChild<Label>(presenter, "labelBvtVrsmResult1");
+            var labelBvtVrsmResult = FindChild<Label>(presenter, "labelBvtVrsmResult" + m_CurrentPos);
             if (labelBvtVrsmResult != null)
                 labelBvtVrsmResult.Content = result.VRSM.ToString(CultureInfo.InvariantCulture);
 
-            var labelBvtIrsmResult = FindChild<Label>(presenter, "labelBvtIrsmResult1");
+            var labelBvtIrsmResult = FindChild<Label>(presenter, "labelBvtIrsmResult" + m_CurrentPos);
             if (labelBvtIrsmResult != null)
-                SetLabel(labelBvtIrsmResult, state, result.IRSM < (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IRSM, result.IRSM.ToString(CultureInfo.InvariantCulture));
+                SetLabel(labelBvtIrsmResult, state, result.IRSM < Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IRSM, result.IRSM.ToString(CultureInfo.InvariantCulture));
 
             if (state != Types.DeviceState.InProcess)
-                if (result.IRSM >= (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray())[bvtCounter].IRSM)
+                if (result.IRSM >= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].IRSM)
                     ((m_CurrentPos == 1) ? m_Errors1 : m_Errors2).Add("ERR_IRSM");
         }
 
@@ -2263,35 +2256,35 @@ namespace SCME.UI.PagesUser
                     labelWithIndexBvtVrrmVResult1.Content = Properties.Resources.VrrmV;
             }
             
-            var labelBvtVdrmResult1 = FindChild<Label>(presenter, "labelBvtVdrmResult1");
+            var labelBvtVdrmResult1 = FindChild<Label>(presenter, "labelBvtVdrmResult" + position);
             if (labelBvtVdrmResult1 != null)
                 ResetLabel(labelBvtVdrmResult1);
 
-            var labelBvtVrrmResult1 = FindChild<Label>(presenter, "labelBvtVrrmResult1");
+            var labelBvtVrrmResult1 = FindChild<Label>(presenter, "labelBvtVrrmResult" + position);
             if (labelBvtVrrmResult1 != null)
                 ResetLabel(labelBvtVrrmResult1);
 
-            var labelBvtIdrmResult1 = FindChild<Label>(presenter, "labelBvtIdrmResult1");
+            var labelBvtIdrmResult1 = FindChild<Label>(presenter, "labelBvtIdrmResult" + position);
             if (labelBvtIdrmResult1 != null)
                 ResetLabel(labelBvtIdrmResult1);
 
-            var labelBvtIrrmResult1 = FindChild<Label>(presenter, "labelBvtIrrmResult1");
+            var labelBvtIrrmResult1 = FindChild<Label>(presenter, "labelBvtIrrmResult" + position);
             if (labelBvtIrrmResult1 != null)
                 ResetLabel(labelBvtIrrmResult1);
 
-            var labelBvtVdsmResult1 = FindChild<Label>(presenter, "labelBvtVdsmResult1");
+            var labelBvtVdsmResult1 = FindChild<Label>(presenter, "labelBvtVdsmResult" + position);
             if (labelBvtVdsmResult1 != null)
                 ResetLabel(labelBvtVdsmResult1);
 
-            var labelBvtIdsmResult1 = FindChild<Label>(presenter, "labelBvtIdsmResult1");
+            var labelBvtIdsmResult1 = FindChild<Label>(presenter, "labelBvtIdsmResult" + position);
             if (labelBvtIdsmResult1 != null)
                 ResetLabel(labelBvtIdsmResult1);
 
-            var labelBvtVrsmResult1 = FindChild<Label>(presenter, "labelBvtVrsmResult1");
+            var labelBvtVrsmResult1 = FindChild<Label>(presenter, "labelBvtVrsmResult" + position);
             if (labelBvtVrsmResult1 != null)
                 ResetLabel(labelBvtVrsmResult1);
 
-            var labelBvtIrsmResult1 = FindChild<Label>(presenter, "labelBvtIrsmResult1");
+            var labelBvtIrsmResult1 = FindChild<Label>(presenter, "labelBvtIrsmResult" + position);
             if (labelBvtIrsmResult1 != null)
                 ResetLabel(labelBvtIrsmResult1);
 
@@ -2690,17 +2683,6 @@ namespace SCME.UI.PagesUser
                 {
                     m_ResultsBVT1.Add(new Types.BVT.TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId });
                     m_ResultsBVT2.Add(new Types.BVT.TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId });
-                    switch (parBvt.TestType)
-                    {
-                        case Types.BVT.BVTTestType.Both:
-                            parBvt.TestType = options.Item2;
-                            break;
-                        case Types.BVT.BVTTestType.Direct:
-                            if (options.Item2 == Types.BVT.BVTTestType.Reverse)
-                                parBvt.IsEnabled = false;
-                            break;
-                    }
-
                     Profile.ParametersBVT.ClassByProfileName = m_ClassByProfileName;
                     parBvt.ClassByProfileName = m_ClassByProfileName;
                     continue;
@@ -2725,8 +2707,8 @@ namespace SCME.UI.PagesUser
                 var parQrrTq = baseTestParametersAndNormativese as Types.QrrTq.TestParameters;
                 if (parQrrTq != null)
                 {
-                    m_ResultsQrrTq1.Add(new Types.QrrTq.TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId });
-                    m_ResultsQrrTq2.Add(new Types.QrrTq.TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId });
+                    m_ResultsQrrTq1.Add(new Types.QrrTq.TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId, Mode = parQrrTq.Mode });
+                    m_ResultsQrrTq2.Add(new Types.QrrTq.TestResults { TestTypeId = baseTestParametersAndNormativese.TestTypeId, Mode = parQrrTq.Mode });
                     continue;
                 }
 

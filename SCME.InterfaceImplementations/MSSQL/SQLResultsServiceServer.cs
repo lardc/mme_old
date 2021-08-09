@@ -781,8 +781,6 @@ namespace SCME.InterfaceImplementations
                             InsertParameterValue(devId, "DCFactFallRate", result.QrrTq[i].DCFactFallRate, testTypeId, trans);
                             InsertParameterValue(devId, "TQ", result.QrrTq[i].Tq, testTypeId, trans);
                             break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }

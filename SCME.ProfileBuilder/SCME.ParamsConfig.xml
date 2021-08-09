@@ -1,0 +1,1280 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mmes>
+  <!--Базовый комплекс-->
+  <mme name="MMEDefault" isLocal="true" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME002" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME005" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME006" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME007" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME008" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME009" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME010" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME011" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME013" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+  <mme name="MME020" isLocal="false" type="Profile" clampingSystem="Presspack" localization="ru-RU">
+    <mme.blocks>
+      <block name="Adapter" port="1" isEmulated="false"/>
+      <block name="Gateway" node="0" isEmulated="false"/>
+      <block name="Commutation" node="1" isEnabled="true" isEmulated="false" isType6="false"/>
+      <block name="CommutationEx" node="5" isEnabled="false" isEmulated="true" isType6="false"/>
+      <block name="GTU" node="3" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Форсирующий ток Ih-->
+          <parameter name="Itm" defaultValue="500" minValue="500" maxValue="2000"/>
+          <!--Ток Ugd-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение Ugd-->
+          <parameter name="VoltageLimit" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время Ugd-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон Ugd-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое Ugd-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+        </block.parameters>
+      </block>
+      <block name="SL" node="2" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток трапеция-->
+          <parameter name="RampCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время трапеция-->
+          <parameter name="RampTime" defaultValue="1000" minValue="200" maxValue="10000"/>
+          <!--Ток открытия трапеция-->
+          <parameter name="RampOpeningCurrent" defaultValue="100" minValue="100" maxValue="1000"/>
+          <!--Время открытия трапеция-->
+          <parameter name="RampOpeningTime" defaultValue="50" minValue="50" maxValue="5000"/>
+          <!--Ток полусинус-->
+          <parameter name="SinusCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время полусинус-->
+          <parameter name="SinusTime" defaultValue="1000" minValue="4000" maxValue="15000"/>
+          <!--Ток S-кривая-->
+          <parameter name="CurveCurrent" defaultValue="500" minValue="150" maxValue="12500"/>
+          <!--Время S-кривая-->
+          <parameter name="CurveTime" defaultValue="4000" minValue="10000" maxValue="10000"/>
+          <!--Коэффициент S-кривая-->
+          <parameter name="CurveFactor" defaultValue="50" minValue="1" maxValue="100"/>
+          <!--Доп. время S-кривая-->
+          <parameter name="CurveAddTime" defaultValue="0" minValue="0" maxValue="5000"/>
+          <!--Количество-->
+          <parameter name="Count" defaultValue="1" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="BVT" node="4" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Ток-->
+          <parameter name="CurrentLimit" defaultValue="5" minValue="0.5" maxValue="300"/>
+          <!--Напряжение прямое-->
+          <parameter name="VoltageLimitD" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Напряжение обратное-->
+          <parameter name="VoltageLimitR" defaultValue="1000" minValue="500" maxValue="8000"/>
+          <!--Время-->
+          <parameter name="PlateTime" defaultValue="1000" minValue="100" maxValue="10000"/>
+          <!--Наклон-->
+          <parameter name="RampUpVoltage" defaultValue="2" minValue="0.5" maxValue="5"/>
+          <!--Стартовое-->
+          <parameter name="StartVoltage" defaultValue="500" minValue="300" maxValue="3000"/>
+          <!--Ток UdsmUrsm-->
+          <parameter name="UdsmUrsmCurrentLimit" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение прямое UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitD" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Напряжение обратное UdsmUrsm-->
+          <parameter name="UdsmUrsmVoltageLimitR" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Время UdsmUrsm-->
+          <parameter name="UdsmUrsmPlateTime" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Наклон UdsmUrsm-->
+          <parameter name="UdsmUrsmRampUpVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+          <!--Стартовое UdsmUrsm-->
+          <parameter name="UdsmUrsmStartVoltage" defaultValue="0" minValue="0" maxValue="100"/>
+        </block.parameters>
+      </block>
+      <block name="dUdt" node="7" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Напряжение подтверждение-->
+          <parameter name="Voltage" defaultValue="1000" minValue="0" maxValue="1000"/>
+          <!--Количество подтверждение-->
+          <parameter name="ConfirmationCount" defaultValue="1" minValue="0" maxValue="100"/>
+          <!--Скорость роста определение-->
+          <parameter name="VoltageRateOffset" defaultValue="100" minValue="50" maxValue="2000"/>
+          <!--Ограничение скорости роста определение-->
+          <parameter name="VoltageRateLimit" defaultValue="1000" minValue="500" maxValue="2500"/>
+        </block.parameters>
+      </block>
+      <block name="ATU" node="9" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда предв. импульса-->
+          <parameter name="PrePulseValue" defaultValue="100" minValue="15" maxValue="250"/>
+          <!--Мощность-->
+          <parameter name="PowerValue" defaultValue="16" minValue="2" maxValue="75"/>
+        </block.parameters>
+      </block>
+      <block name="QrrTq" node="10" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Амплитуда прямого тока-->
+          <parameter name="DirectCurrent" defaultValue="50" minValue="50" maxValue="500"/>
+          <!--Длительность импульса прямого тока-->
+          <parameter name="DCPulseWidth" defaultValue="500" minValue="500" maxValue="5000"/>
+          <!--Скорость нарастания прямого тока-->
+          <parameter name="DCRiseRate" defaultValue="0.2" minValue="0.2" maxValue="5"/>
+          <!--Прямое повторное напряжение-->
+          <parameter name="OffStateVoltage" defaultValue="400" minValue="0.2" maxValue="5"/>
+        </block.parameters>
+      </block>
+      <block name="TOU" node="11" isEnabled="true" isEmulated="false">
+        <block.parameters>
+          <!--Сила тока-->
+          <parameter name="CurrentAmplitude" defaultValue="160" minValue="160" maxValue="1250"/>
+        </block.parameters>
+      </block>
+    </mme.blocks>
+  </mme>
+</mmes>

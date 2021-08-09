@@ -61,7 +61,7 @@ namespace SCME.UIServiceConfig.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ExitButtonIsVisible {
             get {
                 return ((bool)(this["ExitButtonIsVisible"]));
@@ -115,7 +115,7 @@ namespace SCME.UIServiceConfig.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool PlotUserBVT {
             get {
                 return ((bool)(this["PlotUserBVT"]));
@@ -187,7 +187,7 @@ namespace SCME.UIServiceConfig.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\..\\UIServiceData\\Accounts.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\evgeny\\Desktop\\SCME.BaseData\\UIServiceData\\Accounts.xml")]
         public string AccountsPath {
             get {
                 return ((string)(this["AccountsPath"]));
@@ -286,7 +286,7 @@ namespace SCME.UIServiceConfig.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool PlotUserQrrTq {
             get {
                 return ((bool)(this["PlotUserQrrTq"]));
@@ -295,7 +295,7 @@ namespace SCME.UIServiceConfig.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool RACIsVisible {
             get {
                 return ((bool)(this["RACIsVisible"]));

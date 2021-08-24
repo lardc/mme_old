@@ -5,92 +5,8 @@ using System.Runtime.Serialization;
 
 namespace SCME.Types.ATU
 {
-    /// <summary>Состояние оборудования</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDeviceState
-    {
-        /// <summary>Неопределенное состояние</summary>
-        [EnumMember]
-        DS_None = 0,
-        /// <summary>Ошибка</summary>
-        [EnumMember]
-        DS_Fault = 1,
-        /// <summary>Выключен</summary>
-        [EnumMember]
-        DS_Disabled = 2,
-        /// <summary>Ожидание заряда батареи</summary>
-        [EnumMember]
-        DS_BatteryCharge = 3,
-        /// <summary>Состояние готовности</summary>
-        [EnumMember]
-        DS_Ready = 4,
-        /// <summary>В процессе работы</summary>
-        [EnumMember]
-        DS_InProcess = 5
-    };
-
-    /// <summary>Причина ошибки</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWFaultReason
-    {
-        [EnumMember]
-        None = 0,
-        /// <summary>Ошибка заряда батареи</summary>
-        [EnumMember]
-        ChargeError = 1,
-        /// <summary>Ошибка оцифровки значений напряжения/тока</summary>
-        [EnumMember]
-        ADCError = 2
-    };
-
-    /// <summary>Причина предупреждения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWWarningReason
-    {
-        [EnumMember]
-        None = 0,
-        /// <summary>ХХ на выходе</summary>
-        [EnumMember]
-        Idle = 1,
-        /// <summary>КP на выходе</summary>
-        [EnumMember]
-        Short = 2,
-        /// <summary>Погрешность полученной мощности велика</summary>
-        [EnumMember]
-        Accuracy = 3,
-        /// <summary>Пробой прибора</summary>
-        [EnumMember]
-        Break = 4,
-        /// <summary>Краевой пробой прибора</summary>
-        [EnumMember]
-        FacetBreak = 5
-    };
-
-    /// <summary>Причина выключения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDisableReason
-    {
-        [EnumMember]
-        None = 0
-    }
-
-    /// <summary>Результат выполнения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWOperationResult
-    {
-        /// <summary>В процессе</summary>
-        [EnumMember]
-        InProcess = 0,
-        /// <summary>Успешно</summary>
-        [EnumMember]
-        Success = 1,
-        /// <summary>Неудачно</summary>
-        [EnumMember]
-        Fail = 2
-    };
-
     /// <summary>Параметры произведения тестов</summary>
-    [DataContract(Name = "ATU.TestParameters", Namespace = "http://proton-electrotex.com/SCME")]
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class TestParameters : BaseTestParametersAndNormatives, ICloneable
     {
         /// <summary>Инициализирует новый экземпляр класса TestParameters</summary>
@@ -213,6 +129,105 @@ namespace SCME.Types.ATU
             get; set;
         }
     }
+
+    /// <summary>Состояние оборудования</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDeviceState
+    {
+        /// <summary>Неопределенное состояние</summary>
+        [EnumMember]
+        None = 0,
+        /// <summary>Ошибка</summary>
+        [EnumMember]
+        Fault = 1,
+        /// <summary>Выключен</summary>
+        [EnumMember]
+        Disabled = 2,
+        /// <summary>Ожидание заряда батареи</summary>
+        [EnumMember]
+        BatteryCharge = 3,
+        /// <summary>Состояние готовности</summary>
+        [EnumMember]
+        Ready = 4,
+        /// <summary>В процессе</summary>
+        [EnumMember]
+        InProcess = 5
+    };
+
+    /// <summary>Причина ошибки</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWFaultReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Ошибка заряда батареи</summary>
+        [EnumMember]
+        Battery = 1,
+        /// <summary>Ошибка заряда батареи мужду импульсами</summary>
+        [EnumMember]
+        BatteryP2P = 2,
+        /// <summary>Ошибка регулирования мощности</summary>
+        [EnumMember]
+        FollowingError = 3
+    };
+
+    /// <summary>Причина предупреждения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWWarningReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>ХХ на выходе</summary>
+        [EnumMember]
+        Idle = 1,
+        /// <summary>КP на выходе</summary>
+        [EnumMember]
+        Short = 2,
+        /// <summary>Погрешность полученной мощности велика</summary>
+        [EnumMember]
+        Accuracy = 3,
+        /// <summary>Пробой прибора</summary>
+        [EnumMember]
+        Break = 4,
+        /// <summary>Краевой пробой прибора</summary>
+        [EnumMember]
+        FacetBreak = 5
+    };
+
+    /// <summary>Причина выключения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDisableReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Ошибка заряда батареи</summary>
+        [EnumMember]
+        Battery = 1,
+        /// <summary>Ошибка заряда батареи мужду импульсами</summary>
+        [EnumMember]
+        BatteryP2P = 2,
+        /// <summary>Ошибка регулирования мощности</summary>
+        [EnumMember]
+        FollowingError = 3
+    }
+
+    /// <summary>Результат выполнения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWOperationResult
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Успешно</summary>
+        [EnumMember]
+        OK = 1,
+        /// <summary>Неудачно</summary>
+        [EnumMember]
+        Fail = 2
+    };
+
+
+
+
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class CalibrationParameters

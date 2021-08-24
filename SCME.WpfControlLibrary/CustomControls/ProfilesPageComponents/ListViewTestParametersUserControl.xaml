@@ -9,7 +9,7 @@
              xmlns:gateParameters="clr-namespace:SCME.Types.GTU;assembly=SCME.Types"
              xmlns:qrrTqParameters="clr-namespace:SCME.Types.QrrTq;assembly=SCME.Types"
              xmlns:touParameters="clr-namespace:SCME.Types.TOU;assembly=SCME.Types"
-             xmlns:vtmParameters="clr-namespace:SCME.Types.VTM;assembly=SCME.Types"
+             xmlns:vtmParameters="clr-namespace:SCME.Types.SL;assembly=SCME.Types"
              xmlns:testResultDataTemplate="clr-namespace:SCME.WpfControlLibrary.DataTemplates.TestParameters"
              mc:Ignorable="d" Name="ThisListViewTestParametersUserControl"
              d:DesignHeight="450" d:DesignWidth="800">

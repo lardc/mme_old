@@ -2,15 +2,16 @@
 
 namespace SCME.Types.Commutation
 {
+    /// <summary>Режим коммутации</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public enum CommutationMode
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        Gate,
+        GTU,
         [EnumMember]
-        VTM,
+        SL,
         [EnumMember]
         BVTD,
         [EnumMember]
@@ -20,11 +21,10 @@ namespace SCME.Types.Commutation
         [EnumMember]
         ATU,
         [EnumMember]
-        RAC,
-        [EnumMember]
         TOU
     }
 
+    /// <summary>Тип коммутации</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public enum ModuleCommutationType
     {
@@ -62,6 +62,7 @@ namespace SCME.Types.Commutation
         Reverse = 0x0F
     }
 
+    /// <summary>Тип модуля</summary>
     public enum ModuleType
     {
         A2 = 1001,
@@ -72,11 +73,14 @@ namespace SCME.Types.Commutation
         B1 = 1006
     }
 
+    /// <summary>Позиция модуля</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public enum ModulePosition
     {
+        /// <summary>Позиция 1</summary>
         [EnumMember]
         P1 = 0,
+        /// <summary>Позиция 2</summary>
         [EnumMember]
         P2
     }

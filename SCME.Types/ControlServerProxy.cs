@@ -5,7 +5,6 @@ using SCME.Types.BaseTestParams;
 using SCME.Types.Commutation;
 using SCME.Types.GTU;
 using SCME.Types.Profiles;
-using SCME.Types.SCTU;
 using SCME.Types.SQL;
 
 namespace SCME.Types
@@ -61,11 +60,11 @@ namespace SCME.Types
             return Channel.GetSafetyType();
         }
 
-        public bool Start(GTU.TestParameters ParametersGate, VTM.TestParameters ParametersVTM,
-                          BVT.TestParameters ParametersBVT, ATU.TestParameters ParametersATU, QrrTq.TestParameters ParametersQrrTq, IH.TestParameters ParametersIH, RCC.TestParameters ParametersRCC,
+        public bool Start(GTU.TestParameters ParametersGate, SL.TestParameters ParametersVTM,
+                          BVT.TestParameters ParametersBVT, ATU.TestParameters ParametersATU, QrrTq.TestParameters ParametersQrrTq,
                           Commutation.TestParameters ParametersCommutation, Clamping.TestParameters ParametersClamping, TOU.TestParameters ParametersTOU)
         {
-            return Channel.Start(ParametersGate, ParametersVTM, ParametersBVT, ParametersATU, ParametersQrrTq, ParametersIH, ParametersRCC, ParametersCommutation, ParametersClamping, ParametersTOU);
+            return Channel.Start(ParametersGate, ParametersVTM, ParametersBVT, ParametersATU, ParametersQrrTq, ParametersCommutation, ParametersClamping, ParametersTOU);
         }
 
         public void Stop()
@@ -118,11 +117,6 @@ namespace SCME.Types
             Channel.ClearFault(Device);
         }
 
-        public ushort ActivationWorkPlace(ComplexParts Device, ChannelByClumpType ChByClumpType, SctuWorkPlaceActivationStatuses ActivationStatus)
-        {
-            return Channel.ActivationWorkPlace(Device, ChByClumpType, ActivationStatus);
-        }
-
         public ushort ReadRegister(ComplexParts Device, ushort Address)
         {
             return Channel.ReadRegister(Device, Address);
@@ -156,11 +150,11 @@ namespace SCME.Types
             return Channel.RequestRemotePrinting(GroupName, CustomerName, DeviceType, Predicate);
         }
 
-        public bool StartDynamic(Commutation.TestParameters paramsComm, Clamping.TestParameters paramsClamp, GTU.TestParameters[] parametersGate, VTM.TestParameters[] parametersVtm,
+        public bool StartDynamic(Commutation.TestParameters paramsComm, Clamping.TestParameters paramsClamp, GTU.TestParameters[] parametersGate, SL.TestParameters[] parametersVtm,
                           BVT.TestParameters[] parametersBvt, dVdt.TestParameters[] parametersDvDt, ATU.TestParameters[] parametersAtu,
-                          QrrTq.TestParameters[] parametersQrrTq, SctuTestParameters[] parametersSctu, TOU.TestParameters[] parametersTOU)
+                          QrrTq.TestParameters[] parametersQrrTq, TOU.TestParameters[] parametersTOU)
         {
-            return Channel.StartDynamic(paramsComm, paramsClamp, parametersGate, parametersVtm, parametersBvt, parametersDvDt, parametersAtu, parametersQrrTq, parametersSctu, parametersTOU);
+            return Channel.StartDynamic(paramsComm, paramsClamp, parametersGate, parametersVtm, parametersBvt, parametersDvDt, parametersAtu, parametersQrrTq, parametersTOU);
         }
 
         public bool StartHeating(int temperature)

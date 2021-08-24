@@ -369,8 +369,8 @@ namespace SCME.UI
                 //Адаптер
                 TimeoutAdapter = Cache.Welcome.GetTimeout(ComplexParts.Adapter),
                 //GTU
-                IsGateEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.Gate) && Settings.Default.GateIsVisible,
-                TimeoutGate = Cache.Welcome.GetTimeout(ComplexParts.Gate),
+                IsGateEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.GTU) && Settings.Default.GateIsVisible,
+                TimeoutGate = Cache.Welcome.GetTimeout(ComplexParts.GTU),
                 //SL
                 IsSLEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.SL) && Settings.Default.SLIsVisible,
                 TimeoutSL = Cache.Welcome.GetTimeout(ComplexParts.SL),
@@ -381,20 +381,14 @@ namespace SCME.UI
                 IsClampEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.Clamping) && Settings.Default.ClampIsVisible,
                 TimeoutClamp = Cache.Welcome.GetTimeout(ComplexParts.Clamping),
                 //dUdt
-                IsdVdtEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.DvDt) && Settings.Default.dVdtIsVisible,
-                TimeoutdVdt = Cache.Welcome.GetTimeout(ComplexParts.DvDt),
+                IsdVdtEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.dVdt) && Settings.Default.dVdtIsVisible,
+                TimeoutdVdt = Cache.Welcome.GetTimeout(ComplexParts.dVdt),
                 //ATU
                 TimeoutATU = Cache.Welcome.GetTimeout(ComplexParts.ATU),
                 IsATUEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.ATU) && Settings.Default.ATUIsVisible,
                 //QrrTq
                 TimeoutQrrTq = Cache.Welcome.GetTimeout(ComplexParts.QrrTq),
                 IsQrrTqEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.QrrTq) && Settings.Default.QrrTqIsVisible,
-                //R A-C
-                TimeoutRAC = Cache.Welcome.GetTimeout(ComplexParts.RAC),
-                IsRACEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.RAC) && Settings.Default.RACIsVisible,
-                //IH
-                TimeoutIH = Cache.Welcome.GetTimeout(ComplexParts.IH),
-                IsIHEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.IH) && Settings.Default.IHIsVisible,
                 //TOU
                 IsTOUEnabled = Cache.Welcome.IsDeviceEnabled(ComplexParts.TOU) && Settings.Default.TOUIsVisible,
                 TimeoutTOU = Cache.Welcome.GetTimeout(ComplexParts.TOU),
@@ -408,7 +402,6 @@ namespace SCME.UI
             Cache.Welcome.IsBackEnable = false;
             Cache.Technician.AreButtonsEnabled(Param);
             Cache.Console.AreButtonEnabled(Param);
-            Cache.Selftest.AreButtonEnabled(Param);
             NeedsToRestart = true;
             AreProfilesParsed = false;
             Cache.Net.Deinitialize();

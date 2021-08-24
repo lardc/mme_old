@@ -33,7 +33,7 @@ namespace SCME.Service.IO
             m_IsATUEmulation = m_IsATUEmulationHard;
             m_Node = (ushort)Settings.Default.ATUNode;
             m_Result = new TestResults();
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Milestone, string.Format("ATU created. Emulation mode: {0}", Settings.Default.ATUEmulation));
+            SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Milestone, string.Format("ATU created. Emulation mode: {0}", Settings.Default.ATUEmulation));
         }
 
         internal IOCommutation ActiveCommutation
@@ -59,10 +59,10 @@ namespace SCME.Service.IO
             try
             {
                 //для исполнения процедуры инициализации необходимо, чтобы блок ATU находился в состоянии DS_NONE, поэтому прежде чем мы начнём исполнять цикл конечного автомата, реализующий инициализацию ATU переведём ATU в состояние DS_None
-                if (ReadRegister(REG_DEV_STATE) != (ushort)Types.ATU.HWDeviceState.DS_None)
+                if (ReadRegister(REG_DEV_STATE) != (ushort)Types.ATU.HWDeviceState.None)
                     CallAction(ACT_DISABLE_POWER);
                 //ATU должен быть в состоянии DS_NONE. в принципе можно было бы сразу проверить состояние блока ATU, но мы будем выдерживать таймаут m_Timeout, за время истечения которого блок ATU должен выйти в состояние DS_None. если такового не случится - будем возбуждать исключительную ситуацию
-                Types.ATU.HWDeviceState WaitedState = Types.ATU.HWDeviceState.DS_None;
+                Types.ATU.HWDeviceState WaitedState = Types.ATU.HWDeviceState.None;
                 ushort State;
                 bool End = false;
                 while (!End)
@@ -73,7 +73,7 @@ namespace SCME.Service.IO
                     {
                         switch (State)
                         {
-                            case (ushort)HWDeviceState.DS_None:
+                            case (ushort)HWDeviceState.None:
                                 //блок ATU перешёл в состояние DS_None
                                 //очищаем ошибки блока ATU
                                 ClearErrors();
@@ -82,15 +82,15 @@ namespace SCME.Service.IO
                                 EnablePower();
 
                                 //из данного состояния ATU должен перейти в состояние DS_BatteryCharge но см. http://elma.pe.local/Projects/ProjectTask/Execute/82923 комментарий (Мороз Е. В. 13.04.2017 13:00:51)
-                                WaitedState = Types.ATU.HWDeviceState.DS_Ready;
+                                WaitedState = Types.ATU.HWDeviceState.Ready;
                                 break;
 
-                            case (ushort)HWDeviceState.DS_BatteryCharge:
+                            case (ushort)HWDeviceState.BatteryCharge:
                                 //из данного состояния ATU должен перейти в состояние DS_Ready
-                                WaitedState = Types.ATU.HWDeviceState.DS_Ready;
+                                WaitedState = Types.ATU.HWDeviceState.Ready;
                                 break;
 
-                            case (ushort)HWDeviceState.DS_Ready:
+                            case (ushort)HWDeviceState.Ready:
                                 //блок ATU перешёл в состояние DS_Ready - завершаем процесс инициализации
                                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
                                 End = true;
@@ -103,15 +103,15 @@ namespace SCME.Service.IO
                         //состояние блока ATU отличное от ожидаемого: ожидалось состояние WaitedState, а по факту оказалось состояние State
                         switch (State)
                         {
-                            case (ushort)HWDeviceState.DS_Fault:
+                            case (ushort)HWDeviceState.Fault:
                                 //сбрасываем состояние DS_Fault
                                 ClearFault();
 
                                 //после сброса состояния DS_Fault оно всегда будет DS_None
-                                WaitedState = Types.ATU.HWDeviceState.DS_None;
+                                WaitedState = Types.ATU.HWDeviceState.None;
                                 break;
 
-                            case (ushort)HWDeviceState.DS_Disabled:
+                            case (ushort)HWDeviceState.Disabled:
                                 throw new Exception(string.Format("state is 'DS_Disabled', reason: {0}", ReadRegister(REG_DISABLE_REASON)));
 
                             default:
@@ -170,14 +170,14 @@ namespace SCME.Service.IO
 
                 switch (State)
                 {
-                    case (ushort)HWDeviceState.DS_Fault:
+                    case (ushort)HWDeviceState.Fault:
                         ushort faultReason = ReadRegister(REG_FAULT_REASON);
 
                         FireNotificationEvent((ushort)HWWarningReason.None, faultReason, (ushort)HWDisableReason.None);
 
                         throw new Exception(string.Format("ATU is in 'DS_Fault' state, reason: {0}", faultReason));
 
-                    case (ushort)HWDeviceState.DS_Disabled:
+                    case (ushort)HWDeviceState.Disabled:
                         ushort disableReason = ReadRegister(REG_DISABLE_REASON);
 
                         FireNotificationEvent((ushort)HWWarningReason.None, (ushort)HWFaultReason.None, disableReason);
@@ -235,7 +235,7 @@ namespace SCME.Service.IO
         {
             var devState = (Types.ATU.HWDeviceState)ReadRegister(REG_DEV_STATE);
 
-            return !((devState == Types.ATU.HWDeviceState.DS_Fault) || (devState == Types.ATU.HWDeviceState.DS_Disabled) || (m_State == Types.DeviceState.InProcess));
+            return !((devState == Types.ATU.HWDeviceState.Fault) || (devState == Types.ATU.HWDeviceState.Disabled) || (m_State == Types.DeviceState.InProcess));
         }
 
         private float RoundTwoDigits(double value)
@@ -273,7 +273,7 @@ namespace SCME.Service.IO
 
                     //проверяем обработку не удачного окончания измерения
                     FireNotificationEvent((ushort)HWWarningReason.Short, (ushort)HWFaultReason.None, (ushort)HWDisableReason.None);
-                    FireNotificationEvent((ushort)HWWarningReason.None, (ushort)HWFaultReason.ChargeError, (ushort)HWDisableReason.None);
+                    FireNotificationEvent((ushort)HWWarningReason.None, (ushort)HWFaultReason.Battery, (ushort)HWDisableReason.None);
                 }
                 else
                 {
@@ -347,7 +347,7 @@ namespace SCME.Service.IO
                 ushort devState = ReadRegister(REG_DEV_STATE, true);
 
                 //блок ATU перешёл в состояние DS_Fault
-                if (devState == (ushort)Types.ATU.HWDeviceState.DS_Fault)
+                if (devState == (ushort)Types.ATU.HWDeviceState.Fault)
                 {
                     ushort faultReason = ReadRegister(REG_FAULT_REASON);
 
@@ -355,7 +355,7 @@ namespace SCME.Service.IO
                 }
 
                 //блок ATU перешёл в состояние DS_Disabled
-                if (devState == (ushort)Types.ATU.HWDeviceState.DS_Disabled)
+                if (devState == (ushort)Types.ATU.HWDeviceState.Disabled)
                 {
                     ushort disableReason = ReadRegister(REG_DISABLE_REASON);
 
@@ -363,7 +363,7 @@ namespace SCME.Service.IO
                 }
 
                 //блок ATU завершил процесс измерения
-                if (devState == (ushort)Types.ATU.HWDeviceState.DS_Ready)
+                if (devState == (ushort)Types.ATU.HWDeviceState.Ready)
                 {
                     //проверим наличие warnig от блока ATU
                     ushort warning = ReadRegister(REG_WARNING);
@@ -396,7 +396,7 @@ namespace SCME.Service.IO
         private void EnablePower()
         //включение зарядки конденсаторов блока ATU
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Milestone, "ATU power is set to enable");
+            SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Milestone, "ATU power is set to enable");
             CallAction(ACT_ENABLE_POWER);
         }
 
@@ -426,7 +426,7 @@ namespace SCME.Service.IO
 
             if (!m_IsATUEmulation) value = m_IOAdapter.Read16(m_Node, Address);
 
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @ReadRegister, address {0}, value {1}", Address, value));
+            if (!SkipJournal) SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -438,7 +438,7 @@ namespace SCME.Service.IO
 
             if (!m_IsATUEmulation) value = m_IOAdapter.Read16S(m_Node, Address);
 
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @ReadRegisterS, address {0}, value {1}", Address, value));
+            if (!SkipJournal) SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -448,7 +448,7 @@ namespace SCME.Service.IO
         //значение мощности в регистр надо писать в Вт/10, а интерфейс пользователя пишет в принимаемое на вход Value в кВт, поэтому данная реализация для случая записи значения мощности переводит принимаемое значение в Вт/10
         //принимаемое Value типа float только для возможности писать значение мощности с дробной частью
         {
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @WriteRegister, address {0}, value {1}", Address, Value));
+            if (!SkipJournal) SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsATUEmulation) return;
 
@@ -471,7 +471,7 @@ namespace SCME.Service.IO
 
         private IList<short> ReadArrayFastS(ushort Address)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info,
                                          string.Format("ATU @ReadArrayFastS, endpoint {0}", Address));
 
             if (m_IsATUEmulation)
@@ -482,7 +482,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @Call, action {0}", Action));
+            SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Info, string.Format("ATU @Call, action {0}", Action));
 
             if (m_IsATUEmulation) return;
 
@@ -493,13 +493,13 @@ namespace SCME.Service.IO
         #region Events
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, type, Message);
+            SystemHost.AppendLog(ComplexParts.ATU, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.ATU, State, Message);
         }
 
         private void FireNotificationEvent(ushort Warning, ushort Fault, ushort Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Error, string.Format("ATU device notification: warning {0}, fault {1}, disable {2}", Warning, Fault, Disable));
+            SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Error, string.Format("ATU device notification: warning {0}, fault {1}, disable {2}", Warning, Fault, Disable));
             m_Communication.PostATUNotificationEvent(Warning, Fault, Disable);
         }
 
@@ -507,13 +507,13 @@ namespace SCME.Service.IO
         {
             string message = string.Format("ATU test state {0}", State);
 
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Info, message);
+            SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Info, message);
             m_Communication.PostATUEvent(State, Result);
         }
 
         private void FireExceptionEvent(string Message)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.ATU, LogMessageType.Error, Message);
+            SystemHost.AppendLog(ComplexParts.ATU, LogMessageType.Error, Message);
             m_Communication.PostExceptionEvent(ComplexParts.ATU, Message);
         }
         #endregion

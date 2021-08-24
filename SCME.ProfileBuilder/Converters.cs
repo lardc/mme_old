@@ -9,9 +9,9 @@ using SCME.Types.Clamping;
 using SCME.Types.Commutation;
 using SCME.Types.dVdt;
 using SCME.Types.Profiles;
-using SCME.Types.VTM;
+using SCME.Types.SL;
 using SCME.Types.QrrTq;
-using TestParameters = SCME.Types.VTM.TestParameters;
+using TestParameters = SCME.Types.SL.TestParameters;
 
 namespace SCME.ProfileBuilder
 {
@@ -147,11 +147,11 @@ namespace SCME.ProfileBuilder
 
             switch (vPro.TestType)
             {
-                case VTMTestType.Ramp:
+                case SLTestType.Ramp:
                     return vPro.RampCurrent;
-                case VTMTestType.Sinus:
+                case SLTestType.Sinus:
                     return vPro.SinusCurrent;
-                case VTMTestType.Curve:
+                case SLTestType.Curve:
                     return vPro.CurveCurrent;
             }
 
@@ -241,12 +241,12 @@ namespace SCME.ProfileBuilder
     {
         public object Convert(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            return (int)((VTMTestType)Value);
+            return (int)((SLTestType)Value);
         }
 
         public object ConvertBack(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            return (VTMTestType)((int)Value);
+            return (SLTestType)((int)Value);
         }
     }
 
@@ -430,18 +430,18 @@ namespace SCME.ProfileBuilder
     {
         public object Convert(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            var type = (VTMTestType)Value;
+            var type = (SLTestType)Value;
             var line = string.Empty;
 
             switch (type)
             {
-                case VTMTestType.Ramp:
+                case SLTestType.Ramp:
                     line = Resources.Ramp;
                     break;
-                case VTMTestType.Sinus:
+                case SLTestType.Sinus:
                     line = Resources.Sinus;
                     break;
-                case VTMTestType.Curve:
+                case SLTestType.Curve:
                     line = Resources.Curve;
                     break;
             }
@@ -451,15 +451,15 @@ namespace SCME.ProfileBuilder
 
         public object ConvertBack(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            var type = VTMTestType.Ramp;
+            var type = SLTestType.Ramp;
             var line = (string)Value;
 
             if (line == Resources.Ramp)
-                type = VTMTestType.Ramp;
+                type = SLTestType.Ramp;
             else if (line == Resources.Sinus)
-                type = VTMTestType.Sinus;
+                type = SLTestType.Sinus;
             else if (line == Resources.Curve)
-                type = VTMTestType.Curve;
+                type = SLTestType.Curve;
 
             return type;
         }
@@ -508,11 +508,11 @@ namespace SCME.ProfileBuilder
     {
         public object Convert(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            var type = (VTMTestType)Value;
+            var type = (SLTestType)Value;
             int index = int.Parse((string)Parameter);
 
-            if ((type == VTMTestType.Ramp && index == 0) || (type == VTMTestType.Sinus && index == 1) ||
-                (type == VTMTestType.Curve && index == 2))
+            if ((type == SLTestType.Ramp && index == 0) || (type == SLTestType.Sinus && index == 1) ||
+                (type == SLTestType.Curve && index == 2))
                 return Visibility.Visible;
 
             return Visibility.Collapsed;

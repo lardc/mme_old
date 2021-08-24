@@ -12,7 +12,6 @@ using SCME.Types;
 using SCME.Types.BaseTestParams;
 using SCME.Types.Commutation;
 using SCME.Types.Profiles;
-using SCME.Types.SCTU;
 using SCME.Types.SQL;
 using SCME.UIServiceConfig.Properties;
 
@@ -32,31 +31,25 @@ namespace SCME.Service
         private readonly IOdVdt m_IOdVdt;
         private readonly IOATU m_IOAtu;
         private readonly IOQrrTq m_IOQrrTq;
-        private readonly IOIH m_IOIH;
-        private readonly IORCC m_IORCC;
-        private readonly IoSctu _ioSctu;
         private readonly ThreadService m_Thread;
         private readonly IOTOU m_IOTOU;
         public readonly IoDbSync IoDbSync;
         private readonly bool m_ClampingSystemConnected;
 
         private Types.GTU.TestParameters m_ParametersGate;
-        private Types.VTM.TestParameters m_ParametersSL;
+        private Types.SL.TestParameters m_ParametersSL;
         private Types.BVT.TestParameters m_ParametersBvt;
         private Types.dVdt.TestParameters m_ParametersdVdt;
         private Types.ATU.TestParameters m_ParametersAtu;
         private Types.QrrTq.TestParameters m_ParametersQrrTq;
-        private Types.IH.TestParameters m_ParametersIH;
-        private Types.RCC.TestParameters m_ParametersRCC;
         private Types.TOU.TestParameters m_ParametersTOU;
 
         private Types.GTU.TestParameters[] m_ParametersGateDyn;
-        private Types.VTM.TestParameters[] m_ParametersSLDyn;
+        private Types.SL.TestParameters[] m_ParametersSLDyn;
         private Types.BVT.TestParameters[] m_ParametersBvtDyn;
         private Types.dVdt.TestParameters[] m_ParametersdVdtDyn;
         private Types.ATU.TestParameters[] m_ParametersAtuDyn;
         private Types.QrrTq.TestParameters[] m_ParametersQrrTqDyn;
-        private SctuTestParameters[] _sctuTestParameters;
         private Types.TOU.TestParameters[] m_ParametersTOUDyn;
 
         private TypeCommon.InitParams m_Param;
@@ -79,7 +72,7 @@ namespace SCME.Service
             m_ClampingSystemConnected = Settings.Default.IsClampingSystemConnected;
 
             if (!Enum.TryParse(Settings.Default.SafetyType, out m_SafetyType))
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, "LogicContainer. Unrecognised value on config parameter 'SafetyType'.");
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, "LogicContainer. Unrecognised value on config parameter 'SafetyType'.");
 
             m_Communication = Communication;
 
@@ -87,13 +80,11 @@ namespace SCME.Service
             m_Thread.FinishedHandler += Thread_FinishedHandler;
 
             m_ParametersGate = new Types.GTU.TestParameters { IsEnabled = false };
-            m_ParametersSL = new Types.VTM.TestParameters { IsEnabled = false };
+            m_ParametersSL = new Types.SL.TestParameters { IsEnabled = false };
             m_ParametersBvt = new Types.BVT.TestParameters { IsEnabled = false };
             m_ParametersdVdt = new Types.dVdt.TestParameters { IsEnabled = false };
             m_ParametersAtu = new Types.ATU.TestParameters { IsEnabled = false };
             m_ParametersQrrTq = new Types.QrrTq.TestParameters { IsEnabled = false };
-            m_ParametersIH = new Types.IH.TestParameters { IsEnabled = false };
-            m_ParametersRCC = new Types.RCC.TestParameters { IsEnabled = false };
             m_ParametersTOU = new Types.TOU.TestParameters { IsEnabled = false };
 
             m_IOAdapter = new IOAdapter(m_Communication);
@@ -111,11 +102,8 @@ namespace SCME.Service
             m_IOdVdt = new IOdVdt(m_IOAdapter, m_Communication);
             m_IOAtu = new IOATU(m_IOAdapter, m_Communication);
             m_IOQrrTq = new IOQrrTq(m_IOAdapter, m_Communication);
-            m_IOIH = new IOIH(m_IOGate, m_IOStls, m_Communication);
             m_IOGate.SL = m_IOStls;
             m_IOGate.BVT = m_IOBvt;
-            m_IORCC = new IORCC(m_IOGate, m_Communication);
-            _ioSctu = new IoSctu(m_IOAdapter, m_Communication);
             m_IOTOU = new IOTOU(m_IOAdapter, m_Communication);
             IoDbSync = new IoDbSync(m_Communication, _monitoringSender);
 
@@ -126,8 +114,6 @@ namespace SCME.Service
             m_IOClamping.ActiveCommutation = m_IOCommutation;
             m_IOAtu.ActiveCommutation = m_IOCommutation;
             m_IOQrrTq.ActiveCommutation = m_IOCommutation;
-            m_IOIH.ActiveCommutation = m_IOCommutation;
-            m_IORCC.ActiveCommutation = m_IOCommutation;
             m_IOTOU.ActiveCommutation = m_IOCommutation;
         }
 
@@ -145,7 +131,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, string.Format(Resources.Error_LogicContainer_Exception, ex.Message));
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, string.Format(Resources.Error_LogicContainer_Exception, ex.Message));
                 m_Communication.PostCommonConnectionEvent(DeviceConnectionState.DisconnectionError, ex.Message);
 
                 return;
@@ -154,7 +140,7 @@ namespace SCME.Service
             m_Param = Params;
             var state = DeviceConnectionState.ConnectionInProcess;
 
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone,
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Milestone,
                                          string.Format(Resources.Log_LogicContainer_Requested_block_modes, m_Param.IsGateEnabled, m_Param.IsSLEnabled, m_Param.IsBVTEnabled, m_Param.IsClampEnabled, m_Param.IsdVdtEnabled, m_Param.IsATUEnabled, m_Param.IsQrrTqEnabled, m_Param.IsRACEnabled, m_Param.IsIHEnabled, m_Param.IsTOUEnabled));
 
             try
@@ -200,15 +186,6 @@ namespace SCME.Service
                     state = m_IOQrrTq.Initialize(m_Param.IsQrrTqEnabled, m_Param.TimeoutQrrTq);
 
                 if (state == DeviceConnectionState.ConnectionSuccess)
-                    state = m_IOIH.Initialize(m_Param.IsIHEnabled, m_Param.TimeoutIH);
-
-                if (state == DeviceConnectionState.ConnectionSuccess)
-                    state = m_IORCC.Initialize(m_Param.IsRCCEnabled, m_Param.TimeoutRCC);
-
-                if (state == DeviceConnectionState.ConnectionSuccess)
-                    state = _ioSctu.Initialize(m_Param.IsSctuEnabled, m_Param.TimeoutSctu);
-
-                if (state == DeviceConnectionState.ConnectionSuccess)
                     state = m_IOTOU.Initialize(m_Param.IsTOUEnabled, m_Param.TimeoutTOU);
 
                 InitializationResponse = taskSync.Result;
@@ -228,7 +205,7 @@ namespace SCME.Service
                 if (state == DeviceConnectionState.ConnectionSuccess)
                     m_IOGateway.SetGreenLed(true);
 
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info,
                 string.Format(Resources.Log_LogicContainer_Connection_state,
                     state == DeviceConnectionState.ConnectionSuccess
                         ? Resources.Log_LogicContainer_Connected
@@ -236,7 +213,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, string.Format(Resources.Error_LogicContainer_Exception, ex.Message));
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, string.Format(Resources.Error_LogicContainer_Exception, ex.Message));
             }
 
             m_ConnectionState = state;
@@ -265,7 +242,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -277,7 +254,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -288,7 +265,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -299,7 +276,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -310,7 +287,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -321,7 +298,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -332,7 +309,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -343,7 +320,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -354,7 +331,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -365,7 +342,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -376,40 +353,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
-                savedEx = ex;
-            }
-
-            try
-            {
-                m_IOIH.Deinitialize();
-            }
-            catch (Exception ex)
-            {
-                var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
-                savedEx = ex;
-            }
-
-            try
-            {
-                m_IORCC.Deinitialize();
-            }
-            catch (Exception ex)
-            {
-                var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
-                savedEx = ex;
-            }
-
-            try
-            {
-                _ioSctu.Deinitialize();
-            }
-            catch (Exception ex)
-            {
-                var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
@@ -420,13 +364,13 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 var message = string.Format(Resources.Error_LogicContainer_Exception, ex.Message);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
                 savedEx = ex;
             }
 
             GC.Collect();
 
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_LogicContainer_All_disconnected);
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_LogicContainer_All_disconnected);
 
             if (savedEx != null)
                 m_Communication.PostCommonConnectionEvent(DeviceConnectionState.DisconnectionError, string.Format(Resources.Error_LogicContainer_Exception, savedEx.Message));
@@ -444,7 +388,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                ThrowFaultException(ComplexParts.Gate, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
+                ThrowFaultException(ComplexParts.GTU, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
                 return new Types.GTU.CalibrationResultGate();
             }
         }
@@ -458,7 +402,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                ThrowFaultException(ComplexParts.Gate, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
+                ThrowFaultException(ComplexParts.GTU, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
                 return 0;
             }
         }
@@ -472,7 +416,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                ThrowFaultException(ComplexParts.Gate, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
+                ThrowFaultException(ComplexParts.GTU, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
             }
         }
 
@@ -487,7 +431,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                ThrowFaultException(ComplexParts.Gate, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
+                ThrowFaultException(ComplexParts.GTU, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
             }
 
             return parameters;
@@ -658,28 +602,6 @@ namespace SCME.Service
                 }
             }
 
-            if (m_ParametersIH.IsEnabled && m_Param.IsIHEnabled)
-            {
-                if (!m_IOIH.IsReadyToStart())
-                {
-                    if (res != "")
-                        res = res + ", ";
-
-                    res = res + "IH";
-                }
-            }
-
-            if (m_ParametersRCC.IsEnabled && m_Param.IsRCCEnabled)
-            {
-                if (!m_IORCC.IsReadyToStart())
-                {
-                    if (res != "")
-                        res = res + ", ";
-
-                    res = res + "RCC";
-                }
-            }
-
             return res;
         }
 
@@ -688,7 +610,7 @@ namespace SCME.Service
             
             if (m_ParametersGateDyn == null)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, "NotReadyDevicesToStartDynamic масивы параметров не инициализированы");
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, "NotReadyDevicesToStartDynamic масивы параметров не инициализированы");
                 return string.Empty;
             }
 
@@ -696,14 +618,13 @@ namespace SCME.Service
 
 
 
-            var orderedParameters = new List<BaseTestParametersAndNormatives>(m_ParametersGateDyn.Length + m_ParametersSLDyn.Length + m_ParametersBvtDyn.Length + m_ParametersdVdtDyn.Length + m_ParametersAtuDyn.Length + m_ParametersQrrTqDyn.Length + _sctuTestParameters.Length + m_ParametersTOUDyn.Length);
+            var orderedParameters = new List<BaseTestParametersAndNormatives>(m_ParametersGateDyn.Length + m_ParametersSLDyn.Length + m_ParametersBvtDyn.Length + m_ParametersdVdtDyn.Length + m_ParametersAtuDyn.Length + m_ParametersQrrTqDyn.Length + m_ParametersTOUDyn.Length);
             orderedParameters.AddRange(m_ParametersGateDyn);
             orderedParameters.AddRange(m_ParametersSLDyn);
             orderedParameters.AddRange(m_ParametersBvtDyn);
             orderedParameters.AddRange(m_ParametersdVdtDyn);
             orderedParameters.AddRange(m_ParametersAtuDyn);
             orderedParameters.AddRange(m_ParametersQrrTqDyn);
-            orderedParameters.AddRange(_sctuTestParameters);
             orderedParameters.AddRange(m_ParametersTOUDyn);
             orderedParameters = orderedParameters.OrderBy(o => o.Order).ToList();
 
@@ -714,7 +635,7 @@ namespace SCME.Service
                     if (!m_IOGate.IsReadyToStart())
                         res = "Gate";
 
-                var slParameters = baseTestParametersAndNormativese as Types.VTM.TestParameters;
+                var slParameters = baseTestParametersAndNormativese as Types.SL.TestParameters;
                 if (!ReferenceEquals(slParameters, null))
                     if (!m_IOStls.IsReadyToStart())
                     {
@@ -905,14 +826,14 @@ namespace SCME.Service
 
         #region Test sequence
 
-        public bool Start(Types.GTU.TestParameters ParametersGate, Types.VTM.TestParameters ParametersSL, Types.BVT.TestParameters ParametersBvt, Types.ATU.TestParameters ParametersAtu, Types.QrrTq.TestParameters ParametersQrrTq, Types.IH.TestParameters ParametersIH, Types.RCC.TestParameters ParametersRCC, Types.Commutation.TestParameters ParametersComm, Types.Clamping.TestParameters ParametersClamp, Types.TOU.TestParameters ParametersTOU)
+        public bool Start(Types.GTU.TestParameters ParametersGate, Types.SL.TestParameters ParametersSL, Types.BVT.TestParameters ParametersBvt, Types.ATU.TestParameters ParametersAtu, Types.QrrTq.TestParameters ParametersQrrTq, Types.Commutation.TestParameters ParametersComm, Types.Clamping.TestParameters ParametersClamp, Types.TOU.TestParameters ParametersTOU)
         {
             m_Stop = false;
 
             if (m_State == DeviceState.InProcess)
             {
                 ThrowFaultException(ComplexParts.Service, "Test is already started", String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name), false);
-                //SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, "Start bug ");
+                //SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, "Start bug ");
             }
                 
             IOCommutation m_IOActiveCommutation = null;
@@ -927,8 +848,6 @@ namespace SCME.Service
             m_IOClamping.ActiveCommutation = m_IOActiveCommutation;
             m_IOAtu.ActiveCommutation = m_IOActiveCommutation;
             m_IOQrrTq.ActiveCommutation = m_IOActiveCommutation;
-            m_IOIH.ActiveCommutation = m_IOActiveCommutation;
-            m_IORCC.ActiveCommutation = m_IOActiveCommutation;
             m_IOTOU.ActiveCommutation = m_IOActiveCommutation;
 
             m_ParametersGate = ParametersGate;
@@ -936,15 +855,13 @@ namespace SCME.Service
             m_ParametersBvt = ParametersBvt;
             m_ParametersAtu = ParametersAtu;
             m_ParametersQrrTq = ParametersQrrTq;
-            m_ParametersIH = ParametersIH;
-            m_ParametersRCC = ParametersRCC;
             m_ParametersTOU = ParametersTOU;
 
             m_State = DeviceState.InProcess;
 
             var message = string.Format("Start main test, state {0}; test enabled: Gate - {1}, VTM, - {2}, BVT - {3}, ATU - {4}, QrrTq - {5}, IH - {6}, RCC - {7}, TOU - {8}",
-                                        m_State, m_ParametersGate.IsEnabled, m_ParametersSL.IsEnabled, m_ParametersBvt.IsEnabled, m_ParametersAtu.IsEnabled, m_ParametersQrrTq.IsEnabled, m_ParametersIH.IsEnabled, m_ParametersRCC.IsEnabled, m_ParametersTOU.IsEnabled);
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, message);
+                                        m_State, m_ParametersGate.IsEnabled, m_ParametersSL.IsEnabled, m_ParametersBvt.IsEnabled, m_ParametersAtu.IsEnabled, m_ParametersQrrTq.IsEnabled, m_ParametersTOU.IsEnabled);
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Milestone, message);
 
             m_Communication.PostTestAllEvent(m_State, "Starting tests");
 
@@ -960,7 +877,7 @@ namespace SCME.Service
             return true;
         }
 
-        public bool Start(TestParameters parametersCommutation, Types.Clamping.TestParameters parametersClamp, Types.GTU.TestParameters[] parametersGate, Types.VTM.TestParameters[] parametersSl, Types.BVT.TestParameters[] parametersBvt, Types.dVdt.TestParameters[] parametersDvDt, Types.ATU.TestParameters[] parametersAtu, Types.QrrTq.TestParameters[] parametersQrrTq, SctuTestParameters[] parametersSctu, Types.TOU.TestParameters[] parametersTOU)
+        public bool Start(TestParameters parametersCommutation, Types.Clamping.TestParameters parametersClamp, Types.GTU.TestParameters[] parametersGate, Types.SL.TestParameters[] parametersSl, Types.BVT.TestParameters[] parametersBvt, Types.dVdt.TestParameters[] parametersDvDt, Types.ATU.TestParameters[] parametersAtu, Types.QrrTq.TestParameters[] parametersQrrTq, Types.TOU.TestParameters[] parametersTOU)
         {
             m_Stop = false;
 
@@ -968,7 +885,7 @@ namespace SCME.Service
             SetSafetyState(m_IOCommutation, true);
             if (m_IOCommutation.IsSafetyAlarm() || SCME.UIServiceConfig.Properties.Settings.Default.AlarmEmulation)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Safety alarm");
+                SystemHost.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Safety alarm");
                 m_State = DeviceState.None;
                 return false;
             }
@@ -997,13 +914,12 @@ namespace SCME.Service
             m_ParametersdVdtDyn = parametersDvDt;
             m_ParametersAtuDyn = parametersAtu;
             m_ParametersQrrTqDyn = parametersQrrTq;
-            _sctuTestParameters = parametersSctu;
             m_ParametersTOUDyn = parametersTOU;
 
             m_State = DeviceState.InProcess;
 
             var message = string.Format("Start main test, state {0}; test enabled:", m_State);
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, message);
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, message);
 
             m_Communication.PostTestAllEvent(m_State, "Starting tests");
 
@@ -1069,30 +985,21 @@ namespace SCME.Service
             //реализация того, что должно выполнятся после разжатия пресса
             try
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "Start after unsqueeze routine");
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, "Start after unsqueeze routine");
 
-                var orderedParameters = new List<BaseTestParametersAndNormatives>(m_ParametersGateDyn.Length + m_ParametersSLDyn.Length + m_ParametersBvtDyn.Length + m_ParametersdVdtDyn.Length + m_ParametersAtuDyn.Length + m_ParametersQrrTqDyn.Length + _sctuTestParameters.Length + m_ParametersTOUDyn.Length);
+                var orderedParameters = new List<BaseTestParametersAndNormatives>(m_ParametersGateDyn.Length + m_ParametersSLDyn.Length + m_ParametersBvtDyn.Length + m_ParametersdVdtDyn.Length + m_ParametersAtuDyn.Length + m_ParametersQrrTqDyn.Length + m_ParametersTOUDyn.Length);
                 orderedParameters.AddRange(m_ParametersGateDyn);
                 orderedParameters.AddRange(m_ParametersSLDyn);
                 orderedParameters.AddRange(m_ParametersBvtDyn);
                 orderedParameters.AddRange(m_ParametersdVdtDyn);
                 orderedParameters.AddRange(m_ParametersAtuDyn);
                 orderedParameters.AddRange(m_ParametersQrrTqDyn);
-                orderedParameters.AddRange(_sctuTestParameters);
                 orderedParameters.AddRange(m_ParametersTOUDyn);
                 orderedParameters = orderedParameters.OrderBy(o => o.Order).ToList();
-
-                foreach (var baseTestParametersAndNormativese in orderedParameters)
-                {
-                    var sctuParameters = baseTestParametersAndNormativese as SctuTestParameters;
-
-                    if (!ReferenceEquals(sctuParameters, null))
-                        _ioSctu.SCTUWaitReady();
-                }
             }
             catch (Exception ex)
             {
-                ThrowFaultException(ComplexParts.Sctu, ex.Message, "AfterUnsqueezeRoutine");
+                
             }
         }
 
@@ -1136,14 +1043,13 @@ namespace SCME.Service
 
                     if (res == DeviceState.Success)
                     {
-                        var orderedParameters = new List<BaseTestParametersAndNormatives>(m_ParametersGateDyn.Length + m_ParametersSLDyn.Length + m_ParametersBvtDyn.Length + m_ParametersdVdtDyn.Length + m_ParametersAtuDyn.Length + m_ParametersQrrTqDyn.Length + _sctuTestParameters.Length + m_ParametersTOUDyn.Length);
+                        var orderedParameters = new List<BaseTestParametersAndNormatives>(m_ParametersGateDyn.Length + m_ParametersSLDyn.Length + m_ParametersBvtDyn.Length + m_ParametersdVdtDyn.Length + m_ParametersAtuDyn.Length + m_ParametersQrrTqDyn.Length + m_ParametersTOUDyn.Length);
                         orderedParameters.AddRange(m_ParametersGateDyn);
                         orderedParameters.AddRange(m_ParametersSLDyn);
                         orderedParameters.AddRange(m_ParametersBvtDyn);
                         orderedParameters.AddRange(m_ParametersdVdtDyn);
                         orderedParameters.AddRange(m_ParametersAtuDyn);
                         orderedParameters.AddRange(m_ParametersQrrTqDyn);
-                        orderedParameters.AddRange(_sctuTestParameters);
                         orderedParameters.AddRange(m_ParametersTOUDyn);
 
                         orderedParameters = orderedParameters.OrderBy(o => o.Order).ToList();
@@ -1163,10 +1069,10 @@ namespace SCME.Service
                                 }
                                 catch (Exception ex)
                                 {
-                                    ThrowFaultException(ComplexParts.Gate, ex.Message, "Start Gate test");
+                                    ThrowFaultException(ComplexParts.GTU, ex.Message, "Start Gate test");
                                 }
 
-                            var slParameters = baseTestParametersAndNormativese as Types.VTM.TestParameters;
+                            var slParameters = baseTestParametersAndNormativese as Types.SL.TestParameters;
                             if (!ReferenceEquals(slParameters, null))
                                 try
                                 {
@@ -1244,22 +1150,6 @@ namespace SCME.Service
                                 }
                             }
 
-                            var sctuParameters = baseTestParametersAndNormativese as SctuTestParameters;
-                            if (!ReferenceEquals(sctuParameters, null))
-                            {
-                                try
-                                {
-                                    if (m_ClampingSystemConnected && m_Param.IsClampEnabled && !m_Stop)
-                                        m_IOClamping.ReturnForceToDefault();
-
-                                    _ioSctu.Start(sctuParameters, m_IOClamping, m_IOGateway);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.Sctu, ex.Message, "Start SCTU test");
-                                }
-                            }
-
                             var tOUparameters = baseTestParametersAndNormativese as Types.TOU.TestParameters;
                             if (!ReferenceEquals(tOUparameters, null))
                             {
@@ -1294,7 +1184,7 @@ namespace SCME.Service
                         }
 
                         if (parametersClamp.IsHeightMeasureEnabled)
-                            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "Height measure enabled");
+                            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, "Height measure enabled");
                     }
                     catch (Exception ex)
                     {
@@ -1308,7 +1198,7 @@ namespace SCME.Service
             }
 
             var msg = string.Format("Main testing, state - {0}", res);
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, msg);
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, msg);
 
             m_State = DeviceState.Success;
             m_Communication.PostTestAllEvent(m_State, "Tests are done");
@@ -1324,7 +1214,7 @@ namespace SCME.Service
                     res = m_IOClamping.StartHeating(temperature);
 
                 var msg = string.Format("Heating, state - {0}", res);
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, msg);
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, msg);
             }
             catch (Exception ex)
             {
@@ -1345,7 +1235,7 @@ namespace SCME.Service
             SetSafetyState(m_IOCommutation, true);
             if (m_IOCommutation.IsSafetyAlarm() || SCME.UIServiceConfig.Properties.Settings.Default.AlarmEmulation)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Safety alarm");
+                SystemHost.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Safety alarm");
                 m_State = DeviceState.None;
                 return;
             }
@@ -1364,126 +1254,6 @@ namespace SCME.Service
                         ThrowFaultException(ComplexParts.Clamping, ex.Message, "Start squeezing");
                     }
 
-                    if (res == DeviceState.Success)
-                    {
-                        Types.RCC.RCCResult resultRCC = Types.RCC.RCCResult.OPRESULT_NONE;
-
-                        if (m_ParametersRCC.IsEnabled && m_Param.IsRCCEnabled && !m_Stop)
-                        {
-                            try
-                            {
-                                m_IORCC.Start(m_ParametersRCC, ParametersComm, out resultRCC);
-                            }
-                            catch (Exception ex)
-                            {
-                                ThrowFaultException(ComplexParts.RCC, ex.Message, "Start RCC test");
-                            }
-                        }
-
-                        bool RCCTestPassed = (resultRCC == Types.RCC.RCCResult.OPRESULT_OK);
-
-                        //если RCC показало замыкание цепи катод-катод - прибор бракованный и дальше нет смысла проверять его другими тестами
-                        if (RCCTestPassed || !(m_ParametersRCC.IsEnabled && m_Param.IsRCCEnabled))
-                        {
-                            //в цепи катод-катод нет КЗ, либо данный тест не исполнялся - в обоих указанных случаях имеет смысл проводить тесты данного изделия дальше
-                            bool DefaultForce = false;
-
-                            if (m_ParametersGate.IsEnabled && m_Param.IsGateEnabled && !m_Stop)
-                            {
-                                try
-                                {
-                                    //чтобы двигатель зажимного не перегревался - зажимаем прибор перед измерениями Gate (только для Gate это допускается) не с тем усилием, что задано в профиле, а с Default значением 
-                                    if (m_ClampingSystemConnected && m_Param.IsClampEnabled && !m_Stop)
-                                    {
-                                        m_IOClamping.ReturnForceToDefault();
-                                        DefaultForce = true;
-                                    }
-
-                                    res = m_IOGate.Start(m_ParametersGate, ParametersComm);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.Gate, ex.Message, "Start Gate test");
-                                }
-                            }
-
-                            //если усилие зажатия было default - дожимаем зажимное до заданного в профиле значения усилия зажатия
-                            if (DefaultForce && m_ClampingSystemConnected && m_Param.IsClampEnabled && !m_Stop)
-                                m_IOClamping.SetCustomForce();
-
-                            if (m_ParametersSL.IsEnabled && m_Param.IsSLEnabled && !m_Stop)
-                            {
-                                try
-                                {
-                                    res = m_IOStls.Start(m_ParametersSL, ParametersComm);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.SL, ex.Message, "Start VTM test");
-                                }
-                            }
-
-                            if (m_ParametersBvt.IsEnabled && m_Param.IsBVTEnabled && !m_Stop)
-                            {
-                                try
-                                {
-                                    res = m_IOBvt.Start(m_ParametersBvt, ParametersComm);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.BVT, ex.Message, "Start BVT test");
-                                }
-                            }
-
-                            if (m_ParametersAtu.IsEnabled && m_Param.IsATUEnabled && !m_Stop)
-                            {
-                                try
-                                {
-                                    res = m_IOAtu.Start(m_ParametersAtu, ParametersComm);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.ATU, ex.Message, "Start ATU test");
-                                }
-                            }
-
-                            if (m_ParametersQrrTq.IsEnabled && m_Param.IsQrrTqEnabled && !m_Stop)
-                            {
-                                try
-                                {
-                                    res = m_IOQrrTq.Start(m_ParametersQrrTq, ParametersComm);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.QrrTq, ex.Message, "Start QrrTq test");
-                                }
-                            }
-
-                            if (m_ParametersIH.IsEnabled && m_Param.IsIHEnabled && !m_Stop)
-                            {
-                                try
-                                {
-                                    res = m_IOIH.Start(m_ParametersIH, ParametersComm);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.IH, ex.Message, "Start IH test");
-                                }
-                            }
-
-                            if (m_ParametersTOU.IsEnabled && m_Param.IsTOUEnabled && !m_Stop)
-                            {
-                                try
-                                {
-                                    res = m_IOTOU.Start(m_ParametersTOU, ParametersComm);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ThrowFaultException(ComplexParts.TOU, ex.Message, "Start TOU test");
-                                }
-                            }
-                        }
-                    }
                 }
                 finally
                 {
@@ -1493,7 +1263,7 @@ namespace SCME.Service
                             res = m_IOClamping.Unsqueeze(ParametersClamp);
 
                         if (ParametersClamp.IsHeightMeasureEnabled)
-                            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "Height measure enabled");
+                            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, "Height measure enabled");
                     }
                     catch (Exception ex)
                     {
@@ -1508,7 +1278,7 @@ namespace SCME.Service
             }
 
             var msg = string.Format("Main testing, state - {0}", res);
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, msg);
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, msg);
 
             m_State = DeviceState.Success;
             m_Communication.PostTestAllEvent(m_State, "Tests are done");
@@ -1543,13 +1313,10 @@ namespace SCME.Service
             if (m_ParametersQrrTq.IsEnabled)
                 m_IOQrrTq.Stop();
 
-            if (m_ParametersIH.IsEnabled)
-                m_IOIH.Stop();
-
             if (m_ParametersTOU.IsEnabled)
                 m_IOTOU.Stop();
 
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_LogicContainer_Main_test_manual_stop);
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_LogicContainer_Main_test_manual_stop);
         }
 
         internal void StopByButtonStop()
@@ -1583,7 +1350,7 @@ namespace SCME.Service
         {
             try
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, $"Call Unsqueeze {m_ClampingSystemConnected} {m_Param.IsClampEnabled}");
+                SystemHost.AppendLog(ComplexParts.Clamping, LogMessageType.Info, $"Call Unsqueeze {m_ClampingSystemConnected} {m_Param.IsClampEnabled}");
                     if (m_ClampingSystemConnected && m_Param.IsClampEnabled)
                         m_Thread.StartSingle(Dummy => m_IOClamping.Unsqueeze(ClampingParameters));
             }
@@ -1607,7 +1374,7 @@ namespace SCME.Service
                         }
                         catch (Exception ex)
                         {
-                            SystemHost.Journal.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
+                            SystemHost.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
                         }
                     });
             }
@@ -1625,7 +1392,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
+                SystemHost.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
                 return null;
             }
             try
@@ -1638,7 +1405,7 @@ namespace SCME.Service
                     }
                     catch (Exception ex)
                     {
-                        SystemHost.Journal.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
+                        SystemHost.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
                     }
                 });
             }
@@ -1649,27 +1416,6 @@ namespace SCME.Service
         }
 
         #region Standart API
-        internal ushort ActivationWorkPlace(ComplexParts Device, ChannelByClumpType ChByClumpType, SctuWorkPlaceActivationStatuses ActivationStatus)
-        {
-            ushort res = 0;
-
-            try
-            {
-                switch (Device)
-                {
-                    case ComplexParts.Sctu:
-                        res = _ioSctu.ActivationWorkPlace(ChByClumpType, ActivationStatus);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                ThrowFaultException(Device, ex.Message, String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name));
-            }
-
-            return res;
-        }
-
         internal ushort ReadRegister(ComplexParts Device, ushort Address)
         {
             ushort res = 0;
@@ -1687,7 +1433,7 @@ namespace SCME.Service
                     case ComplexParts.CommutationEx:
                         res = m_IOCommutationEx.ReadRegister(Address);
                         break;
-                    case ComplexParts.Gate:
+                    case ComplexParts.GTU:
                         res = m_IOGate.ReadRegister(Address);
                         break;
                     case ComplexParts.SL:
@@ -1699,7 +1445,7 @@ namespace SCME.Service
                     case ComplexParts.Clamping:
                         res = m_IOClamping.ReadRegister(Address);
                         break;
-                    case ComplexParts.DvDt:
+                    case ComplexParts.dVdt:
                         res = m_IOdVdt.ReadRegister(Address);
                         break;
                     case ComplexParts.ATU:
@@ -1708,14 +1454,8 @@ namespace SCME.Service
                     case ComplexParts.QrrTq:
                         res = m_IOQrrTq.ReadRegister(Address);
                         break;
-                    case ComplexParts.IH:
-                        //блок IH физичести не существует
-                        break;
                     case ComplexParts.TOU:
                         res = m_IOTOU.ReadRegister(Address);
-                        break;
-                    case ComplexParts.Sctu:
-                        res = _ioSctu.ReadRegister(Address);
                         break;
 
                     //если обработка для Device не предусмотрена
@@ -1745,7 +1485,7 @@ namespace SCME.Service
                     case ComplexParts.CommutationEx:
                         m_IOCommutationEx.WriteRegister(Address, Value);
                         break;
-                    case ComplexParts.Gate:
+                    case ComplexParts.GTU:
                         m_IOGate.WriteRegister(Address, Value);
                         break;
                     case ComplexParts.SL:
@@ -1757,7 +1497,7 @@ namespace SCME.Service
                     case ComplexParts.Clamping:
                         m_IOClamping.WriteRegister(Address, Value);
                         break;
-                    case ComplexParts.DvDt:
+                    case ComplexParts.dVdt:
                         m_IOdVdt.WriteRegister(Address, Value);
                         break;
                     case ComplexParts.ATU:
@@ -1769,13 +1509,6 @@ namespace SCME.Service
                     case ComplexParts.TOU:
                         m_IOTOU.WriteRegister(Address, Value);
                         break;
-                    case ComplexParts.IH:
-                        //блок IH физичести не существует
-                        break;
-                    case ComplexParts.Sctu:
-                        _ioSctu.WriteRegister(Address, Value);
-                        break;
-
                     //если обработка для Device не предусмотрена
                     default: throw new Exception(string.Format("Processing for Device={0} is not specified", Device.ToString()));
                 }
@@ -1798,7 +1531,7 @@ namespace SCME.Service
                     case ComplexParts.CommutationEx:
                         m_IOCommutationEx.CallAction(Address);
                         break;
-                    case ComplexParts.Gate:
+                    case ComplexParts.GTU:
                         m_IOGate.CallAction(Address);
                         break;
                     case ComplexParts.SL:
@@ -1810,7 +1543,7 @@ namespace SCME.Service
                     case ComplexParts.Clamping:
                         m_IOClamping.CallAction(Address);
                         break;
-                    case ComplexParts.DvDt:
+                    case ComplexParts.dVdt:
                         m_IOdVdt.CallAction(Address);
                         break;
                     case ComplexParts.ATU:
@@ -1819,14 +1552,8 @@ namespace SCME.Service
                     case ComplexParts.QrrTq:
                         m_IOQrrTq.CallAction(Address);
                         break;
-                    case ComplexParts.IH:
-                        //блок IH физичести не существует
-                        break;
                     case ComplexParts.TOU:
                         m_IOTOU.CallAction(Address);
-                        break;
-                    case ComplexParts.Sctu:
-                        _ioSctu.CallAction(Address);
                         break;
 
                     //если обработка для Device не предусмотрена
@@ -1854,7 +1581,7 @@ namespace SCME.Service
                     case ComplexParts.CommutationEx:
                         m_IOCommutationEx.ClearFault();
                         break;
-                    case ComplexParts.Gate:
+                    case ComplexParts.GTU:
                         m_IOGate.ClearFaults();
                         break;
                     case ComplexParts.SL:
@@ -1866,7 +1593,7 @@ namespace SCME.Service
                     case ComplexParts.Clamping:
                         m_IOClamping.ClearFault();
                         break;
-                    case ComplexParts.DvDt:
+                    case ComplexParts.dVdt:
                         m_IOdVdt.ClearFault();
                         break;
                     case ComplexParts.ATU:
@@ -1874,9 +1601,6 @@ namespace SCME.Service
                         break;
                     case ComplexParts.QrrTq:
                         m_IOQrrTq.ClearFault();
-                        break;
-                    case ComplexParts.IH:
-                        m_IOIH.ClearFault();
                         break;
                     case ComplexParts.TOU:
                         m_IOTOU.ClearFault();
@@ -1894,7 +1618,7 @@ namespace SCME.Service
 
         private void FireStopEvent()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, "StopEvent");
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Milestone, "StopEvent");
             m_Communication.PostStopEvent();
         }
 
@@ -1906,7 +1630,7 @@ namespace SCME.Service
                 m_State = DeviceState.Fault;
 
             var message = string.Format(Resources.Error_LogicContainer_Main_testing_state_exception, m_State, Exception);
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error, message);
             _monitoringSender.HardwareError(message);
 
             var fd = new FaultData { Device = Device, Message = message, TimeStamp = DateTime.Now };

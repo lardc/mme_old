@@ -4,90 +4,8 @@ using System.Runtime.Serialization;
 
 namespace SCME.Types.dVdt
 {
-    /// <summary>Состояние оборудования</summary>
+    /// <summary>Параметры произведения тестов</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDeviceState
-    {
-        [EnumMember]
-        DS_None = 0,
-        /// <summary>Ошибка</summary>
-        [EnumMember]
-        DS_Fault = 1,
-        /// <summary>Выключен</summary>
-        [EnumMember]
-        DS_Disabled = 2,
-        /// <summary>Заряжен</summary>
-        [EnumMember]
-        DS_Powered = 3,
-        [EnumMember]
-        DS_InProcess = 4
-    };
-
-    /// <summary>Причина ошибки</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWFaultReason
-    {
-        [EnumMember]
-        None = 0,
-        [EnumMember]
-        LinkCell1 = 601,
-        [EnumMember]
-        LinkCell2 = 602,
-        [EnumMember]
-        LinkCell3 = 603,
-        [EnumMember]
-        LinkCell4 = 604,
-        [EnumMember]
-        LinkCell5 = 605,
-        [EnumMember]
-        LinkCell6 = 606,
-        [EnumMember]
-        NotReadyCell1 = 611,
-        [EnumMember]
-        NotReadyCell2 = 612,
-        [EnumMember]
-        NotReadyCell3 = 613,
-        [EnumMember]
-        NotReadyCell4 = 614,
-        [EnumMember]
-        NotReadyCell5 = 615,
-        [EnumMember]
-        NotReadyCell6 = 616
-    };
-
-    /// <summary>Причина предупреждения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWWarningReason
-    {
-        [EnumMember]
-        None = 0,
-        /// <summary>Система перезагружена watchdog'ом</summary>
-        [EnumMember]
-        WatchdogReset = 1001
-    };
-
-    /// <summary>Причина выключения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDisableReason
-    {
-        [EnumMember]
-        None = 0,
-    }
-
-    /// <summary>Результат выполнения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWOperationResult
-    {
-        [EnumMember]
-        InProcess = 0,
-        [EnumMember]
-        Success = 1,
-        [EnumMember]
-        Fail = 2
-    };
-
-    [DataContract(Name = "Dvdt.TestParameters", Namespace = "http://proton-electrotex.com/SCME")]
-    [KnownType(typeof(BaseTestParametersAndNormatives))]
     public class TestParameters : BaseTestParametersAndNormatives, ICloneable
     {
         /// <summary>Инициализирует новый экземпляр класса TestParameters</summary>
@@ -139,33 +57,37 @@ namespace SCME.Types.dVdt
             get; set;
         }
 
+        /// <summary>Проверка изменений в параметрах</summary>
+        /// <param name="oldParameters">Старые параметры</param>
+        /// <returns>Возвращает True, если параметры были изменены</returns>
+        public override bool HasChanges(BaseTestParametersAndNormatives oldParameters)
+        {
+            //Старые параметры
+            TestParameters OldTestParameters = (TestParameters)oldParameters;
+            if (oldParameters == null)
+                throw new InvalidCastException("OldParameters must be dVdtOldParameters");
+            if (Mode != OldTestParameters.Mode)
+                return true;
+            if (VoltageRate != OldTestParameters.VoltageRate)
+                return true;
+            if (Voltage != OldTestParameters.Voltage)
+                return true;
+            if (ConfirmationCount != OldTestParameters.ConfirmationCount)
+                return true;
+            if (VoltageRateLimit != OldTestParameters.VoltageRateLimit)
+                return true;
+            if (VoltageRateOffSet != OldTestParameters.VoltageRateOffSet)
+                return true;
+            return false;
+        }
 
         public object Clone()
         {
             return MemberwiseClone();
         }
-
-        public override bool HasChanges(BaseTestParametersAndNormatives oldParameters)
-        {
-            TestParameters dvdDtOldParameters = (TestParameters)oldParameters;
-            if (dvdDtOldParameters == null)
-                throw new InvalidCastException("oldParameters must be dvdDtOldParameters");
-            if (Mode != dvdDtOldParameters.Mode)
-                return true;
-            if (VoltageRate != dvdDtOldParameters.VoltageRate)
-                return true;
-            if (Voltage != dvdDtOldParameters.Voltage)
-                return true;
-            if (ConfirmationCount != dvdDtOldParameters.ConfirmationCount)
-                return true;
-            if (VoltageRateLimit != dvdDtOldParameters.VoltageRateLimit)
-                return true;
-            if (VoltageRateOffSet != dvdDtOldParameters.VoltageRateOffSet)
-                return true;
-            return false;
-        }
     }
 
+    /// <summary>Результаты тестирования</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class TestResults : BaseTestResults
     {
@@ -193,8 +115,66 @@ namespace SCME.Types.dVdt
         {
             get; set;
         }
-
     }
+
+    /// <summary>Состояние оборудования</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDeviceState
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Ошибка</summary>
+        [EnumMember]
+        Fault = 1,
+        /// <summary>Выключен</summary>
+        [EnumMember]
+        Disabled = 2,
+        /// <summary>Заряжен</summary>
+        [EnumMember]
+        Powered = 3
+    };
+
+    /// <summary>Причина ошибки</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWFaultReason
+    {
+        [EnumMember]
+        None = 0
+    };
+
+    /// <summary>Причина предупреждения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWWarningReason
+    {
+        [EnumMember]
+        None = 0
+    };
+
+    /// <summary>Причина выключения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDisableReason
+    {
+        [EnumMember]
+        None = 0
+    }
+
+    /// <summary>Результат выполнения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWOperationResult
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Успешно</summary>
+        [EnumMember]
+        OK = 1,
+        /// <summary>Неудачно</summary>
+        [EnumMember]
+        Fail = 2
+    };
+
+
+
+
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class CalibrationParams

@@ -3,7 +3,6 @@ using SCME.Types.BaseTestParams;
 using SCME.Types.Clamping;
 using SCME.Types.DatabaseServer;
 using SCME.Types.Profiles;
-using SCME.Types.SCTU;
 using SCME.Types.SQL;
 using SCME.Types.TOU;
 using SCME.UI.CustomControl;
@@ -480,15 +479,15 @@ namespace SCME.UI.IO
 
         #region ExternalControl members
 
-        public bool Start(Types.GTU.TestParameters ParametersGate, Types.VTM.TestParameters ParametersVtm,
-                          Types.BVT.TestParameters ParametersBvt, Types.ATU.TestParameters ParametersAtu, Types.QrrTq.TestParameters ParametersQrrTq, Types.IH.TestParameters ParametersIH, Types.RCC.TestParameters ParametersRCC, Types.Commutation.TestParameters ParametersCommutation, Types.Clamping.TestParameters ParametersClamping, Types.TOU.TestParameters ParametersTOU, bool SkipSC = false)
+        public bool Start(Types.GTU.TestParameters ParametersGate, Types.SL.TestParameters ParametersVtm,
+                          Types.BVT.TestParameters ParametersBvt, Types.ATU.TestParameters ParametersAtu, Types.QrrTq.TestParameters ParametersQrrTq, Types.Commutation.TestParameters ParametersCommutation, Types.Clamping.TestParameters ParametersClamping, Types.TOU.TestParameters ParametersTOU, bool SkipSC = false)
         {
             if (!IsServerConnected)
                 return false;
 
             try
             {
-                if (!ParametersGate.IsEnabled && !ParametersVtm.IsEnabled && !ParametersBvt.IsEnabled && !ParametersAtu.IsEnabled && !ParametersQrrTq.IsEnabled && !ParametersIH.IsEnabled && !ParametersRCC.IsEnabled && !ParametersTOU.IsEnabled)
+                if (!ParametersGate.IsEnabled && !ParametersVtm.IsEnabled && !ParametersBvt.IsEnabled && !ParametersAtu.IsEnabled && !ParametersQrrTq.IsEnabled && !ParametersTOU.IsEnabled)
                 {
                     var dw = new DialogWindow(Resources.Information,
                                               Resources.CanNotStartTest + Environment.NewLine +
@@ -528,7 +527,7 @@ namespace SCME.UI.IO
                     return false;
                 }
 
-                result = m_ControlClient.Start(ParametersGate, ParametersVtm, ParametersBvt, ParametersAtu, ParametersQrrTq, ParametersIH, ParametersRCC, ParametersCommutation, ParametersClamping, ParametersTOU);
+                result = m_ControlClient.Start(ParametersGate, ParametersVtm, ParametersBvt, ParametersAtu, ParametersQrrTq, ParametersCommutation, ParametersClamping, ParametersTOU);
 
                 return result;
 
@@ -592,7 +591,7 @@ namespace SCME.UI.IO
                     return false;
                 }
 
-                result = m_ControlClient.StartDynamic(paramsComm, paramsClamp, parameters.OfType<Types.GTU.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.VTM.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.BVT.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.dVdt.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.ATU.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.QrrTq.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<SctuTestParameters>().ToArray(), parameters.OfType<Types.TOU.TestParameters>().Where(t => t.IsEnabled).ToArray());
+                result = m_ControlClient.StartDynamic(paramsComm, paramsClamp, parameters.OfType<Types.GTU.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.SL.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.BVT.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.dVdt.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.ATU.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.QrrTq.TestParameters>().Where(t => t.IsEnabled).ToArray(), parameters.OfType<Types.TOU.TestParameters>().Where(t => t.IsEnabled).ToArray());
 
                 return result;
             }
@@ -1403,10 +1402,6 @@ namespace SCME.UI.IO
             }
         }
 
-        public void SctuHandler(SctuHwState state, SctuTestResults results)
-        {
-        }
-
         public void DbSyncState(DeviceConnectionState state, string message)
         {
             m_QueueWorker.DbSyncState(state, message);
@@ -1510,22 +1505,22 @@ namespace SCME.UI.IO
             //      m_QueueWorker.AddVtmFaultEvent(Disable);
         }
 
-        public void SLHandler(Types.DeviceState state, Types.VTM.TestResults result)
+        public void SLHandler(Types.DeviceState state, Types.SL.TestResults result)
         {
             m_QueueWorker.AddSLEvent(state, result);
         }
 
-        public void SLNotificationHandler(Types.VTM.HWProblemReason Problem, Types.VTM.HWWarningReason Warning,
-                                           Types.VTM.HWFaultReason Fault,
-                                           Types.VTM.HWDisableReason Disable)
+        public void SLNotificationHandler(Types.SL.HWProblemReason Problem, Types.SL.HWWarningReason Warning,
+                                           Types.SL.HWFaultReason Fault,
+                                           Types.SL.HWDisableReason Disable)
         {
-            if (Warning != Types.VTM.HWWarningReason.None)
+            if (Warning != Types.SL.HWWarningReason.None)
                 m_QueueWorker.AddSLWarningEvent(Warning);
 
-            if (Problem != Types.VTM.HWProblemReason.None)
+            if (Problem != Types.SL.HWProblemReason.None)
                 m_QueueWorker.AddSLProblemEvent(Problem);
 
-            if (Fault != Types.VTM.HWFaultReason.None)
+            if (Fault != Types.SL.HWFaultReason.None)
                 m_QueueWorker.AddSLFaultEvent(Fault);
 
             // if (Disable != Types.VTM.HWDisableReason.None)
@@ -1629,33 +1624,6 @@ namespace SCME.UI.IO
 
             if (Fault != (ushort)Types.TOU.HWFaultReason.None)
                 m_QueueWorker.AddTOUFaultEvent(Fault);
-        }
-
-        public void IHHandler(Types.DeviceState State, Types.IH.TestResults Result)
-        {
-            m_QueueWorker.AddIHEvent(State, Result);
-        }
-
-        public void IHNotificationHandler(ushort Problem, ushort Warning, ushort Fault, ushort Disable)
-        {
-            if (Problem != (ushort)Types.IH.HWProblemReason.None)
-                m_QueueWorker.AddIHProblemEvent(Problem);
-
-            if (Warning != (ushort)Types.IH.HWWarningReason.None)
-                m_QueueWorker.AddIHWarningEvent(Warning);
-
-            if (Fault != (ushort)Types.IH.HWFaultReason.None)
-                m_QueueWorker.AddIHFaultEvent(Fault);
-        }
-
-        public void RCCHandler(Types.DeviceState State, Types.RCC.TestResults Result)
-        {
-            //UI не использует виртуальный блок RCC, его использует только комплекс АКИМ
-        }
-
-        public void RCCNotificationHandler(ushort Problem, ushort Warning, ushort Fault, ushort Disable)
-        {
-            //UI не использует виртуальный блок RCC, его использует только комплекс АКИМ
         }
 
         public void ClampingSwitchHandler(SqueezingState Up, IList<float> ArrayF, IList<float> ArrayFd)

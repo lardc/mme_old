@@ -140,9 +140,6 @@
     <Compile Update="PagesTech\GatePage.xaml.cs">
       <DependentUpon>GatePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="PagesTech\IHPage.xaml.cs">
-      <DependentUpon>IHPage.xaml</DependentUpon>
-    </Compile>
     <Compile Update="PagesTech\LogsPage.xaml.cs">
       <DependentUpon>LogsPage.xaml</DependentUpon>
     </Compile>
@@ -157,9 +154,6 @@
     </Compile>
     <Compile Update="PagesTech\RACPage.xaml.cs">
       <DependentUpon>RACPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="PagesTech\SelftestPage.xaml.cs">
-      <DependentUpon>SelftestPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="PagesTech\TechnicianPage.xaml.cs">
       <DependentUpon>TechnicianPage.xaml</DependentUpon>
@@ -274,9 +268,6 @@
     <Page Update="PagesTech\GatePage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="PagesTech\IHPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="PagesTech\LogsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -287,9 +278,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="PagesTech\RACPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="PagesTech\SelftestPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="PagesTech\SLPage.xaml">

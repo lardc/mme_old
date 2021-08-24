@@ -1,19 +1,18 @@
-﻿using System;
-using System.Configuration;
-using System.Data.SQLite;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.ServiceModel;
-using System.ServiceModel.Configuration;
-using System.Windows.Forms;
-using SCME.InterfaceImplementations;
+﻿using NLog;
+using NLog.Config;
+using NLog.Targets;
 using SCME.InterfaceImplementations.NewImplement.SQLite;
 using SCME.Logger;
 using SCME.Service.Properties;
 using SCME.Types;
 using SCME.Types.Database;
 using SCME.UIServiceConfig.Properties;
+using System;
+using System.Data.SQLite;
+using System.IO;
+using System.ServiceModel;
+using System.Text;
+using NLogger = NLog.Logger;
 
 namespace SCME.Service
 {
@@ -26,6 +25,37 @@ namespace SCME.Service
         private static ServiceHost _SQLiteDbServiceHost;
         private static BroadcastCommunication m_Communication;
         private static IDbService _dbService;
+
+        //Логер
+        private static NLogger Logger;
+        //Месторасположения файлов логов
+        private static string LogPath;
+        private static string DirectoryLogPath;
+
+        public static void AppendLog(ComplexParts device, LogMessageType messageType, string message)
+        {
+            string Message = message.Replace("'", string.Empty);
+            switch (messageType)
+            {
+                //Информационное сообщение
+                case LogMessageType.Info:
+                    Logger.Info(string.Format("{0} INFO - {1}: {2}", DateTime.Now, device, Message));
+                    break;
+                //Важная веха
+                case LogMessageType.Milestone:
+                    Logger.Warn(string.Format("{0} MILESTONE - {1}: {2}", DateTime.Now, device, Message));
+                    break;
+                //Критическое сообщение
+                case LogMessageType.Error:
+                    Logger.Fatal(string.Format("{0} CRITICAL - {1}: {2}", DateTime.Now, device, Message));
+                    //Создание копии при возникновении критического события
+                    string CriticalLogsPath = Path.Combine(DirectoryLogPath, "Critical");
+                    Directory.CreateDirectory(CriticalLogsPath);
+                    File.Copy(LogPath, Path.Combine(CriticalLogsPath, string.Format("LogsService {0:dd.MM.yyyy HH_mm}.log", DateTime.Now)), true);
+                    break;
+            }
+        }
+
         internal static bool? IsSyncedWithServer { get; set; }
 
         private static void AfterSyncWithServerRoutineHandler(string notSyncedReason)
@@ -36,7 +66,7 @@ namespace SCME.Service
                 case true:
                     //если принятый notSyncedReason пуст - синхронизация успешно выполнена
                     IsSyncedWithServer = true;
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, "Local database was successfully synced with a central database");
+                    AppendLog(ComplexParts.Service, LogMessageType.Milestone, "Local database was successfully synced with a central database");
                     break;
 
                 default:
@@ -58,7 +88,7 @@ namespace SCME.Service
 
                     }
 
-                    Journal.AppendLog(ComplexParts.Service, logMessageType, string.Format("Local database not synced with a central database. Reason: {0}", notSyncedReason));
+                    AppendLog(ComplexParts.Service, logMessageType, string.Format("Local database not synced with a central database. Reason: {0}", notSyncedReason));
                     break;
             }
 
@@ -96,22 +126,42 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, $"New implement db local service not host: {ex.Message}");
+                AppendLog(ComplexParts.Service, LogMessageType.Error, $"New implement db local service not host: {ex.Message}");
             }
             
-            Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "New implement db local service run");
+            AppendLog(ComplexParts.Service, LogMessageType.Info, "New implement db local service run");
         }
         
         internal static bool Initialize()
         {
             try
             {
-                Journal = new EventJournal();
-                Journal.Open(Settings.Default.DisableLogDB ? String.Empty : Settings.Default.LogsDatabasePath, Settings.Default.DBOptionsLogs,
-                             Settings.Default.LogsTracePathTemplate,
-                             Settings.Default.ForceLogFlush,
-                             Settings.Default.IncludeDetailsInLog);
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_SystemHost_Application_started);
+                Logger = LogManager.GetCurrentClassLogger();
+                LogPath = Settings.Default.LogsTracePathTemplate;
+                DirectoryLogPath = Path.GetDirectoryName(LogPath);
+                //Перезаписываемый файл логов
+                FileTarget RollingLogFile = new FileTarget("RollingFileLog")
+                {
+                    Encoding = Encoding.UTF8,
+                    Layout = "${message}",
+                    FileName = Settings.Default.LogsTracePathTemplate,
+                    ArchiveFileName = Path.Combine(DirectoryLogPath, "Archived", "LogsArchived.log"),
+                    ArchiveAboveSize = 100000,
+                    MaxArchiveFiles = 1
+                };
+                //Файл критических логов
+                FileTarget CriticalLogFile = new FileTarget("CriticalFileLog")
+                {
+                    Encoding = Encoding.UTF8,
+                    Layout = "${message}",
+                    FileName = Path.Combine(DirectoryLogPath, "LogsServiceCritical.log")
+                };
+                //Конфигурация NLog
+                LoggingConfiguration Configuration = new LoggingConfiguration();
+                Configuration.AddRule(LogLevel.Info, LogLevel.Fatal, RollingLogFile);
+                Configuration.AddRule(LogLevel.Warn, LogLevel.Fatal, CriticalLogFile);
+                LogManager.Configuration = Configuration;
+                AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_SystemHost_Application_started);
             }
             catch (Exception ex)
             {
@@ -130,7 +180,7 @@ namespace SCME.Service
 //            }
 //            catch (Exception ex)
 //            {
-//                Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Migrate database error: {0}", ex.Message));
+//                AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Migrate database error: {0}", ex.Message));
 //                return false;
 //            }
 
@@ -142,7 +192,7 @@ namespace SCME.Service
                 Results.Open(Settings.Default.ResultsDatabasePath, Settings.Default.DBOptionsResults, Settings.Default.MMECode);
 
                 if (!Settings.Default.IsLocal)
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_SystemHost_Result_journal_opened);
+                    AppendLog(ComplexParts.Service, LogMessageType.Info, Resources.Log_SystemHost_Result_journal_opened);
 
                 //нам ещё не известно как завершится процесс синхронизации данных, поэтому
                 IsSyncedWithServer = null;
@@ -165,7 +215,7 @@ namespace SCME.Service
                     ms_ControlService = new ExternalControlServer();
                     ms_ControlServiceHost = new ServiceHost(ms_ControlService);
                     ms_ControlServiceHost.Open();
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, String.Format(Resources.Log_SystemHost_Control_service_is_listening));
+                    AppendLog(ComplexParts.Service, LogMessageType.Info, String.Format(Resources.Log_SystemHost_Control_service_is_listening));
 
                     ms_DatabaseServiceHost = new ServiceHost(typeof(DatabaseServer));
 
@@ -175,7 +225,7 @@ namespace SCME.Service
                 {
                     File.AppendAllText(@"SCME.Service error.txt",
                     $"\n\n{DateTime.Now}\nEXCEPTION: {ex}\nINNER EXCEPTION: {ex.InnerException ?? new Exception("No additional information - InnerException is null")}\n");
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, $"SQLite database error: {ex?.InnerException?.ToString() ?? ex.ToString()}");
+                    AppendLog(ComplexParts.Service, LogMessageType.Error, $"SQLite database error: {ex?.InnerException?.ToString() ?? ex.ToString()}");
                     return false;
                 }
                
@@ -186,11 +236,11 @@ namespace SCME.Service
                 }
                 catch (Exception ex)
                 {
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Can't open external database service port: {0}", ex.Message));
+                    AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Can't open external database service port: {0}", ex.Message));
                 }
 
                 ms_DatabaseServiceHost.Open();
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, String.Format(Resources.Log_SystemHost_Database_service_is_listening));
+                AppendLog(ComplexParts.Service, LogMessageType.Info, String.Format(Resources.Log_SystemHost_Database_service_is_listening));
 
                 ms_MaintenanceServiceHost = new ServiceHost(typeof(MaintenanceServer));
 
@@ -200,11 +250,11 @@ namespace SCME.Service
                 }
                 catch (Exception ex)
                 {
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Can't open external maintenance service port: {0}", ex.Message));
+                    AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Can't open external maintenance service port: {0}", ex.Message));
                 }
 
                 ms_MaintenanceServiceHost.Open();
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, String.Format(Resources.Log_SystemHost_Maintenance_service_is_listening));
+                AppendLog(ComplexParts.Service, LogMessageType.Info, String.Format(Resources.Log_SystemHost_Maintenance_service_is_listening));
 
                 return true;
             }
@@ -212,7 +262,7 @@ namespace SCME.Service
             {
                 File.AppendAllText(@"SCME.Service error.txt",
                     $"\n\n{DateTime.Now}\nEXCEPTION: {ex}\nINNER EXCEPTION: {ex.InnerException ?? new Exception("No additional information - InnerException is null")}\n");
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Error, ex.Message);
+                AppendLog(ComplexParts.Service, LogMessageType.Error, ex.Message);
                 Journal.Close();
                 return false;
             }
@@ -243,7 +293,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 if (Journal != null)
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error,
+                    AppendLog(ComplexParts.Service, LogMessageType.Error,
                                         String.Format(Resources.Log_SystemHost_Error_while_closing, @"Control host", ex.Message));
             }
 
@@ -258,7 +308,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 if (Journal != null)
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error,
+                    AppendLog(ComplexParts.Service, LogMessageType.Error,
                                         String.Format(Resources.Log_SystemHost_Error_while_closing, @"DB host", ex.Message));
             }
 
@@ -273,7 +323,7 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 if (Journal != null)
-                    Journal.AppendLog(ComplexParts.Service, LogMessageType.Error,
+                    AppendLog(ComplexParts.Service, LogMessageType.Error,
                                         String.Format(Resources.Log_SystemHost_Error_while_closing, @"Maintenance host", ex.Message));
             }
 
@@ -284,13 +334,13 @@ namespace SCME.Service
             catch (Exception ex)
             {
                 if (Journal != null)
-                    Journal.AppendLog(ComplexParts.Database, LogMessageType.Error,
+                    AppendLog(ComplexParts.Database, LogMessageType.Error,
                                         String.Format(Resources.Log_SystemHost_Error_while_closing, @"Result journal", ex.Message));
             }
 
             if (Journal != null)
             {
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_SystemHost_Application_closed);
+                AppendLog(ComplexParts.Service, LogMessageType.Milestone, Resources.Log_SystemHost_Application_closed);
                 Journal.Close();
             }
         }
@@ -317,7 +367,7 @@ namespace SCME.Service
                 if (sCommunicationLive != String.Empty)
                     Mess = Mess + ", " + sCommunicationLive;
 
-                Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, Mess);
+                AppendLog(ComplexParts.Service, LogMessageType.Info, Mess);
             }
         }
     }

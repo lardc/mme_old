@@ -47,7 +47,7 @@ namespace SCME.Service.IO
             m_Node = (ushort) Settings.Default.BVTNode;
             m_Result = new Types.BVT.TestResults();
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Milestone,
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Milestone,
                 String.Format("BVT created. Emulation mode: {0}", Settings.Default.BVTEmulation));
         }
 
@@ -223,14 +223,14 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, "BVT fault cleared");
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info, "BVT fault cleared");
 
             CallAction(ACT_CLEAR_FAULT);
         }
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, "BVT warning cleared");
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info, "BVT warning cleared");
 
             CallAction(ACT_CLEAR_WARNING);
         }
@@ -243,7 +243,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                     string.Format("BVT @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
@@ -257,7 +257,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16S(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                     string.Format("BVT @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
@@ -271,7 +271,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                     string.Format("BVT @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsBVTEmulation)
@@ -282,7 +282,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 string.Format("BVT @Call, action {0}", Action));
 
             if (m_IsBVTEmulation)
@@ -565,7 +565,7 @@ namespace SCME.Service.IO
         {
             List<short> bufferArray;
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 "BVT @ReadArrays begin");
 
             Result.CurrentData.Clear();
@@ -590,10 +590,10 @@ namespace SCME.Service.IO
                 Result.VoltageData.Select(
                     Value => IsDirect ? (Value < 0 ? Math.Abs(Value) : (short) 0) : (Value > 0 ? (short) 0 : Value)).ToList();
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 string.Format("BVT @ReadArrays data length {0}", Result.VoltageData.Count));
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info,
                 "BVT @ReadArrays end");
         }
 
@@ -630,7 +630,7 @@ namespace SCME.Service.IO
                     throw new Exception(string.Format("BVT device is in disabled state, reason: {0}", disableReason));
                 }
 
-                if (opResult != Types.BVT.HWOperationResult.InProcess)
+                if (opResult != Types.BVT.HWOperationResult.None)
                 {
                     var warning = (Types.BVT.HWWarningReason) ReadRegister(REG_WARNING);
                     var problem = (Types.BVT.HWProblemReason) ReadRegister(REG_PROBLEM);
@@ -667,7 +667,7 @@ namespace SCME.Service.IO
 
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, type, Message);
+            SystemHost.AppendLog(ComplexParts.BVT, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.BVT, State, Message);
         }
 
@@ -686,7 +686,7 @@ namespace SCME.Service.IO
                 message = string.Format($"BVT {(IsUdsmUrsm ? "UdsmUrsm" : "")} {(type == BVTTestType.Direct ? "direct" : "reverse")} test result " +
                                         $"{(type == BVTTestType.Direct ? Result.VDRM : Result.VRRM)} V, {(type == BVTTestType.Direct ? Result.IDRM : Result.IRRM)} mA");
 
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
             if (type == BVTTestType.Direct)
             {
                 if (IsUdsmUrsm)
@@ -718,7 +718,7 @@ namespace SCME.Service.IO
 //            if (State == DeviceState.Success)
 //                message = string.Format($"BVT {(IsUdsmUrsm ? "UdsmUrsm" : "")} direct test result {0} V, {1} mA", Result.VDRM, Result.IDRM);
 //
-//            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
+//            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
 //            m_Communication.PostBVTDirectEvent(State, Result);
 //        }
 //
@@ -729,14 +729,14 @@ namespace SCME.Service.IO
 //            if (State == DeviceState.Success)
 //                message = string.Format($"BVT {(IsUdsmUrsm ? "UdsmUrsm" : "")}  reverse test result {0} V, {1} mA", Result.VRRM, Result.IRRM);
 //
-//            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
+//            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
 //            m_Communication.PostBVTReverseEvent(State, Result);
 //        }
 
         private void FireNotificationEvent(Types.BVT.HWProblemReason Problem, Types.BVT.HWWarningReason Warning,
             Types.BVT.HWFaultReason Fault, Types.BVT.HWDisableReason Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Error,
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Error,
                 string.Format(
                     "BVT device notification: problem {0}, warning {1}, fault {2}, disable {3}",
                     Problem, Warning, Fault, Disable));
@@ -751,7 +751,7 @@ namespace SCME.Service.IO
 //            if (State == DeviceState.Success)
 //                message = string.Format("BVT UdsmUrsm direct test result VDSM={0}, IDSM={1}, ", Result.VDRM, Result.IDRM);
 //
-//            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
+//            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
 //            m_Communication.PostBVTUdsmUrsmDirectEvent(State, Result);
 //        }
 //
@@ -762,13 +762,13 @@ namespace SCME.Service.IO
 //            if (State == DeviceState.Success)
 //                message = string.Format("BVT UdsmUrsm reverse test result VRSM={0}, IRSM={1}", Result.VRRM, Result.IRRM);
 //
-//            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
+//            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Info, message);
 //            m_Communication.PostBVTUdsmUrsmReverseEvent(State, Result);
 //        }
 
         private void FireExceptionEvent(string Message)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.BVT, LogMessageType.Error, Message);
+            SystemHost.AppendLog(ComplexParts.BVT, LogMessageType.Error, Message);
             m_Communication.PostExceptionEvent(ComplexParts.BVT, Message);
         }
 

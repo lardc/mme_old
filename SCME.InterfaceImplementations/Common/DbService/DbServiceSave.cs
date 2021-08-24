@@ -90,7 +90,7 @@ namespace SCME.InterfaceImplementations.Common.DbService
             return ("Gate", gateCondtions, gateParameters);
         }
 
-        private (string typeName, Dictionary<string, object> conditions, Dictionary<string, (object Min, object Max)> parameters) TypeConditionsParameters(Types.VTM.TestParameters sl)
+        private (string typeName, Dictionary<string, object> conditions, Dictionary<string, (object Min, object Max)> parameters) TypeConditionsParameters(Types.SL.TestParameters sl)
         {
             var slCondition = new Dictionary<string, object>()
             {
@@ -102,18 +102,18 @@ namespace SCME.InterfaceImplementations.Common.DbService
 
             switch (sl.TestType)
             {
-                case Types.VTM.VTMTestType.Ramp:
+                case Types.SL.SLTestType.Ramp:
                     slCondition.Add("SL_ITM", sl.RampCurrent);
                     slCondition.Add("SL_Time", sl.RampTime);
                     slCondition.Add("SL_OpenEn", sl.IsRampOpeningEnabled);
                     slCondition.Add("SL_OpenI", sl.RampOpeningCurrent);
                     slCondition.Add("SL_TimeEx", sl.RampOpeningTime);
                     break;
-                case Types.VTM.VTMTestType.Sinus:
+                case Types.SL.SLTestType.Sinus:
                     slCondition.Add("SL_ITM", sl.SinusCurrent);
                     slCondition.Add("SL_Time", sl.SinusTime);
                     break;
-                case Types.VTM.VTMTestType.Curve:
+                case Types.SL.SLTestType.Curve:
                     slCondition.Add("SL_ITM", sl.CurveCurrent);
                     slCondition.Add("SL_Time", sl.CurveTime);
                     slCondition.Add("SL_Factor", sl.CurveFactor);
@@ -458,7 +458,7 @@ namespace SCME.InterfaceImplementations.Common.DbService
                     case Types.GTU.TestParameters gate:
                         _inserter.Insert(TypeConditionsParameters(gate));
                         break;
-                    case Types.VTM.TestParameters sl:
+                    case Types.SL.TestParameters sl:
                         _inserter.Insert(TypeConditionsParameters(sl));
                         break;
                     case Types.BVT.TestParameters bvt:

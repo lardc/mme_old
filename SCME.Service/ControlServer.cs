@@ -6,7 +6,6 @@ using SCME.Service.Properties;
 using SCME.Types;
 using SCME.Types.Commutation;
 using SCME.Types.Profiles;
-using SCME.Types.SCTU;
 using SCME.Types.SQL;
 using SCME.UIServiceConfig.Properties;
 
@@ -140,16 +139,16 @@ namespace SCME.Service
             return _IoMain.GetSafetyType();
         }
 
-        bool IExternalControl.Start(Types.GTU.TestParameters ParametersGate, Types.VTM.TestParameters ParametersSL,
-                                    Types.BVT.TestParameters ParametersBvt, Types.ATU.TestParameters ParametersAtu, Types.QrrTq.TestParameters ParametersQrrTq, Types.IH.TestParameters ParametersIH, Types.RCC.TestParameters ParametersRCC,
+        bool IExternalControl.Start(Types.GTU.TestParameters ParametersGate, Types.SL.TestParameters ParametersSL,
+                                    Types.BVT.TestParameters ParametersBvt, Types.ATU.TestParameters ParametersAtu, Types.QrrTq.TestParameters ParametersQrrTq,
                                     Types.Commutation.TestParameters ParametersComm, Types.Clamping.TestParameters ParametersClamp, Types.TOU.TestParameters ParametersTOU)
         {
-            return _IoMain.Start(ParametersGate, ParametersSL, ParametersBvt, ParametersAtu, ParametersQrrTq, ParametersIH, ParametersRCC, ParametersComm, ParametersClamp, ParametersTOU);
+            return _IoMain.Start(ParametersGate, ParametersSL, ParametersBvt, ParametersAtu, ParametersQrrTq, ParametersComm, ParametersClamp, ParametersTOU);
         }
 
-        bool IExternalControl.StartDynamic(TestParameters parametersCommutation, Types.Clamping.TestParameters parametersClamp, Types.GTU.TestParameters[] parametersGate, Types.VTM.TestParameters[] parametersSl, Types.BVT.TestParameters[] parametersBvt, Types.dVdt.TestParameters[] parametersDvDt, Types.ATU.TestParameters[] parametersAtu, Types.QrrTq.TestParameters[] parametersQrrTq, SctuTestParameters[] parametersSctu, Types.TOU.TestParameters[] parametersTOU)
+        bool IExternalControl.StartDynamic(TestParameters parametersCommutation, Types.Clamping.TestParameters parametersClamp, Types.GTU.TestParameters[] parametersGate, Types.SL.TestParameters[] parametersSl, Types.BVT.TestParameters[] parametersBvt, Types.dVdt.TestParameters[] parametersDvDt, Types.ATU.TestParameters[] parametersAtu, Types.QrrTq.TestParameters[] parametersQrrTq, Types.TOU.TestParameters[] parametersTOU)
         {
-            return _IoMain.Start(parametersCommutation, parametersClamp, parametersGate, parametersSl, parametersBvt, parametersDvDt, parametersAtu, parametersQrrTq, parametersSctu, parametersTOU);
+            return _IoMain.Start(parametersCommutation, parametersClamp, parametersGate, parametersSl, parametersBvt, parametersDvDt, parametersAtu, parametersQrrTq, parametersTOU);
         }
 
         void IExternalControl.ClearSafetyTrig()
@@ -165,11 +164,6 @@ namespace SCME.Service
         void IExternalControl.SafetySystemOff()
         {
             _IoMain.SafetySystemOff();
-        }
-
-        ushort IExternalControl.ActivationWorkPlace(ComplexParts Device, ChannelByClumpType ChByClumpType, SctuWorkPlaceActivationStatuses ActivationStatus)
-        {
-            return _IoMain.ActivationWorkPlace(Device, ChByClumpType, ActivationStatus);
         }
 
         string IExternalControl.NotReadyDevicesToStart()
@@ -257,14 +251,14 @@ namespace SCME.Service
                 var printingProxy = new PrintingServiceProxy(PRINTING_ENDPOINT_NAME);
                 printingProxy.Open();
 
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "Printing service connection is opened");
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, "Printing service connection is opened");
 
                 try
                 {
                     printingProxy.RequestRemotePrinting(Settings.Default.MMECode, GroupName, CustomerName,
                         DeviceType, Predicate);
 
-                    SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info,
+                    SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info,
                         String.Format("Printing request: GroupName - {0}, Selection - {1}", GroupName, Predicate));
                 }
                 finally
@@ -279,14 +273,14 @@ namespace SCME.Service
             }
             catch (FaultException<FaultData> ex)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error,
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error,
                     String.Format("Printing request failed: {0}", ex.Message));
 
                 return false;
             }
             catch (Exception ex)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Error,
+                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Error,
                     String.Format("Printing request failed: {0}", ex.Message));
 
                 return false;
@@ -296,7 +290,7 @@ namespace SCME.Service
         public void SetSafetyMode(SafetyMode safetyMode)
         {
             _IoMain.SetSafetyMode(safetyMode);
-            SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, $"Safety mode is: {safetyMode}");
+            SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, $"Safety mode is: {safetyMode}");
         }
 
         public (MyProfile profile, bool IsInMmeCode) SyncProfile(MyProfile profile)
@@ -313,7 +307,7 @@ namespace SCME.Service
 
         public void WriteJournal(ComplexParts device, LogMessageType type, DateTime dateTime, string message)
         {
-            SystemHost.Journal.AppendLog(device, type, $"{dateTime}: {message}");
+            SystemHost.AppendLog(device, type, $"{dateTime}: {message}");
         }
 
 

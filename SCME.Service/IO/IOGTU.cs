@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using TypeBVT = SCME.Types.BVT;
 using TypeGTU = SCME.Types.GTU;
-using TypeSL = SCME.Types.VTM;
+using TypeSL = SCME.Types.SL;
 
 namespace SCME.Service.IO
 {
@@ -54,7 +54,7 @@ namespace SCME.Service.IO
             IsGraphRead = Settings.Default.GateReadGraph;
             Result = new TypeGTU.TestResults();
             //Сообщение в лог
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Milestone, string.Format("GTU created. Emulation mode: {0}", IsEmulated));
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Milestone, string.Format("GTU created. Emulation mode: {0}", IsEmulated));
         }
 
         /// <summary>Коммутация</summary>
@@ -175,7 +175,7 @@ namespace SCME.Service.IO
                 State = DeviceState.InProcess;
                 AllEvents_Fire(State);
                 //Переключение коммутации
-                DeviceState DevState = ActiveCommutation.Switch(CommutationMode.Gate, commutation.CommutationType, commutation.Position);
+                DeviceState DevState = ActiveCommutation.Switch(CommutationMode.GTU, commutation.CommutationType, commutation.Position);
                 //Ошибка при переключении коммутации
                 if (DevState == DeviceState.Fault)
                 {
@@ -438,7 +438,7 @@ namespace SCME.Service.IO
                     throw new Exception(string.Format("GTU is in disabled state, reason: {0}", DisableReason));
                 }
                 //Тест в процессе выполнения
-                if (OperationResult == TypeGTU.HWOperationResult.InProcess)
+                if (OperationResult == TypeGTU.HWOperationResult.None)
                 {
                     Thread.Sleep(RequestDelay);
                     continue;
@@ -487,7 +487,7 @@ namespace SCME.Service.IO
                     NotificationEvent_Fire(TypeGTU.HWFaultReason.None, TypeGTU.HWWarningReason.None, DisableReason, TypeGTU.HWProblemReason.None);
                     throw new Exception(string.Format("GTU is in disabled state, reason: {0}", DisableReason));
                 }
-                if (DevStateSL == TypeSL.HWDeviceState.Charging || DevStateSL == TypeSL.HWDeviceState.InProcess)
+                if (DevStateSL == TypeSL.HWDeviceState.BatteryCharge || DevStateSL == TypeSL.HWDeviceState.InProcess)
                 {
                     Thread.Sleep(RequestDelay);
                     continue;
@@ -573,12 +573,12 @@ namespace SCME.Service.IO
 
         internal Tuple<ushort, ushort> PulseCalibrationGate(ushort current)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("Calibrate gare, current: {0}", current));
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("Calibrate gare, current: {0}", current));
             //Эмуляция блока
             if (IsEmulated)
                 return new Tuple<ushort, ushort>(0, 0);
             //Переключение коммутации
-            if (ActiveCommutation.Switch(CommutationMode.Gate) == DeviceState.Fault)
+            if (ActiveCommutation.Switch(CommutationMode.GTU) == DeviceState.Fault)
                 return new Tuple<ushort, ushort>(0, 0);
             try
             {
@@ -603,12 +603,12 @@ namespace SCME.Service.IO
 
         internal ushort PulseCalibrationMain(ushort current)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("Calibrate main circuit, current: {0}", current));
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("Calibrate main circuit, current: {0}", current));
             //Эмуляция блока
             if (IsEmulated)
                 return 0;
             //Переключение коммутации
-            if (ActiveCommutation.Switch(CommutationMode.Gate) == DeviceState.Fault)
+            if (ActiveCommutation.Switch(CommutationMode.GTU) == DeviceState.Fault)
                 return 0;
             try
             {
@@ -632,7 +632,7 @@ namespace SCME.Service.IO
 
         internal void WriteCalibrationParams(TypeGTU.CalibrationParameters parameters)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU @WriteCalibrationParams begin");
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, "GTU @WriteCalibrationParams begin");
             WriteRegisterS(REG_GATE_VGT_OFFSET, parameters.GateVGTOffset, true);
             WriteRegisterS(REG_GATE_IGT_OFFSET, parameters.GateIGTOffset, true);
             WriteRegisterS(REG_ADC_IG_FINE_P0, parameters.GateIHLOffset, true);
@@ -645,12 +645,12 @@ namespace SCME.Service.IO
             WriteRegister(REG_ADC_IG_FINE_P1, parameters.GateFineIHL_D, true);
             if (!IsEmulated)
                 CallAction(ACT_SAVE_TO_ROM);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU @WriteCalibrationParams end");
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, "GTU @WriteCalibrationParams end");
         }
 
         internal TypeGTU.CalibrationParameters ReadCalibrationParams()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info,
                                          "Gate @ReadCalibrationParams begin");
 
             var parameters = new Types.GTU.CalibrationParameters
@@ -668,7 +668,7 @@ namespace SCME.Service.IO
                 GateFineIHL_D = ReadRegister(REG_ADC_IG_FINE_P1, true),
             };
 
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Milestone,
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Milestone,
                                          "Gate @ReadCalibrationParams end");
 
             return parameters;
@@ -678,13 +678,13 @@ namespace SCME.Service.IO
         internal void ClearFaults() //Очистка ошибок блока
         {
             CallAction(ACT_CLR_FAULT);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU faults cleared");
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, "GTU faults cleared");
         }
 
         internal void Warnings_Clear() //Очистка предупреждений блока
         {
             CallAction(ACT_CLR_WARNING);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "GTU warnings cleared");
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, "GTU warnings cleared");
         }
 
         /// <summary>Чтение значения регистра</summary>
@@ -697,7 +697,7 @@ namespace SCME.Service.IO
             if (!IsEmulated)
                 Value = Adapter.Read16(Node, address);
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @ReadRegister, address {0}, value {1}", address, Value));
+                SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("GTU @ReadRegister, address {0}, value {1}", address, Value));
             return Value;
         }
 
@@ -711,7 +711,7 @@ namespace SCME.Service.IO
             if (!IsEmulated)
                 Value = Adapter.Read16S(Node, address);
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @ReadRegisterS, address {0}, value {1}", address, Value));
+                SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("GTU @ReadRegisterS, address {0}, value {1}", address, Value));
             return Value;
         }
 
@@ -770,7 +770,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort address, ushort value, bool skipJournal = false)
         {
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @WriteRegister, address {0}, value {1}", address, value));
+                SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("GTU @WriteRegister, address {0}, value {1}", address, value));
             if (IsEmulated)
                 return;
             Adapter.Write16(Node, address, value);
@@ -783,7 +783,7 @@ namespace SCME.Service.IO
         internal void WriteRegisterS(ushort address, short value, bool skipJournal = false)
         {
             if (!skipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @WriteRegisterS, address {0}, value {1}", address, value));
+                SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("GTU @WriteRegisterS, address {0}, value {1}", address, value));
             if (IsEmulated)
                 return;
             Adapter.Write16S(Node, address, value);
@@ -794,7 +794,7 @@ namespace SCME.Service.IO
         /// <returns>Значения эндпоинтов</returns>
         private IList<short> ReadArrayFastS(ushort address)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @ReadArrayFastS, endpoint {0}", address));
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("GTU @ReadArrayFastS, endpoint {0}", address));
             if (IsEmulated)
                 return new List<short>();
             return Adapter.ReadArrayFast16S(Node, address);
@@ -804,7 +804,7 @@ namespace SCME.Service.IO
         /// <param name="action">Адрес функции</param>
         internal void CallAction(ushort action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU @Call, action {0}", action));
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("GTU @Call, action {0}", action));
             if (IsEmulated)
                 return;
             Adapter.Call(Node, action);
@@ -814,8 +814,8 @@ namespace SCME.Service.IO
         #region Events
         private void ConnectionEvent_Fire(DeviceConnectionState state, string message, LogMessageType type = LogMessageType.Info) //Оповещение о подключении
         {
-            Communication.PostDeviceConnectionEvent(ComplexParts.Gate, state, message);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, type, message);
+            Communication.PostDeviceConnectionEvent(ComplexParts.GTU, state, message);
+            SystemHost.AppendLog(ComplexParts.GTU, type, message);
         }
 
         private void AllEvents_Fire(DeviceState state) //Оповещение о тестировании
@@ -823,7 +823,7 @@ namespace SCME.Service.IO
             Communication.PostGateAllEvent(state);
             if (state == DeviceState.Stopped)
                 Communication.PostTestAllEvent(state, "GTU manual stop");
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("GTU test state {0}", state));
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, string.Format("GTU test state {0}", state));
         }
 
         private void KelvinEvent_Fire(DeviceState state, TypeGTU.TestResults result) //Оповещение о прозвонке
@@ -831,7 +831,7 @@ namespace SCME.Service.IO
             string Message = string.Format("GTU Kelvin state {0}", state);
             if (state == DeviceState.Success)
                 Message = string.Format("GTU Kelvin is {0}", result.IsKelvinOk);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, Message);
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, Message);
             Communication.PostGateKelvinEvent(state, result);
         }
 
@@ -841,7 +841,7 @@ namespace SCME.Service.IO
             if (state == DeviceState.Success)
                 Message = string.Format("GTU resistance {0} Ohm", result.Resistance);
             Communication.PostGateResistanceEvent(state, result);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, Message);
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, Message);
         }
 
         private void VGTEvent_Fire(DeviceState state, TypeGTU.TestResults result) //Оповещение о VGT
@@ -850,7 +850,7 @@ namespace SCME.Service.IO
             if (state == DeviceState.Success)
                 Message = string.Format("GTU IGT {0} mA, VGT {1} mV", Result.IGT, Result.VGT);
             Communication.PostGateGateEvent(state, result);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, Message);
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, Message);
         }
 
         private void IHEvent_Fire(DeviceState state, TypeGTU.TestResults result) //Оповещение о IH
@@ -859,7 +859,7 @@ namespace SCME.Service.IO
             if (state == DeviceState.Success)
                 Message = string.Format("Gate IH {0} mA", result.IH);
             Communication.PostGateIhEvent(state, result);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, Message);
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, Message);
         }
 
         private void ILEvent_Fire(DeviceState state, TypeGTU.TestResults result) //Оповещение о IL
@@ -868,7 +868,7 @@ namespace SCME.Service.IO
             if (state == DeviceState.Success)
                 Message = string.Format("GTU IL {0} mA", result.IL);
             Communication.PostGateIlEvent(state, result);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, Message);
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, Message);
         }
 
         private void VGNTEvent_Fire(DeviceState state, TypeGTU.TestResults result) //Оповещение о VGNT
@@ -877,19 +877,19 @@ namespace SCME.Service.IO
             if (state == DeviceState.Success)
                 Message = string.Format("GTU IGNT {0} mA, Gate VGNT {1} mV", result.IGNT, result.VGNT);
             Communication.PostGateVgntEvent(state, result);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, Message);
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, Message);
         }
 
         private void NotificationEvent_Fire(TypeGTU.HWFaultReason fault, TypeGTU.HWWarningReason warning, TypeGTU.HWDisableReason disable, TypeGTU.HWProblemReason problem)
         {
             Communication.PostGateNotificationEvent(problem, warning, fault, disable);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Error, string.Format("GTU device notification: problem {0}, warning {1}, fault {2}, disable {3}", problem, warning, fault, disable));
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Error, string.Format("GTU device notification: problem {0}, warning {1}, fault {2}, disable {3}", problem, warning, fault, disable));
         }
 
         private void ExceptionEvent_Fire(string message) //Оповещение об исключении
         {
-            Communication.PostExceptionEvent(ComplexParts.Gate, message);
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Error, message);
+            Communication.PostExceptionEvent(ComplexParts.GTU, message);
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Error, message);
         }
         #endregion
 

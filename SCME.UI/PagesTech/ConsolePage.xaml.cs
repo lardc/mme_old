@@ -113,7 +113,7 @@ namespace SCME.UI.PagesTech
                     device = ComplexParts.Commutation;
                     break;
                 case 3:
-                    device = ComplexParts.Gate;
+                    device = ComplexParts.GTU;
                     break;
                 case 4:
                     device = ComplexParts.SL;
@@ -128,16 +128,13 @@ namespace SCME.UI.PagesTech
                     device = ComplexParts.Clamping;
                     break;
                 case 8:
-                    device = ComplexParts.DvDt;
+                    device = ComplexParts.dVdt;
                     break;
                 case 9:
                     device = ComplexParts.ATU;
                     break;
                 case 10:
                     device = ComplexParts.QrrTq;
-                    break;
-                case 11:
-                    device = ComplexParts.RAC;
                     break;
             }
             return device;

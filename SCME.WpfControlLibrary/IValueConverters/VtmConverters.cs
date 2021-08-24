@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using SCME.Types.VTM;
+using SCME.Types.SL;
 using SCME.WpfControlLibrary.Properties;
 
 namespace SCME.WpfControlLibrary.IValueConverters
@@ -13,11 +13,11 @@ namespace SCME.WpfControlLibrary.IValueConverters
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                var type = (VTMTestType)value;
+                var type = (SLTestType)value;
                 int index = int.Parse((string)parameter);
 
-                if ((type == VTMTestType.Ramp && index == 0) || (type == VTMTestType.Sinus && index == 1) ||
-                    (type == VTMTestType.Curve && index == 2))
+                if ((type == SLTestType.Ramp && index == 0) || (type == SLTestType.Sinus && index == 1) ||
+                    (type == SLTestType.Curve && index == 2))
                     return Visibility.Visible;
 
                 return Visibility.Collapsed;
@@ -33,19 +33,19 @@ namespace SCME.WpfControlLibrary.IValueConverters
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                var type = (VTMTestType)value;
+                var type = (SLTestType)value;
                 var line = string.Empty;
 
                 switch (type)
                 {
                 
-                    case VTMTestType.Ramp:
+                    case SLTestType.Ramp:
                         line = Resources.Ramp;
                         break;
-                    case VTMTestType.Sinus:
+                    case SLTestType.Sinus:
                         line = Resources.Sinus;
                         break;
-                    case VTMTestType.Curve:
+                    case SLTestType.Curve:
                         line = Resources.Curve;
                         break;
                 }
@@ -55,15 +55,15 @@ namespace SCME.WpfControlLibrary.IValueConverters
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                var type = VTMTestType.Ramp;
+                var type = SLTestType.Ramp;
                 var line = (string)value;
 
                 if (line == Resources.Ramp)
-                    type = VTMTestType.Ramp;
+                    type = SLTestType.Ramp;
                 else if (line == Resources.Sinus)
-                    type = VTMTestType.Sinus;
+                    type = SLTestType.Sinus;
                 else if (line == Resources.Curve)
-                    type = VTMTestType.Curve;
+                    type = SLTestType.Curve;
 
                 return type;
             }

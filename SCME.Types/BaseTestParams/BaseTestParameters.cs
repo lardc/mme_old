@@ -5,7 +5,7 @@ using BVTTestParameters = SCME.Types.BVT.TestParameters;
 using dVdtParameters = SCME.Types.dVdt.TestParameters;
 using GTUTestParameters = SCME.Types.GTU.TestParameters;
 using QrrTqParameters = SCME.Types.QrrTq.TestParameters;
-using SLTestParameters = SCME.Types.VTM.TestParameters;
+using SLTestParameters = SCME.Types.SL.TestParameters;
 using TOUParameters = SCME.Types.TOU.TestParameters;
 
 namespace SCME.Types.BaseTestParams
@@ -40,14 +40,7 @@ namespace SCME.Types.BaseTestParams
         QrrTq = 9,
         /// <summary>TOU</summary>
         [EnumMember]
-        TOU = 13,
-
-        [EnumMember]
-        Sctu = 7,
-        [EnumMember]
-        IH = 11,
-        [EnumMember]
-        RCC = 12
+        TOU = 13
     }
 
     [KnownType(typeof(GTUTestParameters))]
@@ -68,13 +61,6 @@ namespace SCME.Types.BaseTestParams
             get; set;
         }
 
-        /// <summary>Порядок</summary>
-        [DataMember]
-        public int Order
-        {
-            get; set;
-        }
-
         /// <summary>Активация</summary>
         [DataMember]
         public bool IsEnabled
@@ -85,6 +71,13 @@ namespace SCME.Types.BaseTestParams
         /// <summary>Id тестирования</summary>
         [DataMember]
         public long TestTypeId
+        {
+            get; set;
+        }
+
+        /// <summary>Порядок</summary>
+        [DataMember]
+        public int Order
         {
             get; set;
         }
@@ -103,10 +96,10 @@ namespace SCME.Types.BaseTestParams
             {
                 case TestParametersType.GTU:
                     return new GTUTestParameters();
-                case TestParametersType.BVT:
-                    return new BVTTestParameters();
                 case TestParametersType.SL:
                     return new SLTestParameters();
+                case TestParametersType.BVT:
+                    return new BVTTestParameters();
                 case TestParametersType.dVdt:
                     return new dVdtParameters();
                 case TestParametersType.ATU:

@@ -1,196 +1,16 @@
-﻿using System;
-using System.Runtime.Serialization;
-using SCME.Types.BaseTestParams;
+﻿using SCME.Types.BaseTestParams;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace SCME.Types.QrrTq
 {
+    /// <summary>Параметры произведения тестов</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDeviceState
-    //список состояний блока QrrTq
-    {
-        //состояние после включения питания
-        [EnumMember]
-        DS_None = 0,
-
-        //состояние fault (можно сбросить командой ACT_FAULT_CLEAR)
-        [EnumMember]
-        DS_Fault = 1,
-
-        //состояние disabled (требуется перезапуск питания)
-        [EnumMember]
-        DS_Disabled = 2,
-
-        //установка в процессе включения
-        [EnumMember]
-        DS_PowerOn = 3,
-
-        //состояние готовности к новому измерению
-        [EnumMember]
-        DS_Ready = 4,
-
-        //в процессе измерения
-        [EnumMember]
-        DS_InProcess = 5
-    };
-    /*
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWOperationResult
-    {
-        [EnumMember]
-        InProcess = 0,
-
-        [EnumMember]
-        Success = 1,
-
-        [EnumMember]
-        Fail = 2
-    };
-    */
-
-
-
-    //режимы измерений (значения регистра 128)
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum TMode
-    {
-        [EnumMember]
-        //Measure only reverse recovery (Qrr) parameters - измерение только параметров обратного восстановления (применим для диодов и тиристоров)
-        Qrr = 0,
-
-        [EnumMember]
-        //Measure Qrr-tq parameters - измерение параметров обратного восстановления и времени выключения (применим только для тиристоров)
-        QrrTq = 1,
-    };
-
-
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum TDcFallRate
-    {
-        [EnumMember]
-        r2 = 2,
-
-        [EnumMember]
-        r5 = 5,
-
-        [EnumMember]
-        r10 = 10,
-
-        [EnumMember]
-        r15 = 15,
-
-        [EnumMember]
-        r20 = 20,
-
-        [EnumMember]
-        r30 = 30,
-
-        [EnumMember]
-        r50 = 50,
-
-        [EnumMember]
-        r60 = 60,
-
-        [EnumMember]
-        r100 = 100
-    };
-
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public class TDcFallRateHelper : object
-    {
-        public static Array EnumValues()
-        {
-            return Enum.GetValues(typeof(TDcFallRate)).Cast<uint>().Select(x => x.ToString()).ToArray();
-        }
-    }
-
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum TOsvRate
-    {
-        [EnumMember]
-        r20 = 20,
-
-        [EnumMember]
-        r50 = 50,
-
-        [EnumMember]
-        r100 = 100,
-
-        [EnumMember]
-        r200 = 200
-    }
-
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public class TOsvRateHelper : object
-    {
-        public static Array EnumValues()
-        {
-            return Enum.GetValues(typeof(TOsvRate)).Cast<uint>().Select(x => x.ToString()).ToArray();
-        }
-    }
-
-    //параметры, задающие режим работы
-    [DataContract(Name = "QrrTq.TestParameters",Namespace = "http://proton-electrotex.com/SCME")]
     public class TestParameters : BaseTestParametersAndNormatives, ICloneable
     {
-        //Measurement mode - режим измерения
-        [DataMember]
-        public TMode Mode { get; set; }
-
-        //Direct current amplitude (in A) – амплитуда прямого тока(в А)
-        [DataMember]
-        public ushort DirectCurrent { get; set; }
-
-        //Direct current pulse duration (in us) – длительность импульса прямого тока(в мкс)
-        [DataMember]
-        public ushort DCPulseWidth { get; set; }
-
-        //Direct current rise rate (in A/us) – скорость нарастания прямого тока(в А/мкс)
-        [DataMember]
-        public float DCRiseRate { get; set; }
-
-        //Direct current fall rate (in A/us) – скорость спада тока(в А/мкс)
-        [DataMember]
-        public TDcFallRate DCFallRate { get; set; }
-
-        //Off-state voltage (in V) – прямое повторное напряжение(в В)
-        [DataMember]
-        public ushort OffStateVoltage { get; set; }
-
-        //Off-state voltage rise rate (in V/us) – скорость нарастания прямого повторного напряжения(в В/мкс)
-        [DataMember]
-        public TOsvRate OsvRate { get; set; }
-
-        //Измерение trr по методу 90%-50%
-        [DataMember]
-        public bool TrrMeasureBy9050Method { get; set; }
-
-
-        //Actual DC current value (in A) – фактическое значение прямого тока(в А)
-        [DataMember]
-        public short Idc { get; set; }
-
-        //Reverse recovery charge (in uC) – заряд обратного восстановления(в мкКл)
-        [DataMember]
-        public short Qrr { get; set; }
-
-        //Reverse recovery current amplitude (in A) – ток обратного восстановления(в А)
-        [DataMember]
-        public short Irr { get; set; }
-
-        //Reverse recovery time (in us) – время обратного восстановления(в мкс)
-        [DataMember]
-        public short Trr { get; set; }
-
-        [DataMember]
-        //Фактическая скорость спада тока, А/мкс
-        public float DCFactFallRate { get; set; }
-
-        //Turn-off time (in us) – время выключения(в мкс)
-        [DataMember]
-        public short Tq { get; set; }
-
+        /// <summary>Инициализирует новый экземпляр класса TestParameters</summary>
         public TestParameters()
         {
             TestParametersType = TestParametersType.QrrTq;
@@ -205,101 +25,204 @@ namespace SCME.Types.QrrTq
             TrrMeasureBy9050Method = false;
         }
 
+        /// <summary>Режим измерения</summary>
+        [DataMember]
+        public TMode Mode
+        {
+            get; set;
+        }
+
+        /// <summary>Амплитуда прямого тока</summary>
+        [DataMember]
+        public ushort DirectCurrent
+        {
+            get; set;
+        }
+
+        /// <summary>Длительность импульса прямого тока</summary>
+        [DataMember]
+        public ushort DCPulseWidth
+        {
+            get; set;
+        }
+
+        /// <summary>Скорость нарастания прямого тока</summary>
+        [DataMember]
+        public float DCRiseRate
+        {
+            get; set;
+        }
+
+        /// <summary>Скорость спада тока</summary>
+        [DataMember]
+        public TDcFallRate DCFallRate
+        {
+            get; set;
+        }
+
+        /// <summary>Прямое повторное напряжение</summary>
+        [DataMember]
+        public ushort OffStateVoltage
+        {
+            get; set;
+        }
+
+        /// <summary>Скорость нарастания прямого повторного напряжения</summary>
+        [DataMember]
+        public TOsvRate OsvRate
+        {
+            get; set;
+        }
+
+        /// <summary>Измерение trr по методу 90%-50%</summary>
+        [DataMember]
+        public bool TrrMeasureBy9050Method
+        {
+            get; set;
+        }
+
+        /// <summary>Фактическое значение прямого тока</summary>
+        [DataMember]
+        public short Idc
+        {
+            get; set;
+        }
+
+        /// <summary>Заряд обратного восстановления</summary>
+        [DataMember]
+        public short Qrr
+        {
+            get; set;
+        }
+
+        /// <summary>Ток обратного восстановления</summary>
+        [DataMember]
+        public short Irr
+        {
+            get; set;
+        }
+
+        /// <summary>Время обратного восстановления</summary>
+        [DataMember]
+        public short Trr
+        {
+            get; set;
+        }
+
+        [DataMember]
+        /// <summary>Фактическая скорость спада тока</summary>
+        public float DCFactFallRate
+        {
+            get; set;
+        }
+
+        /// <summary>Время выключения</summary>
+        [DataMember]
+        public short Tq
+        {
+            get; set;
+        }
+
+        /// <summary>Проверка изменений в параметрах</summary>
+        /// <param name="oldParameters">Старые параметры</param>
+        /// <returns>Возвращает True, если параметры были изменены</returns>
+        public override bool HasChanges(BaseTestParametersAndNormatives oldParameters)
+        {
+            //Старые параметры
+            TestParameters OldTestParameters = (TestParameters)oldParameters;
+            if (oldParameters == null)
+                throw new InvalidCastException("OldParameters must be QrrTqOldParameters");
+            if (Mode != OldTestParameters.Mode)
+                return true;
+            if (DirectCurrent != OldTestParameters.DirectCurrent)
+                return true;
+            if (DCPulseWidth != OldTestParameters.DCPulseWidth)
+                return true;
+            if (DCRiseRate != OldTestParameters.DCRiseRate)
+                return true;
+            if (DCFallRate != OldTestParameters.DCFallRate)
+                return true;
+            if (OffStateVoltage != OldTestParameters.OffStateVoltage)
+                return true;
+            if (OsvRate != OldTestParameters.OsvRate)
+                return true;
+            if (TrrMeasureBy9050Method != OldTestParameters.TrrMeasureBy9050Method)
+                return true;
+            if (Idc != OldTestParameters.Idc)
+                return true;
+            if (Qrr != OldTestParameters.Qrr)
+                return true;
+            if (Irr != OldTestParameters.Irr)
+                return true;
+            if (Trr != OldTestParameters.Trr)
+                return true;
+            if (DCFactFallRate != OldTestParameters.DCFactFallRate)
+                return true;
+            if (Tq != OldTestParameters.Tq)
+                return true;
+            return false;
+        }
+
         public object Clone()
         {
             return MemberwiseClone();
         }
-
-        public override bool HasChanges(BaseTestParametersAndNormatives oldParameters)
-        {
-            if (oldParameters == null) throw new ArgumentNullException("Метод '" + System.Reflection.MethodBase.GetCurrentMethod().Name + "' получил на вход параметр 'oldParameters' равный Null.");
-
-            //сравниваем свой хеш с хешем принятого oldParameters и если они одинаковы - значит мы имеем дело с одним и тем же экземпляром
-            if (this.GetHashCode() == oldParameters.GetHashCode()) return false;
-
-            //раз мы сюда добрались - имеем дело с разными экземплярами, необходимо сравнение их содержимого
-            var typeName = oldParameters.GetType().Name;
-
-            if (typeName != "TestParameters") throw new InvalidCastException("Method '" + System.Reflection.MethodBase.GetCurrentMethod().Name + "' получил на вход параметр 'oldParameters' тип которого '" + typeName + "'. Ожидался тип параметра 'TestParameters'.");
-
-            var QrrTqOldParameters = (TestParameters)oldParameters;
-
-            if (Mode != QrrTqOldParameters.Mode)
-                return true;
-
-            if (DirectCurrent != QrrTqOldParameters.DirectCurrent)
-                return true;
-
-            if (DCPulseWidth != QrrTqOldParameters.DCPulseWidth)
-                return true;
-
-            if (DCRiseRate != QrrTqOldParameters.DCRiseRate)
-                return true;
-
-            if (DCFallRate != QrrTqOldParameters.DCFallRate)
-                return true;
-
-            if (OffStateVoltage != QrrTqOldParameters.OffStateVoltage)
-                return true;
-
-            if (OsvRate != QrrTqOldParameters.OsvRate)
-                return true;
-
-            if (TrrMeasureBy9050Method != QrrTqOldParameters.TrrMeasureBy9050Method)
-                return true;
-
-            if (Idc != QrrTqOldParameters.Idc)
-                return true;
-
-            if (Qrr != QrrTqOldParameters.Qrr)
-                return true;
-
-            if (Irr != QrrTqOldParameters.Irr)
-                return true;
-
-            if (Trr != QrrTqOldParameters.Trr)
-                return true;
-
-            if (DCFactFallRate != QrrTqOldParameters.DCFactFallRate)
-                return true;
-
-            if (Tq != QrrTqOldParameters.Tq)
-                return true;
-
-            return false;
-        }
     }
 
-    //параметры измеренных значений
+    /// <summary>Результаты тестирования</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class TestResults : BaseTestResults
     {
-        //режим работы блока QrrTq при котором выполнялись измерения
+        /// <summary>Инициализирует новый экземпляр класса TestResults</summary>
+        public TestResults()
+        {
+            CurrentData = new List<short>();
+            VoltageData = new List<short>();
+        }
+
+        /// <summary>Режим измерения</summary>
         [DataMember]
-        public TMode Mode { get; set; }
+        public TMode Mode
+        {
+            get; set;
+        }
 
-        //Off-state voltage (in V) – прямое повторное напряжение(в В)
+        /// <summary>Прямое повторное напряжение</summary>
         [DataMember]
-        public ushort OffStateVoltage { get; set; }
+        public ushort OffStateVoltage
+        {
+            get; set;
+        }
 
-        //Off-state voltage rise rate (in V/us) – скорость нарастания прямого повторного напряжения(в В/мкс)
+        /// <summary>Скорость нарастания прямого повторного напряжения</summary>
         [DataMember]
-        public ushort OsvRate { get; set; }
+        public ushort OsvRate
+        {
+            get; set;
+        }
 
-
-        //Actual DC current value (in A) – фактическое значение прямого тока(в А)
+        /// <summary>Фактическое значение прямого тока</summary>
         [DataMember]
-        public short Idc { get; set; }
+        public short Idc
+        {
+            get; set;
+        }
 
-        //Reverse recovery charge (in uC) – заряд обратного восстановления(в мкКл)
+        /// <summary>Заряд обратного восстановления</summary>
         [DataMember]
-        public float Qrr { get; set; }
+        public float Qrr
+        {
+            get; set;
+        }
 
-        //Reverse recovery current amplitude (in A) – ток обратного восстановления(в А)
+        /// <summary>Ток обратного восстановления</summary>
         [DataMember]
-        public short Irr { get; set; }
+        public short Irr
+        {
+            get; set;
+        }
 
-        //Reverse recovery time (in us) – время обратного восстановления(в мкс)
+        /// <summary>Время обратного восстановления</summary>
         [DataMember]
         public float Trr { get; set; }
 
@@ -318,31 +241,114 @@ namespace SCME.Types.QrrTq
         //Данные для построения графика напряжения
         [DataMember]
         public List<short> VoltageData { get; set; }
-
-        public TestResults()
-        {
-            CurrentData = new List<short>();
-            VoltageData = new List<short>();
-        }
     }
 
-    //код окончания измерений - расшифровка значения регистра 197
+    /// <summary>Состояние оборудования</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWFinishedResult
+    public enum HWDeviceState
     {
-        //No information or not finished
+        /// <summary>Неопределенное состояние</summary>
         [EnumMember]
         None = 0,
-
-        //Operation was successful
+        /// <summary>Ошибка</summary>
         [EnumMember]
-        Ok = 1,
-
-        //Operation failed
+        Fault = 1,
+        /// <summary>Выключен</summary>
         [EnumMember]
-        Fail = 2
+        Disabled = 2,
+        /// <summary>Заряжен</summary>
+        [EnumMember]
+        PowerOn = 3,
+        /// <summary>Готов</summary>
+        [EnumMember]
+        Ready = 4,
+        /// <summary>В процессе</summary>
+        [EnumMember]
+        InProcess = 5
     };
 
+    /// <summary>Причина ошибки</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWFaultReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Ошибка в протоколе коммуникации</summary>
+        [EnumMember]
+        Protocol = 1,
+        /// <summary>Ошибка в логике на высоком уровне</summary>
+        [EnumMember]
+        LogicGeneral = 2,
+        /// <summary>Ошибка узла CROVU</summary>
+        [EnumMember]
+        LogicCROVU = 3,
+        /// <summary>Ошибка узла FCROVU</summary>
+        [EnumMember]
+        LogicFCROVU = 4,
+        /// <summary>Ошибка узла DCU1</summary>
+        [EnumMember]
+        LogicDCU1 = 5,
+        /// <summary>Ошибка узла DCU2</summary>
+        [EnumMember]
+        LogicDCU2 = 6,
+        /// <summary>Ошибка узла DCU3</summary>
+        [EnumMember]
+        LogicDCU3 = 7,
+        /// <summary>Ошибка узла RCU1</summary>
+        [EnumMember]
+        LogicRCU1 = 8,
+        /// <summary>Ошибка узла RCU2</summary>
+        [EnumMember]
+        LogicRCU2 = 9,
+        /// <summary>Ошибка узла RCU3</summary>
+        [EnumMember]
+        LogicRCU3 = 10,
+        /// <summary>Ошибка узла SCOPE</summary>
+        [EnumMember]
+        LogicSCOPE = 11,
+        /// <summary>Нет давления</summary>
+        [EnumMember]
+        Pressure = 12
+    }
+
+    /// <summary>Причина предупреждения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWWarningReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Ручная остановка</summary>
+        [EnumMember]
+        ManualStop = 1,
+        /// <summary>Нет прямого тока</summary>
+        [EnumMember]
+        NoDirectCurrent = 2,
+        /// <summary>Ошибка вычислений узла SCOPE</summary>
+        [EnumMember]
+        SCOPECalcFailed = 3,
+        /// <summary>Высокое значение обратного тока</summary>
+        [EnumMember]
+        IRRTooHigh = 4,
+        /// <summary>Устройство не сменило состояние</summary>
+        [EnumMember]
+        DeviceTriggered = 5,
+        /// <summary>Система перезагружена watchdog'ом</summary>
+        [EnumMember]
+        WatchdogReset = 1001
+    }
+
+    /// <summary>Причина выключения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDisableReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Проблема с главным осциллятором</summary>
+        [EnumMember]
+        BadClock = 1001
+    }
+
+    /// <summary>Причина проблемы</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public enum HWProblemReason
     {
@@ -350,24 +356,89 @@ namespace SCME.Types.QrrTq
         None = 0
     }
 
+    /// <summary>Результат выполнения</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWWarningReason
+    public enum HWOperationResult
     {
         [EnumMember]
-        None = 0
+        None = 0,
+        /// <summary>Успешно</summary>
+        [EnumMember]
+        OK = 1,
+        /// <summary>Неудачно</summary>
+        [EnumMember]
+        Fail = 2
+    };
+
+
+
+
+
+    /// <summary>Режим измерений</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum TMode
+    {
+        /// <summary>Обратное восстановление</summary>
+        [EnumMember]
+        Qrr = 0,
+        /// <summary>Обратное восстановление и время выключения</summary>
+        [EnumMember]
+        QrrTq = 1
+    };
+
+    /// <summary>Скорость спада тока</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum TDcFallRate
+    {
+        [EnumMember]
+        r2 = 2,
+        [EnumMember]
+        r5 = 5,
+        [EnumMember]
+        r10 = 10,
+        [EnumMember]
+        r15 = 15,
+        [EnumMember]
+        r20 = 20,
+        [EnumMember]
+        r30 = 30,
+        [EnumMember]
+        r50 = 50,
+        [EnumMember]
+        r60 = 60,
+        [EnumMember]
+        r100 = 100
+    };
+
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public class TDcFallRateHelper : object
+    {
+        public static Array EnumValues()
+        {
+            return Enum.GetValues(typeof(TDcFallRate)).Cast<uint>().Select(x => x.ToString()).ToArray();
+        }
     }
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWFaultReason
+    public enum TOsvRate
     {
         [EnumMember]
-        None = 0
+        r20 = 20,
+        [EnumMember]
+        r50 = 50,
+        [EnumMember]
+        r100 = 100,
+        [EnumMember]
+        r200 = 200
     }
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDisableReason
+    public class TOsvRateHelper : object
     {
-        [EnumMember]
-        None = 0
+        public static Array EnumValues()
+        {
+            return Enum.GetValues(typeof(TOsvRate)).Cast<uint>().Select(x => x.ToString()).ToArray();
+        }
     }
+
 }

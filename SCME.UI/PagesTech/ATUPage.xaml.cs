@@ -87,7 +87,7 @@ namespace SCME.UI.PagesTech
             {
                 IsEnabled = false
             };
-            Types.VTM.TestParameters paramVtm = new Types.VTM.TestParameters
+            Types.SL.TestParameters paramVtm = new Types.SL.TestParameters
             {
                 IsEnabled = false
             };
@@ -99,20 +99,12 @@ namespace SCME.UI.PagesTech
             {
                 IsEnabled = false
             };
-            Types.IH.TestParameters paramIH = new Types.IH.TestParameters
-            {
-                IsEnabled = false
-            };
-            Types.RCC.TestParameters paramRCC = new Types.RCC.TestParameters
-            {
-                IsEnabled = false
-            };
             Types.TOU.TestParameters paramTOU = new Types.TOU.TestParameters
             {
                 IsEnabled = false
             };
             ClampParameters.SkipClamping = Cache.Clamp.ManualClamping;
-            if (!Cache.Net.Start(paramGate, paramVtm, paramBvt, Parameters, paramQrrTq, paramIH, paramRCC,
+            if (!Cache.Net.Start(paramGate, paramVtm, paramBvt, Parameters, paramQrrTq,
                                  new Types.Commutation.TestParameters
                                  {
                                      BlockIndex = (!Cache.Clamp.clampPage.UseTmax) ? Types.Commutation.HWBlockIndex.Block1 : Types.Commutation.HWBlockIndex.Block2,

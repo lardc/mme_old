@@ -21,7 +21,6 @@ namespace SCME.UI
         private static SLPage ms_SLPage;
         private static GatePage ms_GatePage;
         private static BvtPage ms_BVTPage;
-        private static SelftestPage ms_SelftestPage;
         private static ResultsPage ms_ResultsPage;
         private static ConsolePage ms_ConsolePage;
         private static ClampPage ms_ClampPage;
@@ -29,7 +28,6 @@ namespace SCME.UI
         private static TOUPage ms_TOUPage;
         private static ATUPage ms_ATUPage;
         private static QrrTqPage ms_QrrTqPage;
-        private static IHPage ms_IHPage;
         private static ProfilesPage _profilesPage;
         private static ProfilesPage _profilesPageSelectForTest;
         private static ProfilesPage _profilesPageSpecialMeasure;
@@ -147,12 +145,6 @@ namespace SCME.UI
             set { ms_BVTPage = value; }
         }
 
-        internal static SelftestPage Selftest
-        {
-            get { return ms_SelftestPage ?? (ms_SelftestPage = new SelftestPage()); }
-            set { ms_SelftestPage = value; }
-        }
-
         internal static ResultsPage Results
         {
             get { return ms_ResultsPage ?? (ms_ResultsPage = new ResultsPage()); }
@@ -193,13 +185,6 @@ namespace SCME.UI
         {
             get { return ms_QrrTqPage ?? (ms_QrrTqPage = new QrrTqPage()); }
             set { ms_QrrTqPage = value; }
-        }
-
-
-        internal static IHPage IH
-        {
-            get { return ms_IHPage ?? (ms_IHPage = new IHPage()); }
-            set { ms_IHPage = value; }
         }
         
         #endregion

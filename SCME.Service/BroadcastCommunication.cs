@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using SCME.Service.Properties;
 using SCME.Types;
-using SCME.Types.SCTU;
 
 namespace SCME.Service
 {
@@ -127,13 +126,13 @@ namespace SCME.Service
             EnumerateClients(Client => Client.GateNotificationHandler(Problem, Warning, Fault, Disable));
         }
 
-        public void PostSLEvent(DeviceState State, Types.VTM.TestResults Result)
+        public void PostSLEvent(DeviceState State, Types.SL.TestResults Result)
         {
             EnumerateClients(Client => Client.SLHandler(State, Result));
         }
 
-        public void PostSLNotificationEvent(Types.VTM.HWProblemReason Problem, Types.VTM.HWWarningReason Warning,
-                                             Types.VTM.HWFaultReason Fault, Types.VTM.HWDisableReason Disable)
+        public void PostSLNotificationEvent(Types.SL.HWProblemReason Problem, Types.SL.HWWarningReason Warning,
+                                             Types.SL.HWFaultReason Fault, Types.SL.HWDisableReason Disable)
         {
             EnumerateClients(Client => Client.SLNotificationHandler(Problem, Warning, Fault, Disable));
         }
@@ -206,21 +205,6 @@ namespace SCME.Service
             EnumerateClients(Client => Client.TOUHandler(State, Result));
         }
 
-        public void PostIHEvent(DeviceState State, Types.IH.TestResults Result)
-        {
-            EnumerateClients(Client => Client.IHHandler(State, Result));
-        }
-
-        public void PostRCCEvent(DeviceState State, Types.RCC.TestResults Result)
-        {
-            EnumerateClients(Client => Client.RCCHandler(State, Result));
-        }
-
-        public void PostSctuEvent(SctuHwState state, SctuTestResults results)
-        {
-            EnumerateClients(client => client.SctuHandler(state, results));
-        }
-
         public void PostdVdtNotificationEvent(Types.dVdt.HWWarningReason Warning,
                                      Types.dVdt.HWFaultReason Fault, Types.dVdt.HWDisableReason Disable)
         {
@@ -245,17 +229,6 @@ namespace SCME.Service
         public void PostTOUNotificationEvent(ushort Problem, ushort Warning, ushort Fault, ushort Disable)
         {
             EnumerateClients(Client => Client.TOUNotificationHandler(Problem, Warning, Fault, Disable));
-        }
-
-
-        public void PostIHNotificationEvent(ushort Problem, ushort Warning, ushort Fault, ushort Disable)
-        {
-            EnumerateClients(Client => Client.IHNotificationHandler(Problem, Warning, Fault, Disable));
-        }
-
-        public void PostRCCNotificationEvent(ushort Problem, ushort Warning, ushort Fault, ushort Disable)
-        {
-            EnumerateClients(Client => Client.RCCNotificationHandler(Problem, Warning, Fault, Disable));
         }
 
         private void EnumerateClients(Action<IClientCallback> Act)
@@ -290,7 +263,7 @@ namespace SCME.Service
             }
             catch (Exception ex)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.None, LogMessageType.Error,
+                SystemHost.AppendLog(ComplexParts.None, LogMessageType.Error,
                                              String.Format(Resources.Error_BroadcastCommunication_Exception_during_callback_action, ex.GetType(), ex.Message));
                 m_SubToDelete = Obj;
             }

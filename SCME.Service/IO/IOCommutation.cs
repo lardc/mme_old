@@ -49,7 +49,7 @@ namespace SCME.Service.IO
             m_Node = (ushort)CommutationNode;
             m_Type6 = Type6;
 
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, String.Format("Commutation created. Emulation mode: {0}", m_IsCommutationEmulation));
+            SystemHost.AppendLog(m_ID, LogMessageType.Milestone, String.Format("Commutation created. Emulation mode: {0}", m_IsCommutationEmulation));
         }
 
         internal DeviceConnectionState Initialize()
@@ -72,7 +72,7 @@ namespace SCME.Service.IO
 
                 var devState = (Types.Commutation.HWDeviceState)GetDeviceState();
 
-                if (devState != Types.Commutation.HWDeviceState.PowerReady)
+                if (devState != Types.Commutation.HWDeviceState.Enabled)
                 {
                     if (devState == Types.Commutation.HWDeviceState.Fault)
                     {
@@ -138,13 +138,13 @@ namespace SCME.Service.IO
                         FireSafetyEvent(m_SafetyAlarm);
 
                         m_CheckSafetyThread.StartCycle(SafetyThreadWorker, REQUEST_DELAY_MS);
-                        SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Safety thread cycle started");
+                        SystemHost.AppendLog(m_ID, LogMessageType.Milestone, "Safety thread cycle started");
                     }
                 }
 
 
                 WriteRegister(REG_EN_SFTY_IN4, 0);
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "REG_EN_SFTY_IN4 write state 0");
+                SystemHost.AppendLog(m_ID, LogMessageType.Info, "REG_EN_SFTY_IN4 write state 0");
 
                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
 
@@ -197,7 +197,7 @@ namespace SCME.Service.IO
             if (!Enum.TryParse(Settings.Default.SafetyType, out Result))
             {
                 Result = ComplexSafety.None;
-                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Unrecognised value on config parameter SafetyType");
+                SystemHost.AppendLog(ComplexParts.Commutation, LogMessageType.Error, "Unrecognised value on config parameter SafetyType");
             }
 
             return Result;
@@ -344,7 +344,7 @@ namespace SCME.Service.IO
             if ((m_SafetyType == ComplexSafety.Optical) && (m_ID == ComplexParts.Commutation) && _SafetyMode != SafetyMode.Disabled)
             {
                 //активация оптического датчика безопасности
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Try to commutation optical safety set to on");
+                SystemHost.AppendLog(m_ID, LogMessageType.Info, "Try to commutation optical safety set to on");
 
                 if (m_IsCommutationEmulation)
                 {
@@ -373,7 +373,7 @@ namespace SCME.Service.IO
 
                 CheckSafetyOn();
 
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Commutation optical safety is on");
+                SystemHost.AppendLog(m_ID, LogMessageType.Milestone, "Commutation optical safety is on");
             }
         }
 
@@ -384,7 +384,7 @@ namespace SCME.Service.IO
                 //деактивация датчика безопасности
                 CheckSafetyOff();
 
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Try to commutation optical safety set to off");
+                SystemHost.AppendLog(m_ID, LogMessageType.Milestone, "Try to commutation optical safety set to off");
 
 
 
@@ -400,7 +400,7 @@ namespace SCME.Service.IO
                 CallAction(ACT_SAFETY_OFF);
 
                 //блок должен перейти в состояние PowerReady. подождём его
-                var WaitedState = Types.Commutation.HWDeviceState.PowerReady;
+                var WaitedState = Types.Commutation.HWDeviceState.Enabled;
 
                 ushort FactState = ReadDeviceStateWithAlarm(WaitedState, 3000);
 
@@ -411,7 +411,7 @@ namespace SCME.Service.IO
                      throw new Exception(string.Format("Device is in a bad state. WaitedState={0}, factstate={1}.", (((ushort)WaitedState)).ToString(), FactState.ToString()));
                     
 
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Milestone, "Commutation optical safety is off");
+                SystemHost.AppendLog(m_ID, LogMessageType.Milestone, "Commutation optical safety is off");
             }
         }
 
@@ -427,7 +427,7 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Commutation fault cleared");
+            SystemHost.AppendLog(m_ID, LogMessageType.Info, "Commutation fault cleared");
 
             if (m_IsCommutationEmulation)
                 return;
@@ -437,7 +437,7 @@ namespace SCME.Service.IO
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info, "Commutation warning cleared");
+            SystemHost.AppendLog(m_ID, LogMessageType.Info, "Commutation warning cleared");
 
             if (m_IsCommutationEmulation)
                 return;
@@ -458,7 +458,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info,
+                SystemHost.AppendLog(m_ID, LogMessageType.Info,
                                          string.Format("Commutation @ReadRegister, address {0}, value {1}", Address,
                                                        value));
 
@@ -468,7 +468,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info,
+                SystemHost.AppendLog(m_ID, LogMessageType.Info,
                                          string.Format("Commutation @WriteRegister, address {0}, value {1}", Address,
                                                        Value));
 
@@ -480,7 +480,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info,
+            SystemHost.AppendLog(m_ID, LogMessageType.Info,
                                          string.Format("Commutation @Call, action {0}", Action));
 
             if (m_IsCommutationEmulation)
@@ -531,10 +531,10 @@ namespace SCME.Service.IO
                     case Types.Commutation.CommutationMode.None:
                         CallAction(m_Type6 ? ACT_COMM6_NONE : ACT_COMM2_NONE);
                         break;
-                    case Types.Commutation.CommutationMode.Gate:
+                    case Types.Commutation.CommutationMode.GTU:
                         CallAction(m_Type6 ? ACT_COMM6_GATE : ACT_COMM2_GATE);
                         break;
-                    case Types.Commutation.CommutationMode.VTM:
+                    case Types.Commutation.CommutationMode.SL:
                         CallAction(m_Type6 ? ACT_COMM6_SL : ACT_COMM2_SL);
                         break;
                     case Types.Commutation.CommutationMode.BVTD:
@@ -550,10 +550,6 @@ namespace SCME.Service.IO
                     case Types.Commutation.CommutationMode.ATU:
                         //для ATU может быть только коммутация ACT_COMM2_ATU
                         CallAction(ACT_COMM2_ATU);
-                        break;
-                    case Types.Commutation.CommutationMode.RAC:
-                        //для RAC (сделан на блоке BVT) может быть только коммутация ACT_COMM2_BVT_D
-                        CallAction(ACT_COMM2_BVT_D);
                         break;
                     case Types.Commutation.CommutationMode.TOU:
                         //для TOU может быть только коммутация ACT_COMM2_TOU
@@ -574,14 +570,14 @@ namespace SCME.Service.IO
 
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(m_ID, type, Message);
+            SystemHost.AppendLog(m_ID, type, Message);
 
             m_Communication.PostDeviceConnectionEvent(m_ID, State, Message);
         }
 
         private void FireNotificationEvent(Types.Commutation.HWWarningReason Warning, Types.Commutation.HWFaultReason Fault)
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Error,
+            SystemHost.AppendLog(m_ID, LogMessageType.Error,
                                          string.Format("Commutation device notification: warning {0}, fault {1}",
                                                        Warning, Fault));
 
@@ -590,7 +586,7 @@ namespace SCME.Service.IO
 
         private void FireSwitchEvent(Types.Commutation.CommutationMode SwitchState, Types.Commutation.HWModuleCommutationType CommutationType, Types.Commutation.HWModulePosition Position)
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Info,
+            SystemHost.AppendLog(m_ID, LogMessageType.Info,
                                          string.Format("Switch state {0} on {1}:{2}", SwitchState, CommutationType, Position));
 
             m_Communication.PostCommutationSwitchEvent(SwitchState);
@@ -598,7 +594,7 @@ namespace SCME.Service.IO
 
         private void FireExceptionEvent(string Message)
         {
-            SystemHost.Journal.AppendLog(m_ID, LogMessageType.Error, Message);
+            SystemHost.AppendLog(m_ID, LogMessageType.Error, Message);
 
             m_Communication.PostExceptionEvent(m_ID, Message);
         }
@@ -608,7 +604,7 @@ namespace SCME.Service.IO
             //уведомлять UI о наступлении события срабатывания оптической шторки имеет смысл если тип установленной системы безопасности - оптическая шторка
             if (m_SafetyType == ComplexSafety.Optical)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Info, string.Format("Commutation optical safety system alarm={0}", Alarm.ToString()));
+                SystemHost.AppendLog(ComplexParts.Commutation, LogMessageType.Info, string.Format("Commutation optical safety system alarm={0}", Alarm.ToString()));
                 m_Communication.PostSafetyEvent(Alarm, ComplexSafety.Optical, ComplexButtons.None);
             }
         }

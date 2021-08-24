@@ -292,7 +292,7 @@ namespace SCME.UI.PagesTech
             {
                 IsEnabled = false
             };
-            Types.VTM.TestParameters ParamSL = new Types.VTM.TestParameters
+            Types.SL.TestParameters ParamSL = new Types.SL.TestParameters
             {
                 IsEnabled = false
             };
@@ -304,14 +304,6 @@ namespace SCME.UI.PagesTech
             {
                 IsEnabled = false
             };
-            Types.IH.TestParameters ParamIH = new Types.IH.TestParameters
-            {
-                IsEnabled = false
-            };
-            Types.RCC.TestParameters ParamRCC = new Types.RCC.TestParameters
-            {
-                IsEnabled = false
-            };
             Types.TOU.TestParameters ParamTOU = new Types.TOU.TestParameters
             {
                 IsEnabled = false
@@ -319,7 +311,7 @@ namespace SCME.UI.PagesTech
             ClampParameters.SkipClamping = Cache.Clamp.ManualClamping;
             Parameters.VoltageFrequency = (ushort)Settings.Default.BVTVoltageFrequency;
             Parameters.MeasurementMode = Types.BVT.BVTMeasurementMode.ModeV;
-            if (!Cache.Net.Start(ParamGTU, ParamSL, Parameters, ParamATU, ParamQrrTq, ParamIH, ParamRCC, ParamCommutation, ClampParameters, ParamTOU))
+            if (!Cache.Net.Start(ParamGTU, ParamSL, Parameters, ParamATU, ParamQrrTq, ParamCommutation, ClampParameters, ParamTOU))
                 return;
             Status_Clear();
             IsRunning = true;

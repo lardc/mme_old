@@ -48,7 +48,7 @@ namespace SCME.Service.IO
             }
             catch (Exception e)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.Sync, LogMessageType.Error, $"Local database not synced with a central database. Reason: {e.ToString()}");
+                SystemHost.AppendLog(ComplexParts.Sync, LogMessageType.Error, $"Local database not synced with a central database. Reason: {e.ToString()}");
             }
         }
 
@@ -183,7 +183,7 @@ namespace SCME.Service.IO
 //            if (notSyncedReason == string.Empty)
 //            {
 //                SystemHost.IsSyncedWithServer = true;
-//                SystemHost.Journal.AppendLog(ComplexParts.Service, LogMessageType.Info, "Local database was successfully synced with a central database");
+//                SystemHost.AppendLog(ComplexParts.Service, LogMessageType.Info, "Local database was successfully synced with a central database");
 //                //Включим в процесс синхронизации загрузку профилей, UI пошлёт сообщение для ползунка об окончании синхронизации 
 //                //_communication.PostDbSyncState(DeviceConnectionState.ConnectionSuccess, string.Empty);
 //            }
@@ -203,7 +203,7 @@ namespace SCME.Service.IO
 //                    _communication.PostDbSyncState(DeviceConnectionState.ConnectionFailed, "Sync error");
 //                }
 //
-//                SystemHost.Journal.AppendLog(ComplexParts.Sync, logMessageType, $"Local database not synced with a central database. Reason: {notSyncedReason}");
+//                SystemHost.AppendLog(ComplexParts.Sync, logMessageType, $"Local database not synced with a central database. Reason: {notSyncedReason}");
 //            }
 //
 //            FireSyncDbAreProcessedEvent();
@@ -222,7 +222,7 @@ namespace SCME.Service.IO
 //                if (sCommunicationLive != string.Empty)
 //                    mess = mess + ", " + sCommunicationLive;
 //
-//                SystemHost.Journal.AppendLog(ComplexParts.Sync, LogMessageType.Info, mess);
+//                SystemHost.AppendLog(ComplexParts.Sync, LogMessageType.Info, mess);
 //            }
 //        }
     }

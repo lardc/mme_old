@@ -36,7 +36,7 @@ namespace SCME.Service.IO
             m_Node = (ushort)Settings.Default.dVdtNode;
             m_Result = new TestResults();
 
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Milestone,
+            SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Milestone,
                                          String.Format("dVdt created. Emulation mode: {0}", Settings.Default.dVdtEmulation));
         }
 
@@ -70,21 +70,21 @@ namespace SCME.Service.IO
                 ClearWarning();
 
                 var devState = (HWDeviceState)ReadRegister(REG_DEVICE_STATE);
-                if (devState != HWDeviceState.DS_Powered)
+                if (devState != HWDeviceState.Powered)
                 {
-                    if (devState == HWDeviceState.DS_Fault)
+                    if (devState == HWDeviceState.Fault)
                     {
                         ClearFault();
                         Thread.Sleep(100);
 
                         devState = (HWDeviceState)ReadRegister(REG_DEVICE_STATE);
 
-                        if (devState == HWDeviceState.DS_Fault)
+                        if (devState == HWDeviceState.Fault)
                             throw new Exception(string.Format("dVdt is in fault state, reason: {0}",
                                 (HWFaultReason)ReadRegister(REG_FAULT_REASON)));
                     }
 
-                    if (devState == HWDeviceState.DS_Disabled)
+                    if (devState == HWDeviceState.Disabled)
                         throw new Exception(string.Format("dVdt is in disabled state, reason: {0}",
                                 (HWDisableReason)ReadRegister(REG_DISABLE_REASON)));
 
@@ -98,13 +98,13 @@ namespace SCME.Service.IO
                     devState = (HWDeviceState)
                                ReadRegister(REG_DEVICE_STATE);
 
-                    if (devState == HWDeviceState.DS_Powered)
+                    if (devState == HWDeviceState.Powered)
                         break;
 
-                    if (devState == HWDeviceState.DS_Fault)
+                    if (devState == HWDeviceState.Fault)
                         throw new Exception(string.Format("dVdt is in fault state, reason: {0}",
                                                           (HWFaultReason)ReadRegister(REG_FAULT_REASON)));
-                    if (devState == HWDeviceState.DS_Disabled)
+                    if (devState == HWDeviceState.Disabled)
                         throw new Exception(string.Format("dVdt is in disabled state, reason: {0}",
                                                           (HWDisableReason)ReadRegister(REG_DISABLE_REASON)));
                 }
@@ -170,7 +170,7 @@ namespace SCME.Service.IO
             if (!m_IsdVdtEmulation)
             {
                 var devState = (HWDeviceState)ReadRegister(REG_DEVICE_STATE);
-                if (devState == HWDeviceState.DS_Fault)
+                if (devState == HWDeviceState.Fault)
                 {
                     var faultReason = (HWFaultReason)ReadRegister(REG_FAULT_REASON);
                     FireNotificationEvent(HWWarningReason.None, faultReason,
@@ -179,7 +179,7 @@ namespace SCME.Service.IO
                     throw new Exception(string.Format("dVdt is in fault state, reason: {0}", faultReason));
                 }
 
-                if (devState == HWDeviceState.DS_Disabled)
+                if (devState == HWDeviceState.Disabled)
                 {
                     var disableReason = (HWDisableReason)ReadRegister(REG_DISABLE_REASON);
                     FireNotificationEvent(HWWarningReason.None,
@@ -205,21 +205,21 @@ namespace SCME.Service.IO
         {
             var devState = (Types.dVdt.HWDeviceState)ReadRegister(REG_DEVICE_STATE);
 
-            return !((devState == Types.dVdt.HWDeviceState.DS_Fault) || (devState == Types.dVdt.HWDeviceState.DS_Disabled) || (m_State == DeviceState.InProcess));
+            return !((devState == Types.dVdt.HWDeviceState.Fault) || (devState == Types.dVdt.HWDeviceState.Disabled) || (m_State == DeviceState.InProcess));
         }
 
         #region Standart API
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info, "dVdt fault cleared");
+            SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Info, "dVdt fault cleared");
 
             CallAction(ACT_CLEAR_FAULT);
         }
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info, "dVdt warning cleared");
+            SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Info, "dVdt warning cleared");
 
             CallAction(ACT_CLEAR_WARNING);
         }
@@ -232,7 +232,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Info,
                                          string.Format("dVdt @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
@@ -246,7 +246,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16S(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Info,
                                          string.Format("dVdt @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
@@ -255,7 +255,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Info,
                                          string.Format("dVdt @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsdVdtEmulation)
@@ -266,7 +266,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Info,
                                          string.Format("dVdt @Call, action {0}", Action));
 
             if (m_IsdVdtEmulation)
@@ -492,7 +492,7 @@ namespace SCME.Service.IO
 
                 var devState = (HWDeviceState)ReadRegister(REG_DEVICE_STATE, true);
 
-                if (devState == HWDeviceState.DS_Fault)
+                if (devState == HWDeviceState.Fault)
                 {
                     var faultReason = (HWFaultReason)ReadRegister(REG_FAULT_REASON);
 
@@ -501,7 +501,7 @@ namespace SCME.Service.IO
                     throw new Exception(string.Format("dVdt device is in fault state, reason: {0}", faultReason));
                 }
 
-                if (devState == HWDeviceState.DS_Disabled)
+                if (devState == HWDeviceState.Disabled)
                 {
                     var disableReason = (HWDisableReason)ReadRegister(REG_DISABLE_REASON);
 
@@ -510,7 +510,7 @@ namespace SCME.Service.IO
                     throw new Exception(string.Format("dVdt device is in disabled state, reason: {0}", disableReason));
                 }
 
-                if (devState != HWDeviceState.DS_InProcess)
+                if (devState != HWDeviceState.None)
                 {
                     var warning = (HWWarningReason)ReadRegister(REG_WARNING);
 
@@ -540,8 +540,8 @@ namespace SCME.Service.IO
 
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, type, Message);
-            m_Communication.PostDeviceConnectionEvent(ComplexParts.DvDt, State, Message);
+            SystemHost.AppendLog(ComplexParts.dVdt, type, Message);
+            m_Communication.PostDeviceConnectionEvent(ComplexParts.dVdt, State, Message);
         }
 
         private void FiredVdtEvent(DeviceState State, TestResults Result)
@@ -551,13 +551,13 @@ namespace SCME.Service.IO
             if (State == DeviceState.Success)
                 message = string.Format("dVdt test result {0}", Result.Passed);
 
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Info, message);
+            SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Info, message);
             m_Communication.PostdVdtEvent(State, Result);
         }
 
         private void FireNotificationEvent(HWWarningReason Warning, HWFaultReason Fault, HWDisableReason Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Error,
+            SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Error,
                                          string.Format(
                                              "dVdt device notification: problem None, warning {0}, fault {1}, disable {2}",
                                              Warning, Fault, Disable));
@@ -567,8 +567,8 @@ namespace SCME.Service.IO
 
         private void FireExceptionEvent(string Message)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.DvDt, LogMessageType.Error, Message);
-            m_Communication.PostExceptionEvent(ComplexParts.DvDt, Message);
+            SystemHost.AppendLog(ComplexParts.dVdt, LogMessageType.Error, Message);
+            m_Communication.PostExceptionEvent(ComplexParts.dVdt, Message);
         }
 
         #endregion

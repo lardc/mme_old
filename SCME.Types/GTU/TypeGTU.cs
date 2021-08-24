@@ -5,154 +5,8 @@ using System.Runtime.Serialization;
 
 namespace SCME.Types.GTU
 {
-    /// <summary>Состояние оборудования</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDeviceState
-    {
-        /// <summary>Неопределенное состояние</summary>
-        [EnumMember]
-        None = 0,
-        /// <summary>Ошибка</summary>
-        [EnumMember]
-        Fault = 1,
-        /// <summary>Выключен</summary>
-        [EnumMember]
-        Disabled = 2,
-        /// <summary>Прозвонка</summary>
-        [EnumMember]
-        Kelvin = 3,
-        /// <summary>Gate</summary>
-        [EnumMember]
-        Gate = 4,
-        /// <summary>IH</summary>
-        [EnumMember]
-        IH = 5,
-        /// <summary>IL</summary>
-        [EnumMember]
-        IL = 6,
-        /// <summary>Сопротивление</summary>
-        [EnumMember]
-        RG = 7,
-        /// <summary>Калибровка</summary>
-        [EnumMember]
-        Calibrate = 8,
-        /// <summary>VGNT</summary>
-        [EnumMember]
-        VGNT = 9
-    };
-
-    /// <summary>Причина ошибки</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWFaultReason
-    {
-        [EnumMember]
-        None = 0,
-        [EnumMember]
-        HoldProcessError = 101,
-        [EnumMember]
-        GateProcessError = 112,
-        [EnumMember]
-        LatchProcessError = 121
-    };
-
-    /// <summary>Причина предупреждения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWWarningReason
-    {
-        [EnumMember]
-        None = 0,
-        [EnumMember]
-        HoldingCurrentSmall = 101,
-        /// <summary>Система перезагружена watchdog'ом</summary>
-        [EnumMember]
-        WatchdogReset = 1001
-    };
-
-    /// <summary>Причина выключения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDisableReason
-    {
-        [EnumMember]
-        None = 0,
-        /// <summary>Проблема с главным осциллятором</summary>
-        [EnumMember]
-        BadClock = 1001
-    };
-
-    /// <summary>Причина проблемы</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWProblemReason
-    {
-        [EnumMember]
-        None = 0,
-        /// <summary>Процесс завершен пользователем</summary>
-        [EnumMember]
-        OperationStopped = 1,
-        /// <summary>Ошибка стабилизации VD</summary>
-        [EnumMember]
-        VDSetErr = 2,
-        /// <summary>Ошибка стабилизации ID</summary>
-        [EnumMember]
-        IDSetErr = 3,
-        /// <summary>Ошибка стабилизации VG</summary>
-        [EnumMember]
-        VGSetErr = 4,
-        /// <summary>Ошибка стабилизации IG</summary>
-        [EnumMember]
-        IGSetErr = 5,
-        /// <summary>Неожиданный прямой ток</summary>
-        [EnumMember]
-        IDLeak = 6,
-        /// <summary>Не включен DUT</summary>
-        [EnumMember]
-        DUTNoTrig = 7,
-        /// <summary>Не выключен DUT</summary>
-        [EnumMember]
-        DUTNoClose = 8,
-        /// <summary>Не заперт DUT</summary>
-        [EnumMember]
-        DUTNoLatching = 9,
-        /// <summary>Нет потенциального сигнала DUT VG</summary>
-        [EnumMember]
-        DUTNoVGSensing = 10,
-        /// <summary>DUT запущен во время подтверждения VGNT</summary>
-        [EnumMember]
-        VGNTConfTrig = 11,
-        [EnumMember]
-        HoldReachTimeout = 101,
-        [EnumMember]
-        GateCurrentHigh = 111,
-        [EnumMember]
-        GateFollowingError = 112,
-        [EnumMember]
-        GateIgtOverload = 113,
-        [EnumMember]
-        LatchCurrentHigh = 121,
-        [EnumMember]
-        LatchFollowingError = 122,
-        [EnumMember]
-        RGateFollowingError = 141,
-        [EnumMember]
-        RGateOverload = 142
-    };
-
-    /// <summary>Результат выполнения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWOperationResult
-    {
-        /// <summary>В процессе</summary>
-        [EnumMember]
-        InProcess = 0,
-        /// <summary>Успешно</summary>
-        [EnumMember]
-        Success = 1,
-        /// <summary>Неудачно</summary>
-        [EnumMember]
-        Fail = 2
-    };
-
     /// <summary>Параметры произведения тестов</summary>
-    [DataContract(Name = "GTU.TestParameters", Namespace = "http://proton-electrotex.com/SCME")]
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class TestParameters : BaseTestParametersAndNormatives, ICloneable
     {
         //Использование IH ГОСТ
@@ -166,8 +20,8 @@ namespace SCME.Types.GTU
             Resistance = 100;
             IGT = 500;
             VGT = 2.5f;
-            IH = 150;
             IL = 1000;
+            IH = 150;
             Itm = 0;
             CurrentLimit = 5;
             VoltageLimitD = 1000;
@@ -183,7 +37,7 @@ namespace SCME.Types.GTU
         {
             get; set;
         }
-        
+
         [DataMember]
         public ushort Itm
         {
@@ -494,21 +348,130 @@ namespace SCME.Types.GTU
         }
     }
 
+    /// <summary>Состояние оборудования</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public class CalibrationResultGate
+    public enum HWDeviceState
     {
-        [DataMember]
-        public ushort Current
-        {
-            get; set;
-        }
+        /// <summary>Неопределенное состояние</summary>
+        [EnumMember]
+        None = 0,
+        /// <summary>Ошибка</summary>
+        [EnumMember]
+        Fault = 1,
+        /// <summary>Выключен</summary>
+        [EnumMember]
+        Disabled = 2,
+        /// <summary>Прозвонка</summary>
+        [EnumMember]
+        Kelvin = 3,
+        /// <summary>Gate</summary>
+        [EnumMember]
+        Gate = 4,
+        /// <summary>IH</summary>
+        [EnumMember]
+        IH = 5,
+        /// <summary>IL</summary>
+        [EnumMember]
+        IL = 6,
+        /// <summary>Сопротивление</summary>
+        [EnumMember]
+        RG = 7,
+        /// <summary>Калибровка</summary>
+        [EnumMember]
+        Calibrate = 8,
+        /// <summary>VGNT</summary>
+        [EnumMember]
+        VGNT = 9
+    };
 
-        [DataMember]
-        public ushort Voltage
-        {
-            get; set;
-        }
-    }
+    /// <summary>Причина ошибки</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWFaultReason
+    {
+        [EnumMember]
+        None = 0
+    };
+
+    /// <summary>Причина предупреждения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWWarningReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Система перезагружена watchdog'ом</summary>
+        [EnumMember]
+        WatchdogReset = 1001
+    };
+
+    /// <summary>Причина выключения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDisableReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Проблема с главным осциллятором</summary>
+        [EnumMember]
+        BadClock = 1001
+    };
+
+    /// <summary>Причина проблемы</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWProblemReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Процесс завершен пользователем</summary>
+        [EnumMember]
+        OperationStopped = 1,
+        /// <summary>Ошибка стабилизации VD</summary>
+        [EnumMember]
+        VDSetErr = 2,
+        /// <summary>Ошибка стабилизации ID</summary>
+        [EnumMember]
+        IDSetErr = 3,
+        /// <summary>Ошибка стабилизации VG</summary>
+        [EnumMember]
+        VGSetErr = 4,
+        /// <summary>Ошибка стабилизации IG</summary>
+        [EnumMember]
+        IGSetErr = 5,
+        /// <summary>Неожиданный прямой ток</summary>
+        [EnumMember]
+        IDLeak = 6,
+        /// <summary>Не включен DUT</summary>
+        [EnumMember]
+        DUTNoTrig = 7,
+        /// <summary>Не выключен DUT</summary>
+        [EnumMember]
+        DUTNoClose = 8,
+        /// <summary>Не заперт DUT</summary>
+        [EnumMember]
+        DUTNoLatching = 9,
+        /// <summary>Нет потенциального сигнала DUT VG</summary>
+        [EnumMember]
+        DUTNoVGSensing = 10,
+        /// <summary>DUT запущен во время подтверждения VGNT</summary>
+        [EnumMember]
+        VGNTConfTrig = 11
+    };
+
+    /// <summary>Результат выполнения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWOperationResult
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Успешно</summary>
+        [EnumMember]
+        OK = 1,
+        /// <summary>Неудачно</summary>
+        [EnumMember]
+        Fail = 2
+    };
+
+
+
+
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class CalibrationParameters
@@ -569,6 +532,22 @@ namespace SCME.Types.GTU
 
         [DataMember]
         public ushort GateFineIHL_D
+        {
+            get; set;
+        }
+    }
+
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public class CalibrationResultGate
+    {
+        [DataMember]
+        public ushort Current
+        {
+            get; set;
+        }
+
+        [DataMember]
+        public ushort Voltage
         {
             get; set;
         }

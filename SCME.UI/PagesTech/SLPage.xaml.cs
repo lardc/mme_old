@@ -24,7 +24,7 @@ namespace SCME.UI.PagesTech
         internal SLPage()
         {
             //Установка базовых параметров SL и пресса
-            Parameters = new Types.VTM.TestParameters
+            Parameters = new Types.SL.TestParameters
             {
                 UseLsqMethod = Settings.Default.UseVTMPostProcessing,
                 IsEnabled = true
@@ -45,7 +45,7 @@ namespace SCME.UI.PagesTech
         }
 
         /// <summary>Параметры SL</summary>
-        public Types.VTM.TestParameters Parameters
+        public Types.SL.TestParameters Parameters
         {
             get; set;
         }
@@ -99,7 +99,7 @@ namespace SCME.UI.PagesTech
         /// <summary>Установка результата теста SL</summary>
         /// <param name="state">Состояние</param>
         /// <param name="result">Результат теста</param>
-        internal void SetResultVtm(DeviceState state, Types.VTM.TestResults result)
+        internal void SetResultVtm(DeviceState state, Types.SL.TestResults result)
         {
             Label_Set(lblVtm, state, string.Format("{0}", result.Voltage));
             lblItm.Content = string.Format("{0}", result.Current);
@@ -118,7 +118,7 @@ namespace SCME.UI.PagesTech
 
         /// <summary>Установка ошибок</summary>
         /// <param name="fault">Ошибка</param>
-        internal void SetFault(Types.VTM.HWFaultReason fault)
+        internal void SetFault(Types.SL.HWFaultReason fault)
         {
             labelFault.Content = fault.ToString();
             labelFault.Visibility = Visibility.Visible;
@@ -127,7 +127,7 @@ namespace SCME.UI.PagesTech
 
         /// <summary>Установка предупреждений</summary>
         /// <param name="warning">Предупреждение</param>
-        internal void SetWarning(Types.VTM.HWWarningReason warning)
+        internal void SetWarning(Types.SL.HWWarningReason warning)
         {
             labelWarning.Content = warning.ToString();
             labelWarning.Visibility = Visibility.Visible;
@@ -135,7 +135,7 @@ namespace SCME.UI.PagesTech
 
         /// <summary>Установка проблем</summary>
         /// <param name="problem">Проблема</param>
-        internal void SetProblem(Types.VTM.HWProblemReason problem)
+        internal void SetProblem(Types.SL.HWProblemReason problem)
         {
             labelWarning.Content = problem.ToString();
             labelWarning.Visibility = Visibility.Visible;
@@ -225,21 +225,13 @@ namespace SCME.UI.PagesTech
             {
                 IsEnabled = false
             };
-            Types.IH.TestParameters ParamIH = new Types.IH.TestParameters
-            {
-                IsEnabled = false
-            };
-            Types.RCC.TestParameters ParamRCC = new Types.RCC.TestParameters
-            {
-                IsEnabled = false
-            };
             Types.TOU.TestParameters ParamTOU = new Types.TOU.TestParameters
             {
                 IsEnabled = false
             };
             ClampParameters.SkipClamping = Cache.Clamp.ManualClamping;
             Status_Clear();
-            if (!Cache.Net.Start(ParamGTU, Parameters, ParamBVT, ParamATU, ParamQrrTq, ParamIH, ParamRCC, ParamCommutation, ClampParameters, ParamTOU))
+            if (!Cache.Net.Start(ParamGTU, Parameters, ParamBVT, ParamATU, ParamQrrTq, ParamCommutation, ClampParameters, ParamTOU))
                 return;
             IsRunning = true;
         }

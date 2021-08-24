@@ -61,7 +61,7 @@ namespace SCME.UI.PagesCommon
                 case ComplexParts.Commutation:
                     commutationControl.SetConnectionStatus(connectionState, message);
                     break;
-                case ComplexParts.Gate:
+                case ComplexParts.GTU:
                     gateControl.SetConnectionStatus(connectionState, message);
                     break;
                 case ComplexParts.SL:
@@ -76,7 +76,7 @@ namespace SCME.UI.PagesCommon
                 case ComplexParts.CommutationEx:
                     commutationControlEx.SetConnectionStatus(connectionState, message);
                     break;
-                case ComplexParts.DvDt:
+                case ComplexParts.dVdt:
                     dVdtControl.SetConnectionStatus(connectionState, message);
                     break;
                 case ComplexParts.ATU:
@@ -113,7 +113,7 @@ namespace SCME.UI.PagesCommon
                     return !gatewayControl.IsDisabled;
                 case ComplexParts.Commutation:
                     return !commutationControl.IsDisabled;
-                case ComplexParts.Gate:
+                case ComplexParts.GTU:
                     return !gateControl.IsDisabled;
                 case ComplexParts.SL:
                     return !vtmControl.IsDisabled;
@@ -123,7 +123,7 @@ namespace SCME.UI.PagesCommon
                     return !clampControl.IsDisabled;
                 case ComplexParts.CommutationEx:
                     return !commutationControlEx.IsDisabled;
-                case ComplexParts.DvDt:
+                case ComplexParts.dVdt:
                     return !dVdtControl.IsDisabled;
                 case ComplexParts.ATU:
                     return !aTUControl.IsDisabled;
@@ -162,7 +162,7 @@ namespace SCME.UI.PagesCommon
                 case ComplexParts.Commutation:
                      commutationControl.IsDisabled= value;
                      break;
-                case ComplexParts.Gate:
+                case ComplexParts.GTU:
                      gateControl.IsDisabled= value;
                      break;
                 case ComplexParts.SL:
@@ -177,7 +177,7 @@ namespace SCME.UI.PagesCommon
                 case ComplexParts.CommutationEx:
                      commutationControlEx.IsDisabled= value;
                      break;
-                case ComplexParts.DvDt:
+                case ComplexParts.dVdt:
                      dVdtControl.IsDisabled= value;
                      break;
                 case ComplexParts.ATU:
@@ -216,7 +216,7 @@ namespace SCME.UI.PagesCommon
                     return adapterControl.OperationTimeout;
                 case ComplexParts.Gateway:
                     return gatewayControl.OperationTimeout;
-                case ComplexParts.Gate:
+                case ComplexParts.GTU:
                     return gateControl.OperationTimeout;
                 case ComplexParts.SL:
                     return vtmControl.OperationTimeout;
@@ -224,7 +224,7 @@ namespace SCME.UI.PagesCommon
                     return bvtControl.OperationTimeout;
                 case ComplexParts.Clamping:
                     return clampControl.ClampTimeout;
-                case ComplexParts.DvDt:
+                case ComplexParts.dVdt:
                     return dVdtControl.OperationTimeout;
                 case ComplexParts.ATU:
                     return aTUControl.OperationTimeout;

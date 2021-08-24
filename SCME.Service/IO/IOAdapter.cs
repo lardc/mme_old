@@ -23,7 +23,7 @@ namespace SCME.Service.IO
 
             m_IsAdapterEmulation = Settings.Default.AdapterEmulation;
 
-            SystemHost.Journal.AppendLog(ComplexParts.Adapter, LogMessageType.Milestone,
+            SystemHost.AppendLog(ComplexParts.Adapter, LogMessageType.Milestone,
                                          String.Format("Adapter created. Emulation mode: {0}", m_IsAdapterEmulation));
         }
 
@@ -223,7 +223,7 @@ namespace SCME.Service.IO
 
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Adapter, type, Message);
+            SystemHost.AppendLog(ComplexParts.Adapter, type, Message);
 
             m_Communication.PostDeviceConnectionEvent(ComplexParts.Adapter, State, Message);
         }

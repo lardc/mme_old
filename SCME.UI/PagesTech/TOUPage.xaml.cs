@@ -99,12 +99,10 @@ namespace SCME.UI.PagesTech
             VM.IsRunning = true;
 
             var paramGate = new Types.GTU.TestParameters { IsEnabled = false };
-            var paramVtm = new Types.VTM.TestParameters { IsEnabled = false };
+            var paramVtm = new Types.SL.TestParameters { IsEnabled = false };
             var paramBvt = new Types.BVT.TestParameters { IsEnabled = false };
             var paramATU = new Types.ATU.TestParameters { IsEnabled = false };
             var paramQrrTq = new Types.QrrTq.TestParameters { IsEnabled = false };
-            var paramIH = new Types.IH.TestParameters { IsEnabled = false };
-            var paramRCC = new Types.RCC.TestParameters { IsEnabled = false };
 
             //если пресс был зажат вручную - не стоит пробовать зажимать его ещё раз
             VM.Clamping.SkipClamping = Cache.Clamp.ManualClamping;
@@ -118,7 +116,7 @@ namespace SCME.UI.PagesTech
 
 
 
-            if (!Cache.Net.Start(paramGate, paramVtm, paramBvt, paramATU, paramQrrTq, paramIH, paramRCC, commutation, VM.Clamping, VM.TOU))
+            if (!Cache.Net.Start(paramGate, paramVtm, paramBvt, paramATU, paramQrrTq, commutation, VM.Clamping, VM.TOU))
                 return;
 
             ClearStatus();

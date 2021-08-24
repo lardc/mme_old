@@ -112,12 +112,12 @@ namespace SCME.Service.IO
             m_Node = (ushort)Settings.Default.GatewayNode;
 
             if (!Enum.TryParse(Settings.Default.SafetyType, out m_SafetyType))
-                SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Error, String.Format("Unrecognised value on config parameter '{0}' ", "SafetyType"));
+                SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Error, String.Format("Unrecognised value on config parameter '{0}' ", "SafetyType"));
 
             m_Thread = new ThreadService();
             m_Thread.FinishedHandler += Thread_FinishedHandler;
 
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone,
+            SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone,
                                          String.Format("Gateway created. Emulation mode: {0}", m_IsGatewayEmulation));
         }
 
@@ -171,7 +171,7 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, "Gateway fault cleared");
+            SystemHost.AppendLog(ComplexParts.GTU, LogMessageType.Info, "Gateway fault cleared");
 
             CallAction(ACT_CLEAR_FAULT);
         }
@@ -185,7 +185,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
                                          string.Format("Gateway @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
@@ -194,7 +194,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
                                          string.Format("Gateway @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsGatewayEmulation)
@@ -206,7 +206,7 @@ namespace SCME.Service.IO
         internal void CallAction(ushort Action, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
                                          string.Format("Gateway @Call, action {0}", Action));
 
             if (m_IsGatewayEmulation)
@@ -240,7 +240,7 @@ namespace SCME.Service.IO
 
         internal void SetLamps(bool Lamp1, bool Lamp2, bool Lamp3)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
+            SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Info,
                                          String.Format("Set lamps: lamp 1 - {0}, lamp 2 - {1}, lamp 3 - {2}", Lamp1,
                                                        Lamp2, Lamp3));
 
@@ -254,7 +254,7 @@ namespace SCME.Service.IO
 
         internal void SetGreenLed(bool value)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Info, string.Format("Set green led: {0}", value));
+            SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Info, string.Format("Set green led: {0}", value));
 
             if (m_IsGatewayEmulation)
                 return;
@@ -264,7 +264,7 @@ namespace SCME.Service.IO
 
         internal void SetRedLed(bool value)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Info, string.Format("Set red led: {0}", value));
+            SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Info, string.Format("Set red led: {0}", value));
 
             if (m_IsGatewayEmulation)
                 return;
@@ -438,14 +438,14 @@ namespace SCME.Service.IO
 
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, type, Message);
+            SystemHost.AppendLog(ComplexParts.Gateway, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.Gateway, State, Message);
         }
 
         private void FireNotificationEvent(Types.Gateway.HWWarningReason Warning, Types.Gateway.HWFaultReason Fault,
                                            Types.Gateway.HWDisableReason Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Error,
+            SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Error,
                                          string.Format(
                                              "Gateway device notification: warning {0}, fault {1}, disable {2}",
                                              Warning, Fault, Disable));
@@ -455,13 +455,13 @@ namespace SCME.Service.IO
 
         private void FireExceptionEvent(string Message)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Error, Message);
+            SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Error, Message);
             m_Communication.PostExceptionEvent(ComplexParts.Gateway, Message);
         }
 
         private void FireButtonEvent(ComplexButtons Button, bool State)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Info, string.Format("Gateway button {0}, state {1}", Button, State));
+            SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Info, string.Format("Gateway button {0}, state {1}", Button, State));
             m_Communication.PostButtonPressedEvent(Button, State);
         }
 
@@ -472,12 +472,12 @@ namespace SCME.Service.IO
             {
                 case (ComplexSafety.Mechanical):
                     m_SafetyOn = true;
-                    SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "Mechanical safety system set to on");
+                    SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "Mechanical safety system set to on");
                     break;
 
                 case (ComplexSafety.AsButtonStop):
                     m_SafetyOn = true;
-                    SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "AsButtonStop safety system set to on");
+                    SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "AsButtonStop safety system set to on");
                     break;
             }
         }
@@ -489,12 +489,12 @@ namespace SCME.Service.IO
             {
                 case (ComplexSafety.Mechanical):
                     m_SafetyOn = false;
-                    SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "Mechanical safety system set to off");
+                    SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "Mechanical safety system set to off");
                     break;
 
                 case (ComplexSafety.AsButtonStop):
                     m_SafetyOn = false;
-                    SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "AsButtonStop safety system set to off");
+                    SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "AsButtonStop safety system set to off");
                     break;
             }
         }
@@ -508,7 +508,7 @@ namespace SCME.Service.IO
                 case (ComplexButtons.ButtonStop):
                     bool nButton4 = ReadRegister(REG_SENSOR4, true) != 0;
                     FireButtonEvent(ComplexButtons.ButtonStop, nButton4);
-                    SystemHost.Journal.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "Provocation button 'Stop' response");
+                    SystemHost.AppendLog(ComplexParts.Gateway, LogMessageType.Milestone, "Provocation button 'Stop' response");
                     break;
             }
         }
@@ -519,12 +519,12 @@ namespace SCME.Service.IO
             switch (m_SafetyType)
             {
                 case (ComplexSafety.Mechanical):
-                    SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Milestone, string.Format("Mechanical safety system alarm={0}. Button {1}", Alarm, Button));
+                    SystemHost.AppendLog(ComplexParts.Commutation, LogMessageType.Milestone, string.Format("Mechanical safety system alarm={0}. Button {1}", Alarm, Button));
                     m_Communication.PostSafetyEvent(Alarm, ComplexSafety.Mechanical, Button);
                     break;
 
                 case (ComplexSafety.AsButtonStop):
-                    SystemHost.Journal.AppendLog(ComplexParts.Commutation, LogMessageType.Milestone, string.Format("AsButtonStop safety system alarm={0}. Button {1}", Alarm, Button));
+                    SystemHost.AppendLog(ComplexParts.Commutation, LogMessageType.Milestone, string.Format("AsButtonStop safety system alarm={0}. Button {1}", Alarm, Button));
                     m_Communication.PostSafetyEvent(Alarm, ComplexSafety.AsButtonStop, Button);
                     break;
             }

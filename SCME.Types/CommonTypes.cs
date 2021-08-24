@@ -50,7 +50,7 @@ namespace SCME.Types
         [EnumMember]
         CommutationEx = 6,
         [EnumMember]
-        Gate = 7,
+        GTU = 7,
         [EnumMember]
         SL = 8,
         [EnumMember]
@@ -58,21 +58,11 @@ namespace SCME.Types
         [EnumMember]
         Clamping = 10,
         [EnumMember]
-        DvDt = 11,
-        [EnumMember]
-        QRR = 12,
-        [EnumMember]
-        Sctu = 13,
+        dVdt = 11,
         [EnumMember]
         ATU = 14,
         [EnumMember]
         QrrTq = 15,
-        [EnumMember]
-        RAC = 16,
-        [EnumMember]
-        IH = 17,
-        [EnumMember]
-        RCC = 18,
         [EnumMember]
         TOU = 19,
         [EnumMember]

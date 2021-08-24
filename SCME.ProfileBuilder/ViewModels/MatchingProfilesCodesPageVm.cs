@@ -259,7 +259,7 @@ namespace SCME.ProfileBuilder.ViewModels
 
         private bool SLParameters_Compare(XElement mme, BaseTestParametersAndNormatives parameters) //Проверка параметров SL
         {
-            Types.VTM.TestParameters Parameters = (Types.VTM.TestParameters)parameters;
+            Types.SL.TestParameters Parameters = (Types.SL.TestParameters)parameters;
             //Требуемый блок
             XElement NeededBlock = mme.Element("mme.blocks").Elements("block").FirstOrDefault(block => block.Attribute("name").Value == "SL");
             if (!Parameters_Compare(NeededBlock, "RampCurrent", Parameters.RampCurrent))

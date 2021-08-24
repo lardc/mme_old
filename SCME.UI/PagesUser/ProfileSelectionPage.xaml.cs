@@ -428,7 +428,7 @@ namespace SCME.UI.PagesUser
                         BVTCount++;
                     }
 
-                    var sl = baseTestParametersAndNormativese as Types.VTM.TestParameters;
+                    var sl = baseTestParametersAndNormativese as Types.SL.TestParameters;
                     if (sl != null)
                     {
                         var s = TestByTypeAndOrder(actualProfileItem, TestParametersType.SL, sl.Order);

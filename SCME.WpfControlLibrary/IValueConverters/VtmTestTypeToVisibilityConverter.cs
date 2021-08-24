@@ -1,4 +1,4 @@
-﻿using SCME.Types.VTM;
+﻿using SCME.Types.SL;
 using System;
 using System.Globalization;
 using System.Windows;
@@ -10,11 +10,11 @@ namespace SCME.WpfControlLibrary.IValueConverters
     {
         public object Convert(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            var type = (VTMTestType)Value;
+            var type = (SLTestType)Value;
             int index = int.Parse((string)Parameter);
 
-            if ((type == VTMTestType.Ramp && index == 0) || (type == VTMTestType.Sinus && index == 1) ||
-                (type == VTMTestType.Curve && index == 2))
+            if ((type == SLTestType.Ramp && index == 0) || (type == SLTestType.Sinus && index == 1) ||
+                (type == SLTestType.Curve && index == 2))
                 return Visibility.Visible;
 
             return Visibility.Collapsed;

@@ -1,12 +1,10 @@
 ﻿using SCME.Types.BaseTestParams;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace SCME.Types.TOU
 {
+    /// <summary>Состояние оборудования</summary>
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public enum HWDeviceState
     {

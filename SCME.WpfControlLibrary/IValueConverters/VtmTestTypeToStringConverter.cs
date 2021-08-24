@@ -1,4 +1,4 @@
-﻿using SCME.Types.VTM;
+﻿using SCME.Types.SL;
 using SCME.WpfControlLibrary.Properties;
 using System;
 using System.Globalization;
@@ -10,19 +10,19 @@ namespace SCME.WpfControlLibrary.IValueConverters
     {
         public object Convert(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            var type = (VTMTestType)Value;
+            var type = (SLTestType)Value;
             var line = string.Empty;
 
             switch (type)
             {
                 
-                case VTMTestType.Ramp:
+                case SLTestType.Ramp:
                     line = Resources.Ramp;
                     break;
-                case VTMTestType.Sinus:
+                case SLTestType.Sinus:
                     line = Resources.Sinus;
                     break;
-                case VTMTestType.Curve:
+                case SLTestType.Curve:
                     line = Resources.Curve;
                     break;
             }
@@ -32,15 +32,15 @@ namespace SCME.WpfControlLibrary.IValueConverters
 
         public object ConvertBack(object Value, Type TargetType, object Parameter, CultureInfo Culture)
         {
-            var type = VTMTestType.Ramp;
+            var type = SLTestType.Ramp;
             var line = (string)Value;
 
             if (line == Resources.Ramp)
-                type = VTMTestType.Ramp;
+                type = SLTestType.Ramp;
             else if (line == Resources.Sinus)
-                type = VTMTestType.Sinus;
+                type = SLTestType.Sinus;
             else if (line == Resources.Curve)
-                type = VTMTestType.Curve;
+                type = SLTestType.Curve;
 
             return type;
         }

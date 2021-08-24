@@ -6,7 +6,6 @@ using SCME.Types.BaseTestParams;
 using SCME.Types.BVT;
 using SCME.Types.Clamping;
 using SCME.Types.Profiles;
-using SCME.Types.SCTU;
 using SCME.Types.SQL;
 using TestParameters = SCME.Types.Commutation.TestParameters;
 
@@ -83,11 +82,11 @@ namespace SCME.Types
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]
-        bool Start(GTU.TestParameters ParametersGate, VTM.TestParameters ParametersSL, BVT.TestParameters ParametersBVT, ATU.TestParameters ParametersATU, QrrTq.TestParameters ParametersQrrTq, IH.TestParameters ParametersIH, RCC.TestParameters ParametersRCC, Commutation.TestParameters ParametersCommutation, Clamping.TestParameters ParametersClamp, Types.TOU.TestParameters parametersTOU);
+        bool Start(GTU.TestParameters ParametersGate, SL.TestParameters ParametersSL, BVT.TestParameters ParametersBVT, ATU.TestParameters ParametersATU, QrrTq.TestParameters ParametersQrrTq, Commutation.TestParameters ParametersCommutation, Clamping.TestParameters ParametersClamp, Types.TOU.TestParameters parametersTOU);
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]
-        bool StartDynamic(TestParameters parametersCommutation, Clamping.TestParameters parametersClamp, GTU.TestParameters[] parametersGate, VTM.TestParameters[] parametersVtm, BVT.TestParameters[] parametersBvt, dVdt.TestParameters[] parametersDvDt, ATU.TestParameters[] parametersAtu, QrrTq.TestParameters[] parametersQrrTq, SctuTestParameters[] parametersSctu, Types.TOU.TestParameters[] parametersTOU);
+        bool StartDynamic(TestParameters parametersCommutation, Clamping.TestParameters parametersClamp, GTU.TestParameters[] parametersGate, SL.TestParameters[] parametersVtm, BVT.TestParameters[] parametersBvt, dVdt.TestParameters[] parametersDvDt, ATU.TestParameters[] parametersAtu, QrrTq.TestParameters[] parametersQrrTq, Types.TOU.TestParameters[] parametersTOU);
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]
@@ -128,10 +127,6 @@ namespace SCME.Types
         [OperationContract]
         [FaultContract(typeof(FaultData))]
         void ClearFault(ComplexParts Device);
-
-        [OperationContract]
-        [FaultContract(typeof(FaultData))]
-        ushort ActivationWorkPlace(ComplexParts Device, ChannelByClumpType ChByClumpType, SctuWorkPlaceActivationStatuses ActivationStatus);
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]
@@ -235,11 +230,11 @@ namespace SCME.Types
                                      GTU.HWFaultReason Fault, GTU.HWDisableReason Disable);
 
         [OperationContract(IsOneWay = true)]
-        void SLHandler(DeviceState state, VTM.TestResults result);
+        void SLHandler(DeviceState state, SL.TestResults result);
 
         [OperationContract(IsOneWay = true)]
-        void SLNotificationHandler(VTM.HWProblemReason Problem, VTM.HWWarningReason Warning, VTM.HWFaultReason Fault,
-                                    VTM.HWDisableReason Disable);
+        void SLNotificationHandler(SL.HWProblemReason Problem, SL.HWWarningReason Warning, SL.HWFaultReason Fault,
+                                    SL.HWDisableReason Disable);
 
         [OperationContract(IsOneWay = true)]
         void BVTAllHandler(DeviceState State);
@@ -283,18 +278,6 @@ namespace SCME.Types
         void QrrTqKindOfFreezingHandler(ushort KindOfFreezing);
 
         [OperationContract(IsOneWay = true)]
-        void IHHandler(DeviceState State, IH.TestResults Result);
-
-        [OperationContract(IsOneWay = true)]
-        void IHNotificationHandler(ushort Problem, ushort Warning, ushort Fault, ushort Disable);
-
-        [OperationContract(IsOneWay = true)]
-        void RCCHandler(DeviceState State, RCC.TestResults Result);
-
-        [OperationContract(IsOneWay = true)]
-        void RCCNotificationHandler(ushort Problem, ushort Warning, ushort Fault, ushort Disable);
-
-        [OperationContract(IsOneWay = true)]
         void ClampingSwitchHandler(Clamping.SqueezingState Up, IList<float> ArrayF, IList<float> ArrayFd);
 
         [OperationContract(IsOneWay = true)]
@@ -305,9 +288,6 @@ namespace SCME.Types
 
         [OperationContract(IsOneWay = true)]
         void ClampingTemperatureHandler(HeatingChannel channel, int temeprature);
-
-        [OperationContract(IsOneWay = true)]
-        void SctuHandler(SctuHwState state, SctuTestResults results);
 
         [OperationContract(IsOneWay = true)]
         void DbSyncState(DeviceConnectionState state, string message);

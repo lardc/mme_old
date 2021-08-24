@@ -21,8 +21,10 @@ namespace SCME.Types.BVT
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public enum BVTMeasurementMode
     {
+        /// <summary>I-Mode</summary>
         [EnumMember]
         ModeI,
+        /// <summary>V-Mode</summary>
         [EnumMember]
         ModeV
     };

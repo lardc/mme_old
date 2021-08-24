@@ -1,4 +1,3 @@
-using PropertyChanged;
 using SCME.Types.BaseTestParams;
 using System;
 using System.Collections.Generic;
@@ -6,105 +5,15 @@ using System.Runtime.Serialization;
 
 namespace SCME.Types.BVT
 {
-    /// <summary>Состояние оборудования</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDeviceState
-    {
-        /// <summary>Неопределенное состояние</summary>
-        [EnumMember]
-        DS_None = 0,
-        /// <summary>Ошибка</summary>
-        [EnumMember]
-        DS_Fault = 1,
-        /// <summary>Выключен</summary>
-        [EnumMember]
-        DS_Disabled = 2,
-        [EnumMember]
-        DS_dummy = 3,
-        /// <summary>Заряжен</summary>
-        [EnumMember]
-        DS_Powered = 4,
-        /// <summary>В процессе работы</summary>
-        [EnumMember]
-        DS_InProcess = 5
-    };
-
-    /// <summary>Причина ошибки</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWFaultReason
-    {
-        [EnumMember]
-        None = 0,
-        [EnumMember]
-        BridgeOverload = 400,
-        [EnumMember]
-        FolowingError = 204,
-        [EnumMember]
-        TemperatureOverload = 401
-    };
-
-    /// <summary>Причина предупреждения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWWarningReason
-    {
-        [EnumMember]
-        None = 0,
-        [EnumMember]
-        CurrentNotReached = 401,
-        /// <summary>Система перезагружена watchdog'ом</summary>
-        [EnumMember]
-        WatchdogReset = 1001
-    };
-
-    /// <summary>Причина выключения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWDisableReason
-    {
-        [EnumMember]
-        None = 0,
-        [EnumMember]
-        NoShSignal = 400,
-        [EnumMember]
-        NoStSignal = 401,
-        [EnumMember]
-        NoTempSignal = 402
-    };
-
-    /// <summary>Причина проблемы</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWProblemReason
-    {
-        [EnumMember]
-        None = 0,
-        [EnumMember]
-        Stopped = 401
-    };
-
-    /// <summary>Результат выполнения</summary>
-    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public enum HWOperationResult
-    {
-        /// <summary>В процессе</summary>
-        [EnumMember]
-        InProcess = 0,
-        /// <summary>Успешно</summary>
-        [EnumMember]
-        Success = 1,
-        /// <summary>Неудачно</summary>
-        [EnumMember]
-        Fail = 2
-    };
-
     /// <summary>Параметры произведения тестов</summary>
-    [DataContract(Name = "BVT.TestParameters", Namespace = "http://proton-electrotex.com/SCME")]
-    [AddINotifyPropertyChangedInterface]
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class TestParameters : BaseTestParametersAndNormatives, ICloneable
     {
         /// <summary>Инициализирует новый экземпляр класса TestParameters</summary>
         public TestParameters()
         {
             TestParametersType = TestParametersType.BVT;
-            IsEnabled = false;
+            IsEnabled = true;
             UdsmUrsmTestType = TestType = BVTTestType.Reverse;
             MeasurementMode = BVTMeasurementMode.ModeV;
             UdsmUrsmVoltageLimitD = VoltageLimitD = 1000;
@@ -507,6 +416,125 @@ namespace SCME.Types.BVT
             get; set;
         }
     }
+
+    /// <summary>Состояние оборудования</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDeviceState
+    {
+        /// <summary>Неопределенное состояние</summary>
+        [EnumMember]
+        DS_None = 0,
+        /// <summary>Ошибка</summary>
+        [EnumMember]
+        DS_Fault = 1,
+        /// <summary>Выключен</summary>
+        [EnumMember]
+        DS_Disabled = 2,
+        /// <summary>Dummy</summary>
+        [EnumMember]
+        DS_dummy = 3,
+        /// <summary>Заряжен</summary>
+        [EnumMember]
+        DS_Powered = 4,
+        /// <summary>В процессе</summary>
+        [EnumMember]
+        DS_InProcess = 5
+    };
+
+    /// <summary>Причина ошибки</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWFaultReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Перегрузка тока моста</summary>
+        [EnumMember]
+        BridgeShort = 200,
+        /// <summary>Перегрев моста</summary>
+        [EnumMember]
+        TempMon = 201,
+        /// <summary>Ошибка оптической связи</summary>
+        [EnumMember]
+        OptoConError = 202,
+        /// <summary>Ошибка подачи питания</summary>
+        [EnumMember]
+        LowSidePS = 203,
+        /// <summary>Ошибка следования напряжения</summary>
+        [EnumMember]
+        FollowingError = 204,
+        /// <summary>Выходная насыщенность PWM</summary>
+        [EnumMember]
+        PWMSaturation = 205
+    };
+
+    /// <summary>Причина предупреждения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWWarningReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Не обнаружено условие в режиме I-Mode</summary>
+        [EnumMember]
+        CurrentNotReached = 401,
+        /// <summary>Не обнаружено условие в режиме V-Mode</summary>
+        [EnumMember]
+        VoltageNotReached = 402,
+        /// <summary>Сопротивление вне диапазона</summary>
+        [EnumMember]
+        ResOutOfRange = 403,
+        /// <summary>Перегрузка выхода</summary>
+        [EnumMember]
+        OutputOverload = 404,
+        /// <summary>Система перезагружена watchdog'ом</summary>
+        [EnumMember]
+        WatchdogReset = 1001
+    };
+
+    /// <summary>Причина выключения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWDisableReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Низкий короткий сигнал</summary>
+        [EnumMember]
+        NoShortSignal = 300,
+        /// <summary>Низкий сигнал температуры</summary>
+        [EnumMember]
+        NoTempSignal = 301
+    };
+
+    /// <summary>Причина проблемы</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWProblemReason
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Остановлено пользователем</summary>
+        [EnumMember]
+        Stop = 100,
+        /// <summary>Выходной короткий сигнал</summary>
+        [EnumMember]
+        OutputShort = 101
+    };
+
+    /// <summary>Результат выполнения</summary>
+    [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
+    public enum HWOperationResult
+    {
+        [EnumMember]
+        None = 0,
+        /// <summary>Успешно</summary>
+        [EnumMember]
+        OK = 1,
+        /// <summary>Неудачно</summary>
+        [EnumMember]
+        Fail = 2
+    };
+
+
+
+
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public class CalibrationParameters

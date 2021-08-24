@@ -9,7 +9,7 @@ using SCME.Types.Commutation;
 using SCME.Types.dVdt;
 using SCME.Types.Interfaces;
 using SCME.Types.Profiles;
-using SCME.Types.VTM;
+using SCME.Types.SL;
 using SCME.Types.SQL;
 
 namespace SCME.InterfaceImplementations
@@ -91,7 +91,7 @@ namespace SCME.InterfaceImplementations
                         ProfileTS = profile.Timestamp,
                         Version = prof.Version,
                         GateTestParameters = new List<Types.GTU.TestParameters>(),
-                        VTMTestParameters = new List<Types.VTM.TestParameters>(),
+                        VTMTestParameters = new List<Types.SL.TestParameters>(),
                         BVTTestParameters = new List<Types.BVT.TestParameters>(),
                         DvDTestParameterses = new List<Types.dVdt.TestParameters>(),
                         ATUTestParameters = new List<Types.ATU.TestParameters>(),
@@ -120,7 +120,7 @@ namespace SCME.InterfaceImplementations
                             ProfileTS = childProfile.Timestamp,
                             Version = profilesChildsDict[i].Version,
                             GateTestParameters = new List<Types.GTU.TestParameters>(),
-                            VTMTestParameters = new List<Types.VTM.TestParameters>(),
+                            VTMTestParameters = new List<Types.SL.TestParameters>(),
                             BVTTestParameters = new List<Types.BVT.TestParameters>(),
                             DvDTestParameterses = new List<Types.dVdt.TestParameters>(),
                             ATUTestParameters = new List<Types.ATU.TestParameters>(),
@@ -160,7 +160,7 @@ namespace SCME.InterfaceImplementations
                     continue;
                 }
 
-                var sl = baseTestParametersAndNormativese as Types.VTM.TestParameters;
+                var sl = baseTestParametersAndNormativese as Types.SL.TestParameters;
                 if (sl != null)
                 {
                     profileItem.VTMTestParameters.Add(sl);
@@ -380,7 +380,7 @@ namespace SCME.InterfaceImplementations
                         ProfileTS = profile.Timestamp,
                         Version = prof.Version,
                         GateTestParameters = new List<Types.GTU.TestParameters>(),
-                        VTMTestParameters = new List<Types.VTM.TestParameters>(),
+                        VTMTestParameters = new List<Types.SL.TestParameters>(),
                         BVTTestParameters = new List<Types.BVT.TestParameters>(),
                         DvDTestParameterses = new List<Types.dVdt.TestParameters>(),
                         ATUTestParameters = new List<Types.ATU.TestParameters>(),
@@ -401,7 +401,7 @@ namespace SCME.InterfaceImplementations
                             continue;
                         }
 
-                        var sl = baseTestParametersAndNormativese as Types.VTM.TestParameters;
+                        var sl = baseTestParametersAndNormativese as Types.SL.TestParameters;
                         if (sl != null)
                         {
                             profileItem.VTMTestParameters.Add(sl);
@@ -868,10 +868,10 @@ namespace SCME.InterfaceImplementations
             }
         }
 
-        private Types.VTM.TestParameters FillSlConditions(long testTypeId)
+        private Types.SL.TestParameters FillSlConditions(long testTypeId)
         {
             var results = new Dictionary<string, object>(9);
-            var testParams = new Types.VTM.TestParameters() { IsEnabled = true, TestTypeId = testTypeId };
+            var testParams = new Types.SL.TestParameters() { IsEnabled = true, TestTypeId = testTypeId };
 
             FillOrder(testTypeId, testParams);
 
@@ -884,7 +884,7 @@ namespace SCME.InterfaceImplementations
                 switch (result.Key)
                 {
                     case "SL_Type":
-                        testParams.TestType = (VTMTestType)(Enum.Parse(typeof(VTMTestType), result.Value.ToString()));
+                        testParams.TestType = (SLTestType)(Enum.Parse(typeof(SLTestType), result.Value.ToString()));
                         break;
                     case "SL_FS":
                         testParams.UseFullScale = Boolean.Parse(result.Value.ToString());
@@ -895,13 +895,13 @@ namespace SCME.InterfaceImplementations
                     case "SL_ITM":
                         switch (testParams.TestType)
                         {
-                            case VTMTestType.Ramp:
+                            case SLTestType.Ramp:
                                 testParams.RampCurrent = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Sinus:
+                            case SLTestType.Sinus:
                                 testParams.SinusCurrent = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Curve:
+                            case SLTestType.Curve:
                                 testParams.CurveCurrent = UInt16.Parse(result.Value.ToString());
                                 break;
                         }
@@ -909,13 +909,13 @@ namespace SCME.InterfaceImplementations
                     case "SL_Time":
                         switch (testParams.TestType)
                         {
-                            case VTMTestType.Ramp:
+                            case SLTestType.Ramp:
                                 testParams.RampTime = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Sinus:
+                            case SLTestType.Sinus:
                                 testParams.SinusTime = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Curve:
+                            case SLTestType.Curve:
                                 testParams.CurveTime = UInt16.Parse(result.Value.ToString());
                                 break;
                         }
@@ -929,10 +929,10 @@ namespace SCME.InterfaceImplementations
                     case "SL_TimeEx":
                         switch (testParams.TestType)
                         {
-                            case VTMTestType.Ramp:
+                            case SLTestType.Ramp:
                                 testParams.RampOpeningTime = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Curve:
+                            case SLTestType.Curve:
                                 testParams.CurveAddTime = UInt16.Parse(result.Value.ToString());
                                 break;
                         }
@@ -947,7 +947,7 @@ namespace SCME.InterfaceImplementations
             return testParams;
         }
 
-        private void FillSlParameters(Types.VTM.TestParameters parameters, long testTypeId)
+        private void FillSlParameters(Types.SL.TestParameters parameters, long testTypeId)
         {
             var results = new List<Tuple<string, float?, float?>>();
             FillParametersResults(testTypeId, results);
@@ -1078,7 +1078,7 @@ namespace SCME.InterfaceImplementations
                         ProfileTS = profileDict.TS,
                         Version = profileDict.Version,
                         GateTestParameters = new List<Types.GTU.TestParameters>(),
-                        VTMTestParameters = new List<Types.VTM.TestParameters>(),
+                        VTMTestParameters = new List<Types.SL.TestParameters>(),
                         BVTTestParameters = new List<Types.BVT.TestParameters>(),
                         DvDTestParameterses = new List<Types.dVdt.TestParameters>(),
                         ATUTestParameters = new List<Types.ATU.TestParameters>(),
@@ -1097,7 +1097,7 @@ namespace SCME.InterfaceImplementations
                         if (gate != null)
                             Result.GateTestParameters.Add(gate);
 
-                        var sl = baseTestParametersAndNormativese as Types.VTM.TestParameters;
+                        var sl = baseTestParametersAndNormativese as Types.SL.TestParameters;
                         if (sl != null)
                             Result.VTMTestParameters.Add(sl);
 

@@ -132,9 +132,9 @@ namespace SCME.Types.Profiles
         [DataMember]
         public GTU.ResultNormatives NormativesGate { get; set; }
         [DataMember]
-        public VTM.TestParameters ParametersVTM { get; set; }
+        public SL.TestParameters ParametersVTM { get; set; }
         [DataMember]
-        public VTM.ResultNormatives NormativesVTM { get; set; }
+        public SL.ResultNormatives NormativesVTM { get; set; }
         [DataMember]
         public BVT.TestParameters ParametersBVT { get; set; }
         [DataMember]
@@ -159,7 +159,7 @@ namespace SCME.Types.Profiles
         private void ConstructorInit()
         {
             ParametersGate = new GTU.TestParameters();
-            ParametersVTM = new VTM.TestParameters();
+            ParametersVTM = new SL.TestParameters();
             ParametersBVT = new BVT.TestParameters();
             ParametersComm = new Commutation.ModuleCommutationType();
             ParametersClamp = 5.0f;
@@ -167,7 +167,7 @@ namespace SCME.Types.Profiles
 
 
             NormativesGate = new GTU.ResultNormatives();
-            NormativesVTM = new VTM.ResultNormatives();
+            NormativesVTM = new SL.ResultNormatives();
             NormativesBVT = new BVT.ResultNormatives();
         }
 
@@ -181,7 +181,7 @@ namespace SCME.Types.Profiles
                 ProfileName = Name,
                 Version = Version,
                 GateTestParameters = new List<GTU.TestParameters>(),
-                VTMTestParameters = new List<VTM.TestParameters>(),
+                VTMTestParameters = new List<SL.TestParameters>(),
                 BVTTestParameters = new List<BVT.TestParameters>(),
                 DvDTestParameterses = new List<dVdt.TestParameters>(),
                 ATUTestParameters = new List<ATU.TestParameters>(),
@@ -201,7 +201,7 @@ namespace SCME.Types.Profiles
                     case GTU.TestParameters gate:
                         profileItem.GateTestParameters.Add(gate);
                         break;
-                    case VTM.TestParameters sl:
+                    case SL.TestParameters sl:
                         profileItem.VTMTestParameters.Add(sl);
                         break;
                     case BVT.TestParameters bvt:

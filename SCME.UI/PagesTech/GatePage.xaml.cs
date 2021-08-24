@@ -258,7 +258,7 @@ namespace SCME.UI.PagesTech
                 CommutationType = ConverterUtil.MapCommutationType(CommType),
                 Position = ConverterUtil.MapModulePosition(ModPosition)
             };
-            Types.VTM.TestParameters ParamSL = new Types.VTM.TestParameters
+            Types.SL.TestParameters ParamSL = new Types.SL.TestParameters
             {
                 IsEnabled = false
             };
@@ -274,20 +274,12 @@ namespace SCME.UI.PagesTech
             {
                 IsEnabled = false
             };
-            Types.IH.TestParameters ParamIH = new Types.IH.TestParameters
-            {
-                IsEnabled = false
-            };
-            Types.RCC.TestParameters ParamRCC = new Types.RCC.TestParameters
-            {
-                IsEnabled = false
-            };
             Types.TOU.TestParameters ParamTOU = new Types.TOU.TestParameters
             {
                 IsEnabled = false
             };
             ClampParameters.SkipClamping = Cache.Clamp.ManualClamping;
-            if (!Cache.Net.Start(Parameters, ParamSL, ParamBVT, ParamATU, ParamQrrTq, ParamIH, ParamRCC, ParamCommutation, ClampParameters, ParamTOU))
+            if (!Cache.Net.Start(Parameters, ParamSL, ParamBVT, ParamATU, ParamQrrTq, ParamCommutation, ClampParameters, ParamTOU))
                 return;
             Status_Clear();
             IsRunning = true;

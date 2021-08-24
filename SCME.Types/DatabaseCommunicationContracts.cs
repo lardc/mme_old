@@ -63,7 +63,7 @@ namespace SCME.Types
         public TestResults[] Gate { get; set; }
 
         [DataMember]
-        public VTM.TestResults[] VTM { get; set; }
+        public SL.TestResults[] VTM { get; set; }
 
         [DataMember]
         public BVT.TestResults[] BVT { get; set; }
@@ -83,7 +83,7 @@ namespace SCME.Types
         public TestParameters[] GateTestParameters { get; set; }
 
         [DataMember]
-        public VTM.TestParameters[] VTMTestParameters { get; set; }
+        public SL.TestParameters[] VTMTestParameters { get; set; }
 
         [DataMember]
         public BVT.TestParameters[] BVTTestParameters { get; set; }
@@ -134,7 +134,7 @@ namespace SCME.Types
         public List<TestParameters> GateTestParameters { get; set; }
 
         [DataMember]
-        public List<VTM.TestParameters> VTMTestParameters { get; set; }
+        public List<SL.TestParameters> VTMTestParameters { get; set; }
 
         [DataMember]
         public List<BVT.TestParameters> BVTTestParameters { get; set; }

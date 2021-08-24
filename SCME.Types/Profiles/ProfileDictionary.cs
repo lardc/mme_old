@@ -299,8 +299,8 @@ namespace SCME.Types.Profiles
                         IsEnabled = bool.Parse(nodeVtm.Attributes[0].Value),
                         IsSelfTest = false,
                         TestType =
-                            (VTM.VTMTestType)
-                                Enum.Parse(typeof(VTM.VTMTestType), nodeVtm.ChildNodes[0].Attributes[0].Value),
+                            (SL.SLTestType)
+                                Enum.Parse(typeof(SL.SLTestType), nodeVtm.ChildNodes[0].Attributes[0].Value),
                         RampCurrent =
                             ushort.Parse(nodeVtm.ChildNodes[0].Attributes[1].Value,
                                 CultureInfo.InvariantCulture),

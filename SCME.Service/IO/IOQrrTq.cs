@@ -120,19 +120,19 @@ namespace SCME.Service.IO
                     {
                         switch (State)
                         {
-                            case (ushort)HWDeviceState.DS_None:
+                            case (ushort)HWDeviceState.None:
                                 CallAction(ACT_ENABLE_POWER);
 
                                 //из данного состояния QrrTq должен перейти в состояние DS_PowerOn
-                                WaitedState = HWDeviceState.DS_PowerOn;
+                                WaitedState = HWDeviceState.PowerOn;
                                 break;
 
-                            case (ushort)HWDeviceState.DS_PowerOn:
+                            case (ushort)HWDeviceState.PowerOn:
                                 //из данного состояния QrrTq должен перейти в состояние DS_Ready
-                                WaitedState = HWDeviceState.DS_Ready;
+                                WaitedState = HWDeviceState.Ready;
                                 break;
 
-                            case (ushort)HWDeviceState.DS_Ready:
+                            case (ushort)HWDeviceState.Ready:
                                 //блок QrrTq перешёл в состояние DS_Ready - завершаем процесс инициализации
                                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
                                 End = true;
@@ -145,25 +145,25 @@ namespace SCME.Service.IO
                         //состояние блока QrrTq отличается от ожидаемого: ожидалось состояние WaitedState, а по факту оказалось состояние State
                         switch (State)
                         {
-                            case (ushort)HWDeviceState.DS_Fault:
+                            case (ushort)HWDeviceState.Fault:
                                 //сбрасываем состояние DS_Fault
                                 CallAction(ACT_CLR_FAULT);
 
                                 //после сброса состояния DS_Fault оно всегда будет DS_None
-                                WaitedState = HWDeviceState.DS_None;
+                                WaitedState = HWDeviceState.None;
                                 break;
 
-                            case (ushort)HWDeviceState.DS_Ready:
+                            case (ushort)HWDeviceState.Ready:
                                 //сознательно не сбрасываем warning ибо это всегда делается в начале MeasurementLogicRoutine
                                 m_ConnectionState = DeviceConnectionState.ConnectionSuccess;
                                 End = true;
                                 FireConnectionEvent(m_ConnectionState, "QrrTq successfully initialized.", LogMessageType.Milestone);
                                 break;
 
-                            case (ushort)HWDeviceState.DS_InProcess:
+                            case (ushort)HWDeviceState.InProcess:
                                 CallAction(ACT_STOP);
                                 CallAction(ACT_DISABLE_POWER);
-                                WaitedState = HWDeviceState.DS_None;
+                                WaitedState = HWDeviceState.None;
                                 break;
 
                             default:
@@ -215,7 +215,7 @@ namespace SCME.Service.IO
         {
             var devState = (Types.QrrTq.HWDeviceState)ReadRegister(REG_DEV_STATE);
 
-            return !((devState == Types.QrrTq.HWDeviceState.DS_Fault) || (devState == Types.QrrTq.HWDeviceState.DS_Disabled) || (m_State == DeviceState.InProcess));
+            return !((devState == Types.QrrTq.HWDeviceState.Fault) || (devState == Types.QrrTq.HWDeviceState.Disabled) || (m_State == DeviceState.InProcess));
         }
 
         internal DeviceState Start(TestParameters Parameters, Types.Commutation.TestParameters commParameters)
@@ -236,13 +236,13 @@ namespace SCME.Service.IO
 
                 switch (State)
                 {
-                    case (ushort)HWDeviceState.DS_Fault:
+                    case (ushort)HWDeviceState.Fault:
                         ushort faultReason = ReadRegister(REG_FAULT_REASON);
                         FireNotificationEvent((ushort)HWProblemReason.None, (ushort)HWWarningReason.None, faultReason, (ushort)HWDisableReason.None);
 
                         break;
 
-                    case (ushort)HWDeviceState.DS_Disabled:
+                    case (ushort)HWDeviceState.Disabled:
                         ushort disableReason = ReadRegister(REG_DISABLE_REASON);
                         FireNotificationEvent((ushort)HWProblemReason.None, (ushort)HWWarningReason.None, (ushort)HWFaultReason.None, disableReason);
 
@@ -272,7 +272,7 @@ namespace SCME.Service.IO
                 ushort devState = ReadRegister(REG_DEV_STATE);
 
                 //блок QrrTq перешёл в состояние DS_Fault
-                if (devState == (ushort)HWDeviceState.DS_Fault)
+                if (devState == (ushort)HWDeviceState.Fault)
                 {
                     ushort faultReason = ReadRegister(REG_FAULT_REASON);
 
@@ -282,7 +282,7 @@ namespace SCME.Service.IO
                 }
 
                 //блок QrrTq перешёл в состояние DS_Disabled
-                if (devState == (ushort)HWDeviceState.DS_Disabled)
+                if (devState == (ushort)HWDeviceState.Disabled)
                 {
                     ushort disableReason = ReadRegister(REG_DISABLE_REASON);
 
@@ -292,7 +292,7 @@ namespace SCME.Service.IO
                 }
 
                 //блок QrrTq штатно завершил процесс измерения
-                if (devState == (ushort)HWDeviceState.DS_Ready)
+                if (devState == (ushort)HWDeviceState.Ready)
                 {
                     ushort problem = ReadRegister(REG_PROBLEM);
                     ushort warning = ReadRegister(REG_WARNING);
@@ -409,7 +409,7 @@ namespace SCME.Service.IO
                         //если значение регистра REG_FINISHED содержит значение 1 (OPRESULT_OK), то можно считать оцифрованные значения тока из EP_SlaveData и результаты измерений из соответствующих регистров
                         ushort finishedResult = ReadRegister(REG_FINISHED);
 
-                        if ((HWFinishedResult)finishedResult == HWFinishedResult.Ok)
+                        if ((HWOperationResult)finishedResult == HWOperationResult.OK)
                         {
                             m_Result.Idc = ReadRegisterS(REG_RES_IDC);
 
@@ -455,14 +455,14 @@ namespace SCME.Service.IO
         internal void ClearFault()
         {
             //очистка ошибки блока QrrTq
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq try to clear fault");
+            SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq try to clear fault");
             CallAction(ACT_CLR_FAULT);
         }
 
         private void ClearWarning()
         {
             //очистка предупреждения блока QrrTq
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq try to clear warning");
+            SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq try to clear warning");
             CallAction(ACT_CLR_WARNING);
         }
 
@@ -475,7 +475,7 @@ namespace SCME.Service.IO
                 value = m_IOAdapter.Read16(m_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @ReadRegister, address {0}, value {1}", Address, value));
+                SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -487,7 +487,7 @@ namespace SCME.Service.IO
 
             if (!m_IsEmulation) value = m_IOAdapter.Read16S(m_Node, Address);
 
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @ReadRegisterS, address {0}, value {1}", Address, value));
+            if (!SkipJournal) SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @ReadRegisterS, address {0}, value {1}", Address, value));
 
             return value;
         }
@@ -497,7 +497,7 @@ namespace SCME.Service.IO
             if (Result != null)
             {
                 //чтение массивов даннных тока и напряжения
-                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq @ReadArrays begin");
+                SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq @ReadArrays begin");
 
                 //читаем массив данных для построения графика тока и напряжения
                 Result.CurrentData.Clear();
@@ -509,14 +509,14 @@ namespace SCME.Service.IO
                     Result.VoltageData = m_IOAdapter.ReadArrayFast16S(m_Node, EP_Voltage).ToList();
                 }
 
-                SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq @ReadArray end");
+                SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, "QrrTq @ReadArray end");
             }
         }
 
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         //запись в регистр с номером Address ushort значения Value
         {
-            if (!SkipJournal) SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @WriteRegister, address {0}, value {1}", Address, Value));
+            if (!SkipJournal) SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (m_IsEmulation) return;
 
@@ -525,7 +525,7 @@ namespace SCME.Service.IO
 
         internal void CallAction(ushort Action)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @Call, action {0}", Action));
+            SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, string.Format("QrrTq @Call, action {0}", Action));
 
             if (m_IsEmulation) return;
 
@@ -634,13 +634,13 @@ namespace SCME.Service.IO
         #region Events
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, type, Message);
+            SystemHost.AppendLog(ComplexParts.QrrTq, type, Message);
             m_Communication.PostDeviceConnectionEvent(ComplexParts.QrrTq, State, Message);
         }
 
         private void FireNotificationEvent(ushort Problem, ushort Warning, ushort Fault, ushort Disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Error, string.Format("QrrTq device notification: problem {0}, warning {1}, fault {2}, disable {3}", Problem, Warning, Fault, Disable));
+            SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Error, string.Format("QrrTq device notification: problem {0}, warning {1}, fault {2}, disable {3}", Problem, Warning, Fault, Disable));
             m_Communication.PostQrrTqNotificationEvent(Problem, Warning, Fault, Disable);
         }
 
@@ -648,20 +648,20 @@ namespace SCME.Service.IO
         {
             string message = string.Format("QrrTq test state {0}", State);
 
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, message);
+            SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, message);
             m_Communication.PostQrrTqEvent(State, Result);
         }
 
         private void FireExceptionEvent(string Message)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Error, Message);
+            SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Error, Message);
             m_Communication.PostExceptionEvent(ComplexParts.QrrTq, Message);
         }
 
         private void FireKindOfFreezingEvent(ushort KindOfFreezing)
         {
             string message = string.Format("QrrTq KindOfFreezing {0}", KindOfFreezing);
-            SystemHost.Journal.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, message);
+            SystemHost.AppendLog(ComplexParts.QrrTq, LogMessageType.Info, message);
             m_Communication.PostQrrTqKindOfFreezingEvent(KindOfFreezing);
         }
         #endregion

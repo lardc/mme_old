@@ -11,7 +11,7 @@ using SCME.Types.BVT;
 using SCME.Types.Commutation;
 using SCME.Types.dVdt;
 using SCME.Types.Profiles;
-using SCME.Types.VTM;
+using SCME.Types.SL;
 
 namespace SCME.InterfaceImplementations.Common.DbService
 {
@@ -732,10 +732,10 @@ namespace SCME.InterfaceImplementations.Common.DbService
             }
         }
 
-        private Types.VTM.TestParameters FillSlConditions(long testTypeId)
+        private Types.SL.TestParameters FillSlConditions(long testTypeId)
         {
             var results = new Dictionary<string, object>(9);
-            var testParams = new Types.VTM.TestParameters() {IsEnabled = true, TestTypeId = testTypeId};
+            var testParams = new Types.SL.TestParameters() {IsEnabled = true, TestTypeId = testTypeId};
 
             FillOrder(testTypeId, testParams);
 
@@ -751,7 +751,7 @@ namespace SCME.InterfaceImplementations.Common.DbService
                         testParams.IsEnabled = Convert.ToBoolean(result.Value);
                         break;
                     case "SL_Type":
-                        testParams.TestType = (Types.VTM.VTMTestType) (Enum.Parse(typeof(Types.VTM.VTMTestType), result.Value.ToString()));
+                        testParams.TestType = (Types.SL.SLTestType) (Enum.Parse(typeof(Types.SL.SLTestType), result.Value.ToString()));
                         break;
                     case "SL_FS":
                         testParams.UseFullScale = Boolean.Parse(result.Value.ToString());
@@ -762,13 +762,13 @@ namespace SCME.InterfaceImplementations.Common.DbService
                     case "SL_ITM":
                         switch (testParams.TestType)
                         {
-                            case VTMTestType.Ramp:
+                            case SLTestType.Ramp:
                                 testParams.RampCurrent = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Sinus:
+                            case SLTestType.Sinus:
                                 testParams.SinusCurrent = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Curve:
+                            case SLTestType.Curve:
                                 testParams.CurveCurrent = UInt16.Parse(result.Value.ToString());
                                 break;
                         }
@@ -777,13 +777,13 @@ namespace SCME.InterfaceImplementations.Common.DbService
                     case "SL_Time":
                         switch (testParams.TestType)
                         {
-                            case VTMTestType.Ramp:
+                            case SLTestType.Ramp:
                                 testParams.RampTime = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Sinus:
+                            case SLTestType.Sinus:
                                 testParams.SinusTime = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Curve:
+                            case SLTestType.Curve:
                                 testParams.CurveTime = UInt16.Parse(result.Value.ToString());
                                 break;
                         }
@@ -798,10 +798,10 @@ namespace SCME.InterfaceImplementations.Common.DbService
                     case "SL_TimeEx":
                         switch (testParams.TestType)
                         {
-                            case VTMTestType.Ramp:
+                            case SLTestType.Ramp:
                                 testParams.RampOpeningTime = UInt16.Parse(result.Value.ToString());
                                 break;
-                            case VTMTestType.Curve:
+                            case SLTestType.Curve:
                                 testParams.CurveAddTime = UInt16.Parse(result.Value.ToString());
                                 break;
                         }
@@ -818,7 +818,7 @@ namespace SCME.InterfaceImplementations.Common.DbService
             return testParams;
         }
 
-        private void FillSlParameters(Types.VTM.TestParameters parameters, long testTypeId)
+        private void FillSlParameters(Types.SL.TestParameters parameters, long testTypeId)
         {
             var results = new List<Tuple<string, float?, float?>>();
             FillParametersResults(testTypeId, results);

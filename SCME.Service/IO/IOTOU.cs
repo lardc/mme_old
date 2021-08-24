@@ -36,7 +36,7 @@ namespace SCME.Service.IO
             _Node = (ushort)Settings.Default.TOUNode;
             _Result = new TestResults();
 
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Milestone,
+            SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Milestone,
                                          String.Format("TOU created. Emulation mode: {0}", _IsTOUEmulation));
         }
 
@@ -191,7 +191,7 @@ namespace SCME.Service.IO
                 if (devState != HWDeviceState.Ready)
                 {
                     string error = "Launch test, TOU State not Ready, function Start";
-                    SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Error, error);
+                    SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Error, error);
                     throw new Exception(error);
                 }
             }
@@ -217,14 +217,14 @@ namespace SCME.Service.IO
 
         internal void ClearFault()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info, "TOU fault cleared");
+            SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Info, "TOU fault cleared");
 
             CallAction(ACT_CLEAR_FAULT);
         }
 
         private void ClearWarning()
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info, "TOU warning cleared");
+            SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Info, "TOU warning cleared");
 
             CallAction(ACT_CLEAR_WARNING);
         }
@@ -237,7 +237,7 @@ namespace SCME.Service.IO
                 value = _IOAdapter.Read16(_Node, Address);
 
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Info,
                                          string.Format("TOU @ReadRegister, address {0}, value {1}", Address, value));
 
             return value;
@@ -246,7 +246,7 @@ namespace SCME.Service.IO
         internal void WriteRegister(ushort Address, ushort Value, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Info,
                                          string.Format("TOU @WriteRegister, address {0}, value {1}", Address, Value));
 
             if (_IsTOUEmulation)
@@ -258,7 +258,7 @@ namespace SCME.Service.IO
         internal void CallAction(ushort Action, bool SkipJournal = false)
         {
             if (!SkipJournal)
-                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info,
+                SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Info,
                                          string.Format("TOU @Call, action {0}", Action));
 
             if (_IsTOUEmulation)
@@ -270,7 +270,7 @@ namespace SCME.Service.IO
             }
             catch(Exception ex)
             {
-                SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Error, ex.ToString());
+                SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Error, ex.ToString());
             }
         }
 
@@ -372,14 +372,14 @@ namespace SCME.Service.IO
         //        value = m_IOAdapter.Read16S(m_Node, Address);
 
         //    if (!SkipJournal)
-        //        SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+        //        SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Note,
         //                                 string.Format("TOU @ReadRegisterS, address {0}, value {1}", Address, value));
 
         //    return value;
         //}
         //internal void WriteCalibrationParams(CalibrationParams Parameters)
         //{
-        //    SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+        //    SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Note,
         //                                 "TOU @WriteCalibrationParams begin");
 
         //    //WriteRegister(REG_V_FINE_N, Parameters.VFineN, true);
@@ -394,13 +394,13 @@ namespace SCME.Service.IO
         //    //if (!m_IsdVdtEmulation)
         //    //    m_IOAdapter.Call(m_Node, ACT_SAVE_TO_ROM);
 
-        //    SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+        //    SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Note,
         //                                 "TOU @WriteCalibrationParams end");
         //}
 
         //internal CalibrationParams ReadCalibrationParams()
         //{
-        //    SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+        //    SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Note,
         //                                 "TOU @ReadCalibrationParams begin");
 
         //    var parameters = new CalibrationParams
@@ -415,7 +415,7 @@ namespace SCME.Service.IO
         //        //V2500 = ReadRegister(REG_G2500, true)
         //    };
 
-        //    SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Note,
+        //    SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Note,
         //                                 "TOU @ReadCalibrationParams end");
 
         //    return parameters;
@@ -524,7 +524,7 @@ namespace SCME.Service.IO
 
         private void FireConnectionEvent(DeviceConnectionState State, string Message, LogMessageType type = LogMessageType.Info)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, type, Message);
+            SystemHost.AppendLog(ComplexParts.TOU, type, Message);
             _Communication.PostDeviceConnectionEvent(ComplexParts.TOU, State, Message);
         }
 
@@ -535,13 +535,13 @@ namespace SCME.Service.IO
             if (State == DeviceState.Success)
                 message = string.Format("TOU test result {0} {1} {2}", Result.ITM, Result.TGD, Result.TGT);
 
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Info, message);
+            SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Info, message);
             _Communication.PostTOUEvent(State, Result);
         }
 
         private void FireNotificationEvent(HWProblemReason problem, HWWarningReason warning, HWFaultReason fault, HWDisableReason disable)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Error,
+            SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Error,
                                          string.Format(
                                              "TOU device notification: problem None, warning {0}, fault {1}, disable {2}",
                                              warning, fault, disable));
@@ -551,7 +551,7 @@ namespace SCME.Service.IO
 
         private void FireExceptionEvent(string Message)
         {
-            SystemHost.Journal.AppendLog(ComplexParts.TOU, LogMessageType.Error, Message);
+            SystemHost.AppendLog(ComplexParts.TOU, LogMessageType.Error, Message);
             _Communication.PostExceptionEvent(ComplexParts.TOU, Message);
         }
 

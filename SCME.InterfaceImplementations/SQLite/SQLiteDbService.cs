@@ -8,7 +8,7 @@ using System.ServiceModel;
 using SCME.InterfaceImplementations.Common;
 using SCME.Types.DataContracts;
 
-namespace SCME.InterfaceImplementations.NewImplement.SQLite
+namespace SCME.InterfaceImplementations.SQLite
 {
     public class SQLiteDbService : Common.DbService.DbService<SQLiteCommand, SQLiteConnection>
     {

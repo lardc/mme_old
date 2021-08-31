@@ -52,7 +52,7 @@ namespace SCME.ProfileBuilder.Pages
             var connectionStringBuilder = GetSqlConnectionStringBuilder;
           
             var sqlConnection = new SqlConnection(connectionStringBuilder.ToString());
-            var service = new InterfaceImplementations.NewImplement.MSSQL.MSSQLDbService(sqlConnection);
+            var service = new InterfaceImplementations.MSSQL.MSSQLDbService(sqlConnection);
             service.Migrate();
             return service;
         }
@@ -62,7 +62,7 @@ namespace SCME.ProfileBuilder.Pages
             var connectionStringBuilder = GetSQLiteConnectionStringBuilder;
 
             var sqliteConnection = new SQLiteConnection(connectionStringBuilder.ToString());
-            var service = new InterfaceImplementations.NewImplement.SQLite.SQLiteDbService(sqliteConnection);
+            var service = new InterfaceImplementations.SQLite.SQLiteDbService(sqliteConnection);
             service.Migrate();
             return service;
         }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Windows;
-using System.Windows.Media.Animation;
-using System.Windows.Navigation;
-using SCME.InterfaceImplementations.NewImplement.MSSQL;
-using SCME.ProfileBuilder.Pages;
+﻿using SCME.ProfileBuilder.Pages;
 using SCME.ProfileBuilder.Properties;
 using SCME.WpfControlLibrary;
-using SCME.WpfControlLibrary.CustomControls;
-using SCME.WpfControlLibrary.IValueConverters;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace SCME.ProfileBuilder
 {

@@ -68,7 +68,7 @@ namespace SCME.Agent
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Не удалось подключиться к SCME.UpdateServer. Запуск установленной версии ПО", "Ошибка");
+                MessageBox.Show("Не удалось подключиться к SCME.UpdateServer. Запуск установленной версии ПО", "Уведомление");
                 //Запись логов ошибки
                 if (Directory.Exists("Logs"))
                 {

@@ -1,6 +1,6 @@
 ﻿using SCME.DatabaseServer.Properties;
 using SCME.InterfaceImplementations;
-using SCME.InterfaceImplementations.NewImplement.MSSQL;
+using SCME.InterfaceImplementations.MSSQL;
 using SCME.Types.Utils;
 using System;
 using System.Data.SqlClient;

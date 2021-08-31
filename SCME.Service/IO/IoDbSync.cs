@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using SCME.InterfaceImplementations;
-using SCME.InterfaceImplementations.NewImplement.SQLite;
-using SCME.Service.Properties;
+﻿using SCME.InterfaceImplementations.SQLite;
 using SCME.Types;
 using SCME.Types.Database;
 using SCME.Types.DatabaseServer;
-using SCME.Types.Interfaces;
 using SCME.Types.Profiles;
 using SCME.UIServiceConfig.Properties;
-
-// ReSharper disable InvertIf
+using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SCME.Service.IO
 {

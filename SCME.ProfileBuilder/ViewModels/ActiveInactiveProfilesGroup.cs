@@ -1,12 +1,10 @@
-﻿using System;
+﻿using PropertyChanged;
+using SCME.Types.Database;
+using SCME.Types.Profiles;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
-using PropertyChanged;
-using SCME.InterfaceImplementations.NewImplement.SQLite;
-using SCME.Types.Database;
-using SCME.Types.Profiles;
 
 namespace SCME.ProfileBuilder.ViewModels
 {

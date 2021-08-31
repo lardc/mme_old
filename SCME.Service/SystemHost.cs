@@ -1,7 +1,7 @@
 ﻿using NLog;
 using NLog.Config;
 using NLog.Targets;
-using SCME.InterfaceImplementations.NewImplement.SQLite;
+using SCME.InterfaceImplementations.SQLite;
 using SCME.Logger;
 using SCME.Service.Properties;
 using SCME.Types;
@@ -103,23 +103,23 @@ namespace SCME.Service
 
         private static void HostDbService()
         {
-            _SQLiteDbServiceHost = new ServiceHost( _dbService = new SQLiteDbService(new SQLiteConnection(new SQLiteConnectionStringBuilder()
+            _SQLiteDbServiceHost = new ServiceHost(_dbService = new SQLiteDbService(new SQLiteConnection(new SQLiteConnectionStringBuilder()
             {
                 DataSource = Settings.Default.ResultsDatabasePath,
                 SyncMode = SynchronizationModes.Full,
                 JournalMode = SQLiteJournalModeEnum.Truncate,
                 FailIfMissing = true
             }.ToString())));
-             var behaviour = _SQLiteDbServiceHost.Description.Behaviors.Find<ServiceBehaviorAttribute>();
-                behaviour.InstanceContextMode = InstanceContextMode.Single;
+            var behaviour = _SQLiteDbServiceHost.Description.Behaviors.Find<ServiceBehaviorAttribute>();
+            behaviour.InstanceContextMode = InstanceContextMode.Single;
 
             if (SCME.UIServiceConfig.Properties.Settings.Default.IsLocal)
-            
-            if (UIServiceConfig.Properties.Settings.Default.IsLocal)
-                _dbService.Migrate();
-            
-            
-    
+
+                if (UIServiceConfig.Properties.Settings.Default.IsLocal)
+                    _dbService.Migrate();
+
+
+
             try
             {
                 _SQLiteDbServiceHost.Open();
@@ -128,10 +128,10 @@ namespace SCME.Service
             {
                 AppendLog(ComplexParts.Service, LogMessageType.Error, $"New implement db local service not host: {ex.Message}");
             }
-            
-            AppendLog(ComplexParts.Service, LogMessageType.Info, "New implement db local service run");
+
+            AppendLog(ComplexParts.Service, LogMessageType.Info, "DB local service run");
         }
-        
+
         internal static bool Initialize()
         {
             try
@@ -171,18 +171,18 @@ namespace SCME.Service
                 return false;
             }
 
-//            try
-//            {
-//                SQLiteDatabaseService dbForMigration = new SQLiteDatabaseService(Settings.Default.ResultsDatabasePath);
-//                dbForMigration.Open();
-//                dbForMigration.Migrate();
-//                dbForMigration.Close();
-//            }
-//            catch (Exception ex)
-//            {
-//                AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Migrate database error: {0}", ex.Message));
-//                return false;
-//            }
+            //            try
+            //            {
+            //                SQLiteDatabaseService dbForMigration = new SQLiteDatabaseService(Settings.Default.ResultsDatabasePath);
+            //                dbForMigration.Open();
+            //                dbForMigration.Migrate();
+            //                dbForMigration.Close();
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                AppendLog(ComplexParts.Service, LogMessageType.Error, String.Format("Migrate database error: {0}", ex.Message));
+            //                return false;
+            //            }
 
             try
             {
@@ -197,19 +197,19 @@ namespace SCME.Service
                 //нам ещё не известно как завершится процесс синхронизации данных, поэтому
                 IsSyncedWithServer = null;
 
-//                switch (Settings.Default.IsLocal)
-//                {
-//                    case true:
-//                        //синхронизация отключена, уведомляем UI, что стадия синхронизации баз данных пройдена
-//                        AfterSyncWithServerRoutineHandler("Synchronization of the local database with a central database is prohibited by parameter DisableResultDB");
-//                        break;
-//
-//                    default:
-//                        //запускаем в потоке синхронизацию результатов измерений и профилей 
-//                        Results.SyncWithServer(AfterSyncWithServerRoutineHandler);
-//                        break;
-//                }
-                   
+                //                switch (Settings.Default.IsLocal)
+                //                {
+                //                    case true:
+                //                        //синхронизация отключена, уведомляем UI, что стадия синхронизации баз данных пройдена
+                //                        AfterSyncWithServerRoutineHandler("Synchronization of the local database with a central database is prohibited by parameter DisableResultDB");
+                //                        break;
+                //
+                //                    default:
+                //                        //запускаем в потоке синхронизацию результатов измерений и профилей 
+                //                        Results.SyncWithServer(AfterSyncWithServerRoutineHandler);
+                //                        break;
+                //                }
+
                 try
                 {
                     ms_ControlService = new ExternalControlServer();
@@ -228,8 +228,8 @@ namespace SCME.Service
                     AppendLog(ComplexParts.Service, LogMessageType.Error, $"SQLite database error: {ex?.InnerException?.ToString() ?? ex.ToString()}");
                     return false;
                 }
-               
-                
+
+
                 try
                 {
                     ms_DatabaseServiceHost.AddServiceEndpoint(typeof(IDatabaseCommunicationService), new NetTcpBinding("DefaultTcpBinding"), Settings.Default.DBServiceExternalEndpoint);

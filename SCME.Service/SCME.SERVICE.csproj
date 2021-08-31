@@ -122,13 +122,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BroadcastCommunication.cs" />
+    <Compile Include="DatabaseServer.cs" />
     <Compile Include="IO\IOATU.cs" />
     <Compile Include="IO\IoDbSync.cs" />
     <Compile Include="IO\IOTOU.cs" />
     <Compile Include="IO\IOdVdt.cs" />
     <Compile Include="IO\IOQrrTq.cs" />
     <Compile Include="MaintenanceServer.cs" />
-    <Compile Include="DatabaseServer.cs" />
     <Compile Include="IO\IOClamping.cs" />
     <Compile Include="IO\IOBvt.cs" />
     <Compile Include="IO\IOAdapter.cs" />

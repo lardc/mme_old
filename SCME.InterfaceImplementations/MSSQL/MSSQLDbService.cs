@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace SCME.InterfaceImplementations.NewImplement.MSSQL
+namespace SCME.InterfaceImplementations.MSSQL
 {
     public class MSSQLDbService : Common.DbService.DbService<SqlCommand, SqlConnection>  
     {

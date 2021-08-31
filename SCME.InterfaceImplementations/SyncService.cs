@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.ServiceModel;
 using System.Threading;
-using SCME.InterfaceImplementations.NewImplement.SQLite;
+using SCME.InterfaceImplementations.SQLite;
 using SCME.Types;
 using SCME.Types.DatabaseServer;
 using SCME.Types.Interfaces;

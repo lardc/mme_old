@@ -1365,18 +1365,18 @@ namespace SCME.Service
             try
             {
                 ThreadPool.QueueUserWorkItem(delegate
+                {
+                    try
                     {
-                        try
-                        {
-                            var devId = SystemHost.Results.WriteResult(Item, Errors);
-                            _monitoringSender.Test(Item.ProfileKey, devId);
-                            
-                        }
-                        catch (Exception ex)
-                        {
-                            SystemHost.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
-                        }
-                    });
+                        var devId = SystemHost.Results.WriteResult(Item, Errors);
+                        _monitoringSender.Test(Item.ProfileKey, devId);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        SystemHost.AppendLog(ComplexParts.Database, LogMessageType.Error, ex.Message);
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -1388,7 +1388,7 @@ namespace SCME.Service
         {
             try
             {
-                return  SystemHost.Results.SaveProfiles(profileItems, Settings.Default.MMECode);
+                return SystemHost.Results.SaveProfiles(profileItems, Settings.Default.MMECode);
             }
             catch (Exception ex)
             {

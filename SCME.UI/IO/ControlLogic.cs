@@ -23,9 +23,6 @@ namespace SCME.UI.IO
     {
         private const int REQUEST_DELAY_MS = 100;
 
-        private const string CONTROL_SERVER_ENDPOINT_NAME = "SCME.Service.ExternalControl";
-        private const string DATABASE_SERVER_ENDPOINT_NAME = "SCME.Service.DatabaseServer";
-
         private readonly ExternalControlCallbackHost m_CallbackHost;
         private readonly DispatcherTimer m_NetPingTimer;
         private ControlServerProxy m_ControlClient;
@@ -348,10 +345,9 @@ namespace SCME.UI.IO
                 {
                     ShowFaultError("Read device RT class error", ex);
                 }
-                catch (CommunicationException ex)
+                catch (CommunicationException)
                 {
-                    throw ex;
-                    //ProcessCommunicationException(ex);
+                    throw;
                 }
             }
 
@@ -372,16 +368,15 @@ namespace SCME.UI.IO
                 {
                     ShowFaultError("Read device class error", ex);
                 }
-                catch (CommunicationException ex)
+                catch (CommunicationException)
                 {
-                    throw ex;
-                    //ProcessCommunicationException(ex);
+                    throw;
                 }
             }
 
             return result;
         }
-        
+
         private void ProcessCommunicationException(CommunicationException Ex)
         {
             Cache.Main.ConnectionLabelVisible = true;
@@ -415,7 +410,7 @@ namespace SCME.UI.IO
                             else
                                 DatabaseClient.Close();
 
-                        m_ControlClient = new ControlServerProxy(new InstanceContext( m_CallbackHost), Settings.Default.ControlService);
+                        m_ControlClient = new ControlServerProxy(new InstanceContext(m_CallbackHost), Settings.Default.ControlService);
                         DatabaseClient = new DatabaseCommunicationProxy(Settings.Default.DatabaseService);
 
                         m_ControlClient.Subscribe();
@@ -464,9 +459,9 @@ namespace SCME.UI.IO
             {
             }
             catch (CommunicationException ex)
-            
-            
-            
+
+
+
             {
                 ProcessCommunicationException(ex);
             }
@@ -738,7 +733,7 @@ namespace SCME.UI.IO
             {
                 m_ControlClient.SafetySystemOn();
             }
-            catch(FaultException<FaultData> ex)
+            catch (FaultException<FaultData> ex)
             {
                 MessageBox.Show(ex.Detail.Message);
             }
@@ -1321,7 +1316,7 @@ namespace SCME.UI.IO
 
         public void GetState()
         {
-            if(m_ControlClient == null)
+            if (m_ControlClient == null)
                 return;
             var q = m_ControlClient.IsInitialized();
         }
@@ -1346,7 +1341,7 @@ namespace SCME.UI.IO
         {
             m_QueueWorker.AddBvtUdsmUrsmReverseEvent(State, Result);
         }
-        
+
         internal void AddCommonConnectionEvent(DeviceConnectionState State, string Message)
         {
             m_QueueWorker.AddCommonConnectionEvent(State, Message);
@@ -1388,15 +1383,15 @@ namespace SCME.UI.IO
         {
             switch (channel)
             {
-                case (HeatingChannel.Top):
+                case HeatingChannel.Top:
                     m_QueueWorker.AddClampingTopTempEvent(temeprature);
                     break;
 
-                case (HeatingChannel.Bottom):
+                case HeatingChannel.Bottom:
                     m_QueueWorker.AddClampingBottomTempEvent(temeprature);
                     break;
 
-                case (HeatingChannel.Setting):
+                case HeatingChannel.Setting:
                     m_QueueWorker.AddClampingSettingTemperatureEvent(temeprature);
                     break;
             }
@@ -1424,7 +1419,7 @@ namespace SCME.UI.IO
 
         public void SyncDBAreProcessedHandler()
         {
-            throw  new NotImplementedException();
+            throw new NotImplementedException();
             //m_QueueWorker.AddSyncDbAreProcessedEvent();
         }
 

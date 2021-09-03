@@ -16,10 +16,6 @@ namespace SCME.UI.IO
         {
             var dictionary = new ProfileDictionary(profiles.Select(m => m.ToProfile()));
             Cache.Main.AreProfilesParsed = true;
-
-//            Cache.ProfileEdit = new ProfilePage(dictionary);
-//            Cache.ProfileSelection = new ProfileSelectionPage(dictionary);
-//            Cache.ProfileSelection.SetNextButtonVisibility(Cache.Main.Param);
         }
         
         public static void ImportProfilesFromDb()

@@ -4,7 +4,6 @@ using SCME.UI.PagesCommon;
 using SCME.UI.PagesTech;
 using SCME.UI.PagesUser;
 using SCME.WpfControlLibrary;
-using SCME.WpfControlLibrary.CustomControls;
 using SCME.WpfControlLibrary.Pages;
 
 namespace SCME.UI
@@ -85,14 +84,6 @@ namespace SCME.UI
             set { ms_LoginPage = value; }
         }
 
-        //internal static ProfileSelectionPage ProfileSelection { get; set; }
-        //{
-        //    get { return _ProfileSelection ?? (_ProfileSelection = new ProfileSelectionPage()); }
-        //    set { _ProfileSelection = value; }
-        //}
-
-        //internal static ProfileSelectionPage ProfileSelection { get; set; }
-
         internal static UserTestPage UserTest
         {
             get { return ms_UserTestPage ?? (ms_UserTestPage = new UserTestPage()); }
@@ -122,9 +113,6 @@ namespace SCME.UI
             get { return ms_PasswordPage ?? (ms_PasswordPage = new PasswordPage()); }
             set { ms_PasswordPage = value; }
         }
-
-        //internal static ProfilePage ProfileEdit { get; set; }
-
      
 
         internal static SLPage Sl

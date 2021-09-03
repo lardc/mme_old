@@ -6,17 +6,14 @@ using SCME.UIServiceConfig.Properties;
 using SCME.WpfControlLibrary;
 using SCME.WpfControlLibrary.CustomControls;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
@@ -48,10 +45,8 @@ namespace SCME.UI
             //Добавление обработчиков исключений
             Application.Current.DispatcherUnhandledException += DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
-            //Подгрузка ограничений
-            Constraints_Load();
             //Установка локализованной клавиатуры
-            Cache.Keyboards = new KeyboardLayouts(Path.IsPathRooted(Settings.Default.KeyboardsPath) ? Settings.Default.KeyboardsPath : Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase), Settings.Default.KeyboardsPath));
+            Cache.Keyboards = new KeyboardLayouts(Path.IsPathRooted(Settings.Default.KeyboardsPath) ? Settings.Default.KeyboardsPath : Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase), Settings.Default.KeyboardsPath));
             ResourceBinding.Scaling(0.60);
             InitializeComponent();
             VM.TechPasswordVisibility = Visibility.Collapsed;
@@ -98,6 +93,8 @@ namespace SCME.UI
                 DialogWindow.ShowDialog();
                 Application.Current.Shutdown(1);
             }
+
+            SystemHost.Initialize();
         }
 
         /// <summary>Модель представления главного окна</summary>
@@ -128,25 +125,6 @@ namespace SCME.UI
         public bool ConnectionLabelVisible
         {
             set => connectionLabel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void Constraints_Load() //Подгрузка ограничений
-        {
-            string ConstraintsPath = Path.Combine(Path.GetDirectoryName(Settings.Default.AccountsPath), "Constraints.xaml");
-            //Проверка существования файла
-            if (!File.Exists(ConstraintsPath))
-                return;
-            ResourceDictionary ResourceDictionaryUser;
-            using (FileStream Stream = new FileStream(ConstraintsPath, FileMode.Open))
-                ResourceDictionaryUser = (ResourceDictionary)XamlReader.Load(Stream);
-            ResourceDictionary ResourceDictionaryApplication = Application.Current.Resources.MergedDictionaries.First(m => m.Source.AbsolutePath.Contains("Constraints.xaml"));
-            //Перебор всех ограничений
-            foreach (object Entry in ResourceDictionaryUser)
-            {
-                DictionaryEntry DictionaryEntry = (DictionaryEntry)Entry;
-                ResourceDictionaryApplication.Remove(DictionaryEntry.Key);
-                ResourceDictionaryApplication.Add(DictionaryEntry.Key, DictionaryEntry.Value);
-            }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e) //Загрузка окна
@@ -187,11 +165,6 @@ namespace SCME.UI
             //Эмуляция блока QrrTq
             if (Settings.Default.QrrTqEmulation && Settings.Default.QrrTqIsVisible)
                 EmulationMessages.Add(Properties.Resources.QrrTq);
-            //Эмуляция блока R A-C
-            
-            //if (Settings.Default.RACEmulation && Settings.Default.RACIsVisible)
-            //    EmulationMessages.Add(Properties.Resources.RAC);
-            
             //Эмуляция блока TOU
             if (Settings.Default.TOUEmulation && Settings.Default.TOUIsVisible)
                 EmulationMessages.Add(Properties.Resources.TOU);
@@ -215,6 +188,7 @@ namespace SCME.UI
             NeedsToRestart = false;
             if (Cache.Net != null)
                 Cache.Net.Deinitialize();
+            SystemHost.Results.Close();
         }
 
         private void MainWindow_Closed(object sender, EventArgs e) //Запуск explorer.exe

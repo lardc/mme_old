@@ -135,8 +135,27 @@ namespace SCME.WpfControlLibrary.DataProviders
         {
             return UIServiceConfig.Properties.Settings.Default.ClampingSystemType switch
             {
-                ClampingSystemType.Presspack => new Dictionary<string, ModuleCommutationType>() {{nameof(ModuleCommutationType.Direct), ModuleCommutationType.Direct},},
-                ClampingSystemType.Stud => new Dictionary<string, ModuleCommutationType>() {{nameof(ModuleCommutationType.Direct), ModuleCommutationType.Direct}, {nameof(ModuleCommutationType.Reverse), ModuleCommutationType.Reverse},},
+                ClampingSystemType.Ignored => new Dictionary<string, ModuleCommutationType>()
+                {
+                    { nameof(ModuleCommutationType.Direct), ModuleCommutationType.Direct },
+                    { nameof(ModuleCommutationType.Reverse), ModuleCommutationType.Reverse },
+                    {nameof(ModuleCommutationType.MD1), ModuleCommutationType.MD1},
+                    {nameof(ModuleCommutationType.MD3), ModuleCommutationType.MD3},
+                    {nameof(ModuleCommutationType.MD4), ModuleCommutationType.MD4},
+                    {nameof(ModuleCommutationType.MD5), ModuleCommutationType.MD5},
+                    {nameof(ModuleCommutationType.MT1), ModuleCommutationType.MT1},
+                    {nameof(ModuleCommutationType.MT3), ModuleCommutationType.MT3},
+                    {nameof(ModuleCommutationType.MT4), ModuleCommutationType.MT4},
+                    {nameof(ModuleCommutationType.MT5), ModuleCommutationType.MT5},
+                    {nameof(ModuleCommutationType.MDT3), ModuleCommutationType.MDT3},
+                    {nameof(ModuleCommutationType.MDT4), ModuleCommutationType.MDT4},
+                    {nameof(ModuleCommutationType.MDT5), ModuleCommutationType.MDT5},
+                    {nameof(ModuleCommutationType.MTD3), ModuleCommutationType.MTD3},
+                    {nameof(ModuleCommutationType.MTD4), ModuleCommutationType.MTD4},
+                    {nameof(ModuleCommutationType.MTD5), ModuleCommutationType.MTD5}
+                },
+                ClampingSystemType.Presspack => new Dictionary<string, ModuleCommutationType>() {{nameof(ModuleCommutationType.Direct), ModuleCommutationType.Direct}},
+                ClampingSystemType.Stud => new Dictionary<string, ModuleCommutationType>() {{nameof(ModuleCommutationType.Direct), ModuleCommutationType.Direct}, {nameof(ModuleCommutationType.Reverse), ModuleCommutationType.Reverse}},
                 ClampingSystemType.Module => new Dictionary<string, ModuleCommutationType>()
                 {
                     {nameof(ModuleCommutationType.MD1), ModuleCommutationType.MD1},
@@ -152,7 +171,7 @@ namespace SCME.WpfControlLibrary.DataProviders
                     {nameof(ModuleCommutationType.MDT5), ModuleCommutationType.MDT5},
                     {nameof(ModuleCommutationType.MTD3), ModuleCommutationType.MTD3},
                     {nameof(ModuleCommutationType.MTD4), ModuleCommutationType.MTD4},
-                    {nameof(ModuleCommutationType.MTD5), ModuleCommutationType.MTD5},
+                    {nameof(ModuleCommutationType.MTD5), ModuleCommutationType.MTD5}
                 },
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -160,7 +179,7 @@ namespace SCME.WpfControlLibrary.DataProviders
 
         public static Visibility GetVisibilityHeightForce()
         {
-            return Settings.Default.ClampingSystemType == ClampingSystemType.Presspack ? Visibility.Visible : Visibility.Collapsed;
+            return Settings.Default.ClampingSystemType == ClampingSystemType.Presspack || Settings.Default.ClampingSystemType == ClampingSystemType.Ignored ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public static Visibility GetVisibilityModuleType()

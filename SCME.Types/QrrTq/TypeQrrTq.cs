@@ -198,7 +198,7 @@ namespace SCME.Types.QrrTq
             Mode = TMode.Qrr;
             DirectCurrent = 50;
             DCPulseWidth = 500;
-            DCRiseRate = 0.2f;
+            DCRiseRate = 2f;
             DCFallRate = TDcFallRate.r2;
             OffStateVoltage = 400;
             OsvRate = TOsvRate.r20;

@@ -48,7 +48,7 @@
     <system:Single x:Key="MaxDCRiseRate_QRRTQ">5</system:Single>
     <system:Single x:Key="MinDCRiseRate_QRRTQ">0.2</system:Single>
 
-    <system:Single x:Key="MaxOffStateVoltage_QRRTQ">5</system:Single>
+    <system:Single x:Key="MaxOffStateVoltage_QRRTQ">1000</system:Single>
     <system:Single x:Key="MinOffStateVoltage_QRRTQ">0.2</system:Single>
 
     <system:Single x:Key="MaxRampTime_SL">10000</system:Single>

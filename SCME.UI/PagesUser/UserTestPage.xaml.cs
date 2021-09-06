@@ -2113,6 +2113,7 @@ namespace SCME.UI.PagesUser
                 PositionStatus_Clear(1);
             if (Position2)
                 PositionStatus_Clear(2);
+
         }
 
         private void PositionStatus_Clear(int position)
@@ -2601,6 +2602,10 @@ namespace SCME.UI.PagesUser
             wasCurrentMore = false;
             //Cache.Net.StopMeasuringTemp();
             ClearStatus(true, true);
+
+            chartPlotter1.Children.RemoveAll(typeof(LineGraph));
+            chartPlotter2.Children.RemoveAll(typeof(LineGraph));
+
             StartFirst();
         }
 

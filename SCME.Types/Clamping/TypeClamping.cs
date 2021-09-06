@@ -8,7 +8,8 @@ namespace SCME.Types.Clamping
     {
         [EnumMember] Presspack = 0,
         [EnumMember] Stud = 1,
-        [EnumMember] Module = 2
+        [EnumMember] Module = 2,
+        [EnumMember] Ignored = 3
     }
     
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]

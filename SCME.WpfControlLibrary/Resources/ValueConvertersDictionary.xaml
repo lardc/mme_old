@@ -31,5 +31,6 @@
     <Converters:BvtUdsmUrsmIdsmToVisibilityConverter x:Key="bvtUdsmUrsmIdsmToVisibilityConverter" />
     <Converters:ModuleTypeConverter x:Key="ModuleTypeConverter" />
 
+    <Converters:QrrTqModeVisibilityConverter x:Key="QrrTqM2V"/>
 
 </ResourceDictionary>

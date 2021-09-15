@@ -64,7 +64,7 @@
             <dynamicDataDisplay:VerticalAxisTitle Content="{x:Static res:Resources.Graph_ImA}"/>
             <dynamicDataDisplay:AxisGrid Visibility="Hidden"/>
         </dynamicDataDisplay:ChartPlotter>
-        <ScrollViewer x:Name="ScrollViewer" Style="{StaticResource DefaultScrollViewer}" Grid.Row="0" Grid.Column="3">
+        <customControls:ScrollViewerLeftMouseButtonScroll x:Name="ScrollViewer" Style="{StaticResource DefaultScrollViewer}" Grid.Row="0" Grid.Column="3">
             <Border Name="borderParameters" Margin="0,0,5,0">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -130,7 +130,7 @@
                     <Label Name="labelWarning" Content="Warning" Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="2" Background="Gold" Padding="10"/>
                 </Grid>
             </Border>
-        </ScrollViewer>
+        </customControls:ScrollViewerLeftMouseButtonScroll>
         <Line StrokeThickness="1" Stroke="{StaticResource xBlue1}" X1="0" Y1="0" X2="0" Y2="{Binding ActualHeight, ElementName=borderParameters}" Grid.Row="0" Grid.Column="3" Margin="0,20" HorizontalAlignment="Left"/>
         <Grid Grid.Row="1" Grid.ColumnSpan="4" Margin="0,0,-10,0">
             <Grid.ColumnDefinitions>

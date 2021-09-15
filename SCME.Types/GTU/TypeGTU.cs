@@ -183,7 +183,7 @@ namespace SCME.Types.GTU
         {
             get; set;
         }
-        
+
         [DataMember]
         public ushort Itm
         {

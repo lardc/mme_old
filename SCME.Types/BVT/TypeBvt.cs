@@ -35,10 +35,26 @@ namespace SCME.Types.BVT
     {
         [EnumMember]
         None = 0,
+        /// <summary>Перегрузка тока моста</summary>
+        [EnumMember]
+        BridgeShort = 200,
+        /// <summary>Перегрев моста</summary>
+        [EnumMember]
+        TempMon = 201,
+        /// <summary>Ошибка оптической связи</summary>
+        [EnumMember]
+        OptoConError = 202,
+        /// <summary>Ошибка подачи питания</summary>
+        [EnumMember]
+        LowSidePS = 203,
+        /// <summary>Ошибка следования напряжения</summary>
+        [EnumMember]
+        FollowingError = 204,
+        /// <summary>Выходная насыщенность PWM</summary>
+        [EnumMember]
+        PWMSaturation = 205,
         [EnumMember]
         BridgeOverload = 400,
-        [EnumMember]
-        FolowingError = 204,
         [EnumMember]
         TemperatureOverload = 401
     };
@@ -51,6 +67,15 @@ namespace SCME.Types.BVT
         None = 0,
         [EnumMember]
         CurrentNotReached = 401,
+        /// <summary>Не обнаружено условие в режиме V-Mode</summary>
+        [EnumMember]
+        VoltageNotReached = 402,
+        /// <summary>Сопротивление вне диапазона</summary>
+        [EnumMember]
+        ResOutOfRange = 403,
+        /// <summary>Перегрузка выхода</summary>
+        [EnumMember]
+        OutputOverload = 404,
         /// <summary>Система перезагружена watchdog'ом</summary>
         [EnumMember]
         WatchdogReset = 1001
@@ -126,7 +151,7 @@ namespace SCME.Types.BVT
         {
             get; set;
         }
-        
+
         [DataMember]
         public ushort UdsmUrsmPulseFrequency
         {
@@ -192,7 +217,7 @@ namespace SCME.Types.BVT
         {
             get; set;
         }
-        
+
         [DataMember]
         public float IDSM
         {
@@ -349,7 +374,7 @@ namespace SCME.Types.BVT
             if (IRRM != OldTestParameters.IRRM)
                 return true;
             if (UdsmUrsmPulseFrequency != OldTestParameters.UdsmUrsmPulseFrequency)
-                return true;    
+                return true;
             if (UdsmUrsmVoltageLimitD != OldTestParameters.VoltageLimitD)
                 return true;
             if (UdsmUrsmVoltageLimitR != OldTestParameters.VoltageLimitR)

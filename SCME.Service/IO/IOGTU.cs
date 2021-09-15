@@ -354,7 +354,6 @@ namespace SCME.Service.IO
                 Result.ArrayIH = ReadArrayFastS(EP16_Data_Vg);
             WriteRegister(REG_HOLD_WITH_SL, 0);
             SL.WriteRegister(IOStLs.REG_DISABLE_MATH, 0);
-            ActiveCommutation.CallAction(110);
             IHEvent_Fire(DeviceState.Success, Result);
         }
 
@@ -365,6 +364,7 @@ namespace SCME.Service.IO
             if (!Parameter.IsIlEnabled)
                 return;
             ILEvent_Fire(DeviceState.InProcess, Result);
+            ActiveCommutation.CallAction(IOCommutation.ACT_COMM2_GATE);
             CallAction(ACT_START_IL);
             //Эмуляция блока
             if (IsEmulated)

@@ -241,7 +241,7 @@ namespace SCME.Types.VTM
                 return true;
             if (UseLsqMethod != oldParameters.UseLsqMethod)
                 return true;
-            if(Count != oldParameters.Count)
+            if (Count != oldParameters.Count)
                 return true;
             if (VTM.CompareTo(oldParameters.VTM) != 0)
                 return true;
@@ -292,13 +292,13 @@ namespace SCME.Types.VTM
     }
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
-    public class TestResults: BaseTestResults
+    public class TestResults : BaseTestResults
     {
         [DataMember]
         public float Voltage { get; set; }
 
         [DataMember]
-        public ushort Current{ get; set; }
+        public ushort Current { get; set; }
 
         [DataMember]
         public IList<short> ITMArray { get; set; }

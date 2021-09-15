@@ -132,7 +132,7 @@ namespace SCME.Types.ATU
             get; set;
         }
 
-        [DataMember] 
+        [DataMember]
         public float PRSM_Min
         {
             get; set;
@@ -159,7 +159,7 @@ namespace SCME.Types.ATU
                 return true;
             return false;
         }
-        
+
         public object Clone()
         {
             return MemberwiseClone();

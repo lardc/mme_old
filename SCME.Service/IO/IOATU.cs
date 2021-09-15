@@ -359,7 +359,7 @@ namespace SCME.Service.IO
                 {
                     ushort disableReason = ReadRegister(REG_DISABLE_REASON);
 
-                    FireNotificationEvent((ushort)HWWarningReason.None, (ushort)HWFaultReason.None, disableReason);                    
+                    FireNotificationEvent((ushort)HWWarningReason.None, (ushort)HWFaultReason.None, disableReason);
                 }
 
                 //блок ATU завершил процесс измерения

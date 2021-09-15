@@ -11,7 +11,7 @@ namespace SCME.Types.Clamping
         [EnumMember] Module = 2,
         [EnumMember] Ignored = 3
     }
-    
+
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]
     public enum DeviceState
     {
@@ -84,7 +84,7 @@ namespace SCME.Types.Clamping
 
         [DataMember]
         public bool IsHeightMeasureEnabled { get; set; }
-        
+
         /// <summary>
         /// Высота прибора в мм, необходима для правильного алгоритма работы 
         /// </summary>

@@ -819,7 +819,7 @@ namespace SCME.Service.IO
             }
         }
 
-   
+
 
         private ushort GetDeviceState()
         {

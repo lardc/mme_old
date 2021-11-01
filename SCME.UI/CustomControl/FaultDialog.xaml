@@ -1,0 +1,33 @@
+﻿<Window x:Class="SCME.UI.CustomControl.FaultDialog"
+        x:Name="faultDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:SCME.UI.Properties"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Width="800" Height="300"
+        BorderThickness="1"
+        BorderBrush="{StaticResource xBlue1}">
+    <Window.Resources>
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource CLabelStyle}"/>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}"/>
+    </Window.Resources>
+    <Grid Background="{StaticResource xGray2}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Причина НП" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="50"/>
+        <Button Content="{x:Static res:Resources.Cancel}" IsCancel="True" Grid.Row="1" Grid.Column="0" Width="250" Background="{StaticResource xRed1}"/>
+        <Button Content="ВАХ" Grid.Row="1" Grid.Column="1" Width="250" Click="ButtonVAH_Click"/>
+        <Button Content="Металлизация" Grid.Row="1" Grid.Column="2" Width="250" Click="ButtonMetal_Click"/>
+    </Grid>
+</Window>

@@ -20,6 +20,7 @@ using SCME.Types.BaseTestParams;
 using SCME.Types.GTU;
 using SCME.Types.Profiles;
 using SCME.UI.Annotations;
+using SCME.UI.CustomControl;
 using SCME.UIServiceConfig.Properties;
 using SCME.WpfControlLibrary;
 using SCME.WpfControlLibrary.Commands;
@@ -64,6 +65,9 @@ namespace SCME.UI.PagesUser
         private bool wasCurrentMore;
         private bool _HasFault = false;
         private int? m_ClassByProfileName = null;
+
+        private bool IsStoppedByUser;
+
         public UserTestPage()
         {
             this.DataContext = new UserTestPageViewModel();
@@ -664,6 +668,12 @@ namespace SCME.UI.PagesUser
                 }
                 else if (needSave)
                 {
+                    if (IsStoppedByUser)
+                    {
+                        IsStoppedByUser = false;
+                        return;
+                    }
+
                     ResultItem DataForSave = new ResultItem
                     {
                         Timestamp = DateTime.Now,
@@ -2787,6 +2797,8 @@ namespace SCME.UI.PagesUser
 
         private void Stop_Click(object Sender, RoutedEventArgs E)
         {
+            IsStoppedByUser = true;
+
             Cache.Net.StopByButtonStop();
         }
 
@@ -2812,6 +2824,12 @@ namespace SCME.UI.PagesUser
                 //                        break;
                 //                }
             }
+        }
+
+        private void Fault_Click(object sender, RoutedEventArgs e)
+        {
+            FaultDialog faultDialog = new FaultDialog();
+            faultDialog.ShowDialog();
         }
 
         internal void OnLeaveNotify()

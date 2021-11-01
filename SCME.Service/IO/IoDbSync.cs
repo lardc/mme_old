@@ -161,8 +161,7 @@ namespace SCME.Service.IO
 
             return (null, true);
         }
-
-
+        
 //        private void SyncWithServer(AfterSyncProfilesRoutine afterSyncProfilesRoutine)
 //        {
 //            //запоминаем что нам надо вызвать после того как будет выполнена синхронизация результатов измерений

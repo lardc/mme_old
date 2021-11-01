@@ -176,9 +176,16 @@
               X1="0" Y1="0" X2="0" Y2="{Binding ElementName=gridResult1, Path=ActualHeight}"
               Grid.Column="2" Grid.Row="0" Grid.RowSpan="6" Margin="0,20" Width="0" />
         <Button Name="btnBack" x:FieldModifier="private" Grid.Column="0" Grid.Row="5" Content="{x:Static res:Resources.Back}" Click="Back_Click" Margin="0" TabIndex="7" Style="{StaticResource BackButton}" HorizontalAlignment="Left"/>
-        <Grid Grid.Column="1" Grid.Row="5"  Visibility="{Binding Source={x:Static ui:Cache.Main}, Path=VM.IsLocal, Converter={StaticResource B2VI}}" Margin="6,0">
-            <Button Name="btnSync" x:FieldModifier="private"  Content="{x:Static res:Resources.Sync}" Visibility="{Binding SpecialMeasureMode, Converter={StaticResource B2VI}}"  Click="BtnSync_OnClick" TabIndex="7"/>
+        <Grid Grid.Column="1" Grid.Row="5" Visibility="{Binding Source={x:Static ui:Cache.Main}, Path=VM.IsLocal, Converter={StaticResource B2VI}}" Margin="6,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Name="btnSync" x:FieldModifier="private" Grid.Column="0" Content="Синхр." Width="150" Visibility="{Binding SpecialMeasureMode, Converter={StaticResource B2VI}}"  Click="BtnSync_OnClick" TabIndex="7"/>
+            <Button Grid.Column="1" Content="Ошибка" Width="150" Background="{StaticResource xRed1}" Click="Fault_Click" TabIndex="9" />
         </Grid>
+        
+
         <Button Grid.Column="2" Grid.Row="5" Content="{x:Static res:Resources.Stop}" Background="{StaticResource xRed1}" Click="Stop_Click" Margin="6,0"  TabIndex="8" />
         <Button Name="btnStart" x:FieldModifier="private" Grid.Column="3" Grid.Row="5" Content="{x:Static res:Resources.Start}" Background="{StaticResource xGreen1}" Margin="40,0,0,0" Click="Start_Click"  TabIndex="5"/>
     </Grid>

@@ -585,7 +585,7 @@ namespace SCME.InterfaceImplementations
                 _deviceDeleteCmd.Parameters["@DEV_ID"].Value = devId;
                 _deviceDeleteCmd.ExecuteNonQuery();
             }
-
+            
             _devInsertCommand.Transaction = trans;
             _devInsertCommand.Parameters["@GROUP_ID"].Value = groupId;
             _devInsertCommand.Parameters["@PROFILE_ID"].Value = profileId;

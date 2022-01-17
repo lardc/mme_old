@@ -995,15 +995,21 @@ namespace SCME.UIServiceConfig.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool IsLSL {
             get {
                 return ((bool)(this["IsLSL"]));
             }
-            set {
-                this["IsLSL"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ATUReadGraph {
+            get {
+                return ((bool)(this["ATUReadGraph"]));
             }
         }
     }

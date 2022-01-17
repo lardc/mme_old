@@ -45,8 +45,8 @@ namespace SCME.WpfControlLibrary.DataProviders
         {
             return new Dictionary<string, BVTMeasurementMode>()
             {
-                {BVTMeasurementMode.ModeI.ToString(), BVTMeasurementMode.ModeI},
-                {BVTMeasurementMode.ModeV.ToString(), BVTMeasurementMode.ModeV},
+                {"Подтверждение", BVTMeasurementMode.ModeI},
+                {"Определение", BVTMeasurementMode.ModeV},
             };
         }
 

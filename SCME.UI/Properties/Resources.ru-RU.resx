@@ -325,7 +325,7 @@
     <value>Значение</value>
   </data>
   <data name="VdrmV" xml:space="preserve">
-    <value>VDRM, V</value>
+    <value>UDRM</value>
   </data>
   <data name="Vgt" xml:space="preserve">
     <value>UGT</value>
@@ -823,10 +823,10 @@
     <value>Класс</value>
   </data>
   <data name="Ubr" xml:space="preserve">
-    <value>Ubr, В</value>
+    <value>Ubr</value>
   </data>
   <data name="VrrmV" xml:space="preserve">
-    <value>VRRM, В</value>
+    <value>URRM</value>
   </data>
   <data name="WarningEmulation" xml:space="preserve">
     <value>Блоки, находящиеся в режиме эмуляции</value>

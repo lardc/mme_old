@@ -326,7 +326,10 @@
     <Setting Name="VGNTIsVisible" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="IsLSL" Type="System.Boolean" Scope="User">
+    <Setting Name="IsLSL" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ATUReadGraph" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

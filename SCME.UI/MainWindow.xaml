@@ -182,7 +182,7 @@
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel Width="400">
-                                        <TextBlock Text="{Binding Version, StringFormat={}Текущая версия ПО: {0}}"/>
+                                        <TextBlock Text="Текущая версия ПО: 4.0.4"/>
                                         <TextBlock TextWrapping="WrapWithOverflow">
                                         Основные нововведения патча:
                                         <LineBreak/>

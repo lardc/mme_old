@@ -78,7 +78,7 @@
                         <Label Name="labelKelvinResult2" Grid.Column="6" Grid.Row="0" Content="OK"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="8,0,0,0"/>
 
-                        <customControls:LabelWithIndex Content="Rg" Grid.Column="0" Grid.Row="1" Height="Auto" />
+                        <customControls:LabelWithIndex Content="RG" Grid.Column="0" Grid.Row="1" Height="Auto" />
                         <TextBlock Text="Ом" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Label Name="labelRgResult1" Grid.Column="4" Grid.Row="1" Content="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Height="Auto"  Margin="8,0,-6,0"/>
@@ -504,7 +504,7 @@
                         <Label Name="labelResult2" Grid.Column="6" Grid.Row="0"
                        HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="8,0,0,0"/>
 
-                        <customControls:LabelWithIndex Content="VoltageRate" Grid.Column="0"  Grid.Row="1"  Height="Auto"
+                        <customControls:LabelWithIndex Content="Нарастание" Grid.Column="0"  Grid.Row="1"  Height="Auto"
                               Visibility="{Binding Mode, Converter={StaticResource DT2VB}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                            />
                         <TextBlock Text="В" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Mode, Converter={StaticResource DT2VB}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -555,7 +555,7 @@
                         <Rectangle Fill="Black" Grid.Column="3" Grid.RowSpan="4" Margin="0,0,-15,0" Width="1"/>
                         <Rectangle Fill="Black" Grid.Column="5" Grid.RowSpan="4" Margin="0,0,-15,0" Width="1"/>
 
-                        <customControls:LabelWithIndex Content="UBR" Grid.Column="0" Grid.Row="0"/>
+                        <customControls:LabelWithIndex Content="U(BR)" Grid.Column="0" Grid.Row="0"/>
                         <TextBlock Text="В" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Label Name="lbAtuUBR1" Grid.Column="4" Grid.Row="0" Margin="8,0,-6,0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto"/>
                         <Label Name="lbAtuUBR2" Grid.Column="6" Grid.Row="0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="8,0,0,0"/>
@@ -641,7 +641,7 @@
                         <Label Grid.Column="4" Grid.Row="4" Margin="8,0,-6,0" x:Name="lbIrr1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="4" Margin="8,0,0,0" x:Name="lbIrr2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
 
-                        <customControls:LabelWithIndex Grid.Column="0" Grid.Row="5" Content="TRR" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <customControls:LabelWithIndex Grid.Column="0" Grid.Row="5" Content="tRR" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="мкс" Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center"  Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                         <Label Grid.Column="4" Grid.Row="5" Margin="8,0,-6,0" x:Name="lbTrr1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="5" Margin="8,0,0,0" x:Name="lbTrr2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
@@ -651,7 +651,7 @@
                         <Label Grid.Column="4" Grid.Row="6" Margin="8,0,-6,0" x:Name="lbDCFactFallRate1" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
                         <Label Grid.Column="6" Grid.Row="6" Margin="8,0,0,0" x:Name="lbDCFactFallRate2" Height="Auto" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}"/>
 
-                        <customControls:LabelWithIndex Grid.Column="0" Grid.Row="7" Content="Tq" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <customControls:LabelWithIndex Grid.Column="0" Grid.Row="7" Content="tq" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="мкс" Grid.Column="2" Grid.Row="7" HorizontalAlignment="Center" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                         <Label Grid.Column="4" Grid.Row="7" Margin="8,0,-6,0" Height="Auto" x:Name="lbTq1" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Grid.Column="6" Grid.Row="7" Margin="8,0,0,0" Height="Auto" x:Name="lbTq2" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize26}" Visibility="{Binding Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, UpdateSourceTrigger=PropertyChanged}"/>

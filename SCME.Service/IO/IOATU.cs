@@ -304,8 +304,11 @@ namespace SCME.Service.IO
                     m_Result.IPRSM = RoundTwoDigits(ReadRegisterS(REG_CURRENT_VALUE_MEASURE) / 1000d); //А уровень отображения реализует вывод до 2 десятых
                     m_Result.PRSM = RoundTwoDigits(ReadRegisterS(REG_POWER_VALUE_MEASURE) / 100d);     //в регистре сидит значение Bт/10. переводим его в кВт уровень отображения реализует вывод до 2 десятых
 
-                    m_Result.ArrayVDUT = ReadArrayFastS(ARR_SCOPE1_DATA);
-                    m_Result.ArrayIDUT = ReadArrayFastS(ARR_SCOPE2_DATA);
+                    if (Settings.Default.ATUReadGraph)
+                    {
+                        m_Result.ArrayVDUT = ReadArrayFastS(ARR_SCOPE1_DATA);
+                        m_Result.ArrayIDUT = ReadArrayFastS(ARR_SCOPE2_DATA);
+                    }
 
                     //по окончании процесса измерения - отключаем коммутацию
                     if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.None) == Types.DeviceState.Fault)

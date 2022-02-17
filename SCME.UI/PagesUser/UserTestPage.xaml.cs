@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -2433,6 +2434,72 @@ namespace SCME.UI.PagesUser
             }
         }
 
+        private void tbPseJob_LostFocus(object sender, RoutedEventArgs e)
+        {
+            string PseJob = tbPseJob.Text;
+            if (PseJob == string.Empty)
+                return;
+            string[] Patterns = new string[]
+            {
+                @"^4-\d{8}-\d{4}$",
+                @"^4RJ-\d{6}-\d{4}$",
+                @"^4RH-\d{6}-\d{4}$",
+                @"^4RP-\d{6}-\d{4}$",
+                @"^4RK-\d{6}-\d{4}$",
+                @"^4RO-\d{6}-\d{4}$",
+                @"^4RQ-\d{6}-\d{4}$",
+                @"^4RL-\d{6}-\d{4}$",
+                @"^4RD-\d{6}-\d{4}$",
+                @"^4RE-\d{6}-\d{4}$",
+                @"^4RF-\d{6}-\d{4}$",
+                @"^3RJ-\d{6}-\d{4}$",
+                @"^3RH-\d{6}-\d{4}$",
+                @"^3RP-\d{6}-\d{4}$",
+                @"^3RK-\d{6}-\d{4}$",
+                @"^3RO-\d{6}-\d{4}$"
+            };
+            foreach (string Pattern in Patterns)
+                if (Regex.IsMatch(PseJob, Pattern))
+                    return;
+            DialogWindow DialogWindow = new DialogWindow("Ошибка", "Некорректный ПЗ ППЭ");
+            DialogWindow.ButtonConfig(DialogWindow.EbConfig.OK);
+            DialogWindow.ShowDialog();
+        }
+
+        private void TbPseNumber_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            ((ValidatingTextBox)sender).HideKeyboard();
+
+            string PseNumber = tbPseNumber.Text;
+            if (PseNumber == string.Empty)
+                return;
+            string[] Patterns = new string[]
+            {
+                @"^\d+/4-\d{8}$",
+                @"^\d+/4RJ-\d{6}$",
+                @"^\d+/4RH-\d{6}$",
+                @"^\d+/4RP-\d{6}$",
+                @"^\d+/4RK-\d{6}$",
+                @"^\d+/4RO-\d{6}$",
+                @"^\d+/4RQ-\d{6}$",
+                @"^\d+/4RL-\d{6}$",
+                @"^\d+/4RD-\d{6}$",
+                @"^\d+/4RE-\d{6}$",
+                @"^\d+/4RF-\d{6}$",
+                @"^\d+/3RJ-\d{6}$",
+                @"^\d+/3RH-\d{6}$",
+                @"^\d+/3RP-\d{6}$",
+                @"^\d+/3RK-\d{6}$",
+                @"^\d+/3RO-\d{6}$",
+            };
+            foreach (string Pattern in Patterns)
+                if (Regex.IsMatch(PseNumber, Pattern))
+                    return;
+            DialogWindow DialogWindow = new DialogWindow("Ошибка", "Некорректный номер ППЭ");
+            DialogWindow.ButtonConfig(DialogWindow.EbConfig.OK);
+            DialogWindow.ShowDialog();
+        }
+
         private void tbPseNumber_TextChanged(object sender, TextChangedEventArgs e)
         {
             ValidatingTextBox tb = sender as ValidatingTextBox;
@@ -3039,11 +3106,6 @@ namespace SCME.UI.PagesUser
                 dw.ButtonConfig(DialogWindow.EbConfig.OK);
                 dw.ShowDialog();
             }
-        }
-
-        private void TbPseNumber_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-           ((ValidatingTextBox) sender).HideKeyboard();
         }
     }
 

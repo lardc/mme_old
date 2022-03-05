@@ -840,4 +840,7 @@
   <data name="ModuleType" xml:space="preserve">
     <value>Тип модуля</value>
   </data>
+  <data name="MinVtm_V" xml:space="preserve">
+    <value>Мин. UTM, В</value>
+  </data>
 </root>

@@ -843,4 +843,7 @@
   <data name="ModuleType" xml:space="preserve">
     <value>Module type</value>
   </data>
+  <data name="MinVtm_V" xml:space="preserve">
+    <value>Max. VTM, V</value>
+  </data>
 </root>

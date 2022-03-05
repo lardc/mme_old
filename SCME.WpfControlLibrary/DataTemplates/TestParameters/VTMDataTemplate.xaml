@@ -61,8 +61,10 @@
     <Label Content="{x:Static res:Resources.AdditionalTime_us}" Grid.Row="6" Grid.Column="3" Margin="0,5,0,0" Foreground="Black"/>
     <customControls:ValidatingTextBox Text="{Binding CurveAddTime}" IsNumeric="True" Minimum="{StaticResource MinCurveAddTime_SL}" Maximum="{StaticResource MaxCurveAddTime_SL}" Grid.Row="6" Grid.Column="4" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
     <CheckBox Content="{x:Static res:Resources.UseFullScale}" IsChecked="{Binding UseFullScale}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,0,0" BorderBrush="#FFC9C9C9" Foreground="Black"/> 
-    <Label Content="{x:Static res:Resources.Count}" Grid.Row="8" Grid.Column="0" Margin="0,5,0,0" Foreground="Black"/>
-    <customControls:ValidatingTextBox Text="{Binding Count}" IsNumeric="True" Minimum="{StaticResource MinPulsesITM_SL}" Maximum="{StaticResource MaxPulsesITM_SL}" Grid.Row="8" Grid.Column="1" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Label Content="{x:Static res:Resources.Count}" Grid.Row="7" Grid.Column="3" Margin="0,5,0,0" Foreground="Black"/>
+    <customControls:ValidatingTextBox Text="{Binding Count}" IsNumeric="True" Minimum="{StaticResource MinPulsesITM_SL}" Maximum="{StaticResource MaxPulsesITM_SL}" Grid.Row="7" Grid.Column="4" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Label Content="{x:Static res:Resources.MinVtm_V}" Grid.Row="8" Grid.Column="0" Margin="0,5,0,0" Foreground="Black"/>
+    <customControls:ValidatingTextBox Text="{Binding MinVTM}" IsNumeric="True" IsFloat="True" Grid.Row="8" Grid.Column="1" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
     <Label Content="{x:Static res:Resources.MaxVtm_V}" Grid.Row="8" Grid.Column="3" Margin="0,5,0,0" Foreground="Black"/>
     <customControls:ValidatingTextBox Text="{Binding VTM}" IsNumeric="True" IsFloat="True" Grid.Row="8" Grid.Column="4" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
 </Grid>

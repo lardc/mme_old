@@ -39,6 +39,12 @@
             get; set;
         }
 
+        /// <summary>Ручное обновление</summary>
+        public bool ManualUpdate
+        {
+            get; set;
+        }
+
         /// <summary>Url сервера обновления</summary>
         public string UpdateServerUrl
         {

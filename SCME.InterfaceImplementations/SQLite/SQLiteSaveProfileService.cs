@@ -694,7 +694,7 @@ namespace SCME.InterfaceImplementations
 
         private void InsertVtmParameters(Types.VTM.TestParameters vtmTestParameters, long testTypeId, long profileId)
         {
-            InsertParameter(testTypeId, profileId, "VTM", DBNull.Value, vtmTestParameters.VTM);
+            InsertParameter(testTypeId, profileId, "VTM", vtmTestParameters.MinVTM, vtmTestParameters.VTM);
         }
 
         private void InsertBvtParameters(Types.BVT.TestParameters bvtTestParameters, long testTypeId, long profileId)

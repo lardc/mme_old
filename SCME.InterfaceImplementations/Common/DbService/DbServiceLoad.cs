@@ -830,6 +830,8 @@ namespace SCME.InterfaceImplementations.Common.DbService
                     case "VTM":
                         if (result.Item3.HasValue)
                             parameters.VTM = result.Item3.Value;
+                        if (result.Item2.HasValue)
+                            parameters.MinVTM = result.Item2.Value;
                         break;
                 }
             }

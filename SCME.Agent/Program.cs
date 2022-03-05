@@ -53,29 +53,31 @@ namespace SCME.Agent
                 Process.Start("explorer.exe");
                 return;
             }
-            try
-            {
-                //Обновление проектов
-                Updater Updater = new Updater();
-                bool AgentIsUpdated = Updater.UpdateAgent().Result;
-                if (AgentIsUpdated)
+            //Автообновление
+            if (!ConfigData.ManualUpdate)
+                try
                 {
-                    Process.Start(Path.ChangeExtension(Application.ExecutablePath, "exe"));
-                    return;
+                    //Обновление проектов
+                    Updater Updater = new Updater();
+                    bool AgentIsUpdated = Updater.UpdateAgent().Result;
+                    if (AgentIsUpdated)
+                    {
+                        Process.Start(Path.ChangeExtension(Application.ExecutablePath, "exe"));
+                        return;
+                    }
+                    if (!Updater.UpdateUiService().Result)
+                        return;
                 }
-                if (!Updater.UpdateUiService().Result)
-                    return;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Не удалось подключиться к SCME.UpdateServer. Запуск установленной версии ПО", "Ошибка");
-                //Запись логов ошибки
-                if (Directory.Exists("Logs"))
+                catch (Exception ex)
                 {
-                    string ErrorMessage = string.Format("{0:dd.MM.yyyy HH:mm:ss} ERROR - connection to UpdateServer wasn't established. Reason:\n{1}\n", DateTime.Now, ex);
-                    File.AppendAllText(LogFilePath, ErrorMessage);
+                    MessageBox.Show("Не удалось подключиться к SCME.UpdateServer. Запуск установленной версии ПО", "Ошибка");
+                    //Запись логов ошибки
+                    if (Directory.Exists("Logs"))
+                    {
+                        string ErrorMessage = string.Format("{0:dd.MM.yyyy HH:mm:ss} ERROR - connection to UpdateServer wasn't established. Reason:\n{1}\n", DateTime.Now, ex);
+                        File.AppendAllText(LogFilePath, ErrorMessage);
+                    }
                 }
-            }
             //Перезапуск супервайзера
             using (Mutex)
             {

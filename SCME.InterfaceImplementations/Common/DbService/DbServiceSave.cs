@@ -123,7 +123,7 @@ namespace SCME.InterfaceImplementations.Common.DbService
 
             var slParameters = new Dictionary<string, (object Min, object Max)>
             {
-                {"VTM", (DBNull.Value, sl.VTM)}
+                {"VTM", (sl.MinVTM, sl.VTM)}
             };
 
             return ("SL", slCondition, slParameters);

@@ -182,33 +182,25 @@
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel Width="400">
-                                        <TextBlock Text="Текущая версия ПО: 4.0.4"/>
+                                        <TextBlock Text="Текущая версия ПО: 4.2"/>
                                         <TextBlock TextWrapping="WrapWithOverflow">
                                         Основные нововведения патча:
                                         <LineBreak/>
-                                        <Run FontSize="16">- Редизайн приложения</Run>
+                                        <Run FontSize="16">- Изменения в системе логгирования</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Добавление измерения UGNT блока GTU</Run>
+                                        <Run FontSize="16">- Доработка серверного ПО по отправке результатов</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Добавление измерения IH ГОСТ блока GTU</Run>
+                                        <Run FontSize="16">- Незначительные правки разметки</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Добавление возможности программного отключения и эмуляции блоков на панели наладчика</Run>
+                                        <Run FontSize="16">- Унификация наименования измерений</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Добавление графика уставки dUdt на панели наладчика</Run>
+                                        <Run FontSize="16">- Корректный идентификатор текущей версии ПО</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Добавление графика ATU на панели наладчика</Run>
+                                        <Run FontSize="16">- Валидация полей ПЗ ППЭ и номер ППЭ</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Унификация наименований блоков</Run>
+                                        <Run FontSize="16">- Добавление параметра минимального значения Utm в измерении SL</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Перенос измерения высоты в раздел параметров</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Добавление граничных значений при редактировании профиля</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Сокрытие контролов температуры через файл конфигурации</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Оповещение пользователя при переходе в локальный режим</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Обработка потери связи с сервисами</Run>
+                                        <Run FontSize="16">- Незначительные исправления багов программы</Run>
                                         <LineBreak/>
                                         </TextBlock>
                                     </StackPanel>

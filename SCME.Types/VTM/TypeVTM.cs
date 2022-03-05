@@ -204,6 +204,9 @@ namespace SCME.Types.VTM
         [DataMember]
         public float VTM { get; set; }
 
+        [DataMember]
+        public float MinVTM { get; set; }
+
         public override bool HasChanges(BaseTestParametersAndNormatives oldParametersBase)
         {
             var oldParameters = oldParametersBase as TestParameters;
@@ -245,7 +248,8 @@ namespace SCME.Types.VTM
                 return true;
             if (VTM.CompareTo(oldParameters.VTM) != 0)
                 return true;
-
+            if (MinVTM.CompareTo(oldParameters.MinVTM) != 0)
+                return true;
             return false;
         }
 
@@ -268,6 +272,7 @@ namespace SCME.Types.VTM
             CurveAddTime = 0;
             Count = 1;
             VTM = 2.5f;
+            MinVTM = 0;
             TestParametersType = TestParametersType.SL;
         }
 
@@ -285,9 +290,12 @@ namespace SCME.Types.VTM
         [DataMember]
         public float VTM { get; set; }
 
+        public float MinVTM { get; set; }
+
         public ResultNormatives()
         {
             VTM = 2.5f;
+            MinVTM = 0;
         }
     }
 

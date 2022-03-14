@@ -844,6 +844,6 @@
     <value>Module type</value>
   </data>
   <data name="MinVtm_V" xml:space="preserve">
-    <value>Max. VTM, V</value>
+    <value>Min. VTM, V</value>
   </data>
 </root>

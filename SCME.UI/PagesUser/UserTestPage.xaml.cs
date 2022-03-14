@@ -1039,7 +1039,7 @@ namespace SCME.UI.PagesUser
             if (labelVtmResult != null)
                 SetLabel(labelVtmResult, state,
                      ((m_CurrentPos == 1) ? ResultsVTM1[slCounter] : ResultsVTM2[slCounter]).Voltage <= (Profile.TestParametersAndNormatives.OfType<Types.VTM.TestParameters>().ToArray())[slCounter].VTM &&
-                     ((m_CurrentPos == 1) ? ResultsVTM1[slCounter] : ResultsVTM2[slCounter]).Voltage > (Profile.TestParametersAndNormatives.OfType<Types.VTM.TestParameters>().ToArray())[slCounter].MinVTM,
+                     ((m_CurrentPos == 1) ? ResultsVTM1[slCounter] : ResultsVTM2[slCounter]).Voltage >= (Profile.TestParametersAndNormatives.OfType<Types.VTM.TestParameters>().ToArray())[slCounter].MinVTM,
                      string.Format("{0}", ((m_CurrentPos == 1) ? ResultsVTM1[slCounter] : ResultsVTM2[slCounter]).Voltage));
 
             if (state != Types.DeviceState.InProcess)
@@ -1183,7 +1183,7 @@ namespace SCME.UI.PagesUser
 
                 var labelBvtVdrmResult = FindChild<Label>(presenter, "labelBvtVdrmResult" + m_CurrentPos);
                 if (labelBvtVdrmResult != null)
-                    SetLabel(labelBvtVdrmResult, state, result.VDRM > Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VDRM, result.VDRM.ToString(CultureInfo.InvariantCulture));
+                    SetLabel(labelBvtVdrmResult, state, result.VDRM >= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VDRM, result.VDRM.ToString(CultureInfo.InvariantCulture));
 
                 if (state != Types.DeviceState.InProcess)
                     if (result.VDRM <= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VDRM)
@@ -1237,7 +1237,7 @@ namespace SCME.UI.PagesUser
 
                 var labelBvtVrrmResult = FindChild<Label>(presenter, "labelBvtVrrmResult" + m_CurrentPos);
                 if (labelBvtVrrmResult != null)
-                    SetLabel(labelBvtVrrmResult, state, result.VRRM > Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VRRM,
+                    SetLabel(labelBvtVrrmResult, state, result.VRRM >= Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].VRRM,
                          result.VRRM.ToString(CultureInfo.InvariantCulture));
 
                 if (state != Types.DeviceState.InProcess)
@@ -2582,7 +2582,7 @@ namespace SCME.UI.PagesUser
             {
                 btnStart.IsEnabled = true;
                 lblDeviceClass.Foreground = Brushes.Black;
-
+ 
                 if (!int.TryParse(Profile.Name.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries)[3], out var deviceClassByProfileName))
                     return;
 

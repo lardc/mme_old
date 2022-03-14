@@ -7,8 +7,8 @@
         xmlns:res="clr-namespace:SCME.ProfileBuilder.Properties"
         mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="924" Width="1300" Height="768"
         Title="SCME.ProfileBuilder" Closing="Window_Closing"
-        ResizeMode="NoResize" Loaded="MetroWindow_Loaded"
+        ResizeMode="CanMinimize" Loaded="MetroWindow_Loaded"
         WindowStartupLocation="CenterScreen" 
-         WindowState="Normal" Icon="App.ico" >
+         WindowState="Normal" Icon="App.ico">
             <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
 </Window>

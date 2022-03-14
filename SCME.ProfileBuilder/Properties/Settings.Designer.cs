@@ -12,7 +12,7 @@ namespace SCME.ProfileBuilder.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -34,7 +34,7 @@ namespace SCME.ProfileBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.128.4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.120\\SCME")]
         public string MSSQLServer {
             get {
                 return ((string)(this["MSSQLServer"]));
@@ -79,7 +79,7 @@ namespace SCME.ProfileBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Ufkfrnbrf6084")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Hpl1520")]
         public string MSSQLPassword {
             get {
                 return ((string)(this["MSSQLPassword"]));
@@ -88,7 +88,7 @@ namespace SCME.ProfileBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Visual Studio\\mme_software\\Debug\\UIServiceData\\SCME_ResultsDB_Local.sqlite")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Visual Studio Builds\\SCME.BaseData\\SCME_ResultsDB_Local.sqlite")]
         public string SQLiteFileName {
             get {
                 return ((string)(this["SQLiteFileName"]));

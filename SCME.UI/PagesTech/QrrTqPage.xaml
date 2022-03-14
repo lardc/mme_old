@@ -8,7 +8,7 @@
       xmlns:res="clr-namespace:SCME.UI.Properties"
       xmlns:customControls="WpfControlLibrary"
       mc:Ignorable="d" x:Name="qrrTqPage"
-      d:DesignWidth="1280" d:DesignHeight="924"
+      d:DesignWidth="1280" d:DesignHeight="9240"
       Title="{x:Static res:Resources.QrrTq}">
 
     <Page.Resources>
@@ -19,17 +19,17 @@
         <ui:BooleanToVisibilityConverter x:Key="B2V"/>
 
         <Style TargetType="{x:Type Label}" BasedOn="{StaticResource CLabelStyle}">
-            <Setter Property="Padding" Value="5,0,0,0" />
-            <Setter Property="Height" Value="62" />
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
         </Style>
 
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}">
          
         </Style>
-
         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CCheckBoxStyle}">
-            <Setter Property="Foreground" Value="{StaticResource xBlack1}" />
-            <Setter Property="Padding" Value="0,0" />
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="Foreground" Value="{StaticResource xBlack1}"/>
+            <Setter Property="Padding" Value="5,0"/>
         </Style>
     </Page.Resources>
 
@@ -44,119 +44,116 @@
             <RowDefinition Height="90*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-
-        <Border Grid.Column="3" Grid.Row="0" Margin="10,0,0,0">
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="10" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Label Grid.Column="0" Grid.Row="0" Content="{x:Static res:Resources.QrrTqMode}" VerticalAlignment="Top"/>
-                <ComboBox Grid.Column="1" Grid.Row="0" Padding="5" Margin="10,9,10,10"
+        <dynamicDataDisplay:ChartPlotter Name="chartPlotter" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="0,0,10,20"                                                 
+                         Background="Transparent" Foreground="{StaticResource xBlack1}" BorderBrush="Transparent">
+            <dynamicDataDisplay:HorizontalAxisTitle Content="{x:Static res:Resources.Graph_TimeUs}" />
+            <dynamicDataDisplay:VerticalAxisTitle Content="{x:Static res:Resources.Graph_IA}" />
+            <dynamicDataDisplay:AxisGrid Visibility="Visible" />
+        </dynamicDataDisplay:ChartPlotter>
+        <customControls:ScrollViewerLeftMouseButtonScroll x:Name="ScrollViewer" Style="{StaticResource DefaultScrollViewer}" Grid.Row="0" Grid.Column="3">
+            <Border x:Name="borderParameters" Margin="0,0,5,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="320"/>
+                        <ColumnDefinition Width="*" MinWidth="145"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" Content="{x:Static res:Resources.QrrTqMode}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="0" Padding="5" Margin="10"
                           ItemsSource="{Binding Source={StaticResource NamesFromQrrTqModeEnum}}"
                           SelectedItem="{Binding ElementName=qrrTqPage, Path=Parameters.Mode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EV2S}}"
                           Style="{StaticResource CComboboxStyle}"/>
-
-                <Label Grid.Column="0" Grid.Row="1" Content="{x:Static res:Resources.QrrTqTrrMeasureBy9050Method}" Visibility="{Binding Parameters.Mode, ConverterParameter=TrrMeasureBy9050Method, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-                <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Parameters.TrrMeasureBy9050Method, ElementName=qrrTqPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="" Visibility="{Binding Parameters.Mode, ConverterParameter=TrrMeasureBy9050Method, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <Label Grid.Column="0" Grid.Row="2" Content="{x:Static res:Resources.QrrTqDirectCurrent}" />
-                <customControls:ValidatingTextBox x:Name="vtbDirectCurrent" Grid.Column="2" Grid.Row="2" Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinDirectCurrent_QRRTQ}" Maximum="{StaticResource MaxDirectCurrent_QRRTQ}" Text="{Binding Parameters.DirectCurrent, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" />
-
-                <Label Grid.Column="0" Grid.Row="3" Content="{x:Static res:Resources.QrrTqDCPulseWidth}"/>
-                <customControls:ValidatingTextBox x:Name="lbDCPulseWidth" Grid.Column="1" Grid.Row="3" Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinDCPulseWidth_QRRTQ}" Maximum="{StaticResource MaxDCPulseWidth_QRRTQ}" Text="{Binding Parameters.DCPulseWidth, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <Label Grid.Column="0" Grid.Row="4" Content="{x:Static res:Resources.QrrTqDCRiseRate}"/>
-                <customControls:ValidatingTextBox x:Name="lbDCRiseRate" Grid.Column="1" Grid.Row="4" Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" IsFloat="True" Minimum="{StaticResource MinDCRiseRate_QRRTQ}" Maximum="{StaticResource MaxDCRiseRate_QRRTQ}" Text="{Binding Parameters.DCRiseRate, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <Label Grid.Column="0" Grid.Row="5" Content="{x:Static res:Resources.QrrTqDCFallRate}"/>
-                <ComboBox Grid.Column="1" Grid.Row="5" Padding="5" Margin="10,9,10,10"
+                    <CheckBox Content="Trr по методу 90%-50%" IsChecked="{Binding Parameters.TrrMeasureBy9050Method, ElementName=qrrTqPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Parameters.Mode, ConverterParameter=TrrMeasureBy9050Method, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <Label Grid.Column="0" Grid.Row="2" Content="{x:Static res:Resources.QrrTqDirectCurrent}" />
+                    <customControls:ValidatingTextBox x:Name="vtbDirectCurrent" Grid.Column="2" Grid.Row="2" Padding="5" Margin="10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinDirectCurrent_QRRTQ}" Maximum="{StaticResource MaxDirectCurrent_QRRTQ}" Text="{Binding Parameters.DirectCurrent, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Grid.Column="0" Grid.Row="3" Content="{x:Static res:Resources.QrrTqDCPulseWidth}"/>
+                    <customControls:ValidatingTextBox x:Name="lbDCPulseWidth" Grid.Column="1" Grid.Row="3" Padding="5" Margin="10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinDCPulseWidth_QRRTQ}" Maximum="{StaticResource MaxDCPulseWidth_QRRTQ}" Text="{Binding Parameters.DCPulseWidth, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="0" Grid.Row="4" Content="{x:Static res:Resources.QrrTqDCRiseRate}"/>
+                    <customControls:ValidatingTextBox x:Name="lbDCRiseRate" Grid.Column="1" Grid.Row="4" Padding="5" Margin="10" TextBlock.TextAlignment="Right" IsNumeric="True" IsFloat="True" Minimum="{StaticResource MinDCRiseRate_QRRTQ}" Maximum="{StaticResource MaxDCRiseRate_QRRTQ}" Text="{Binding Parameters.DCRiseRate, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="0" Grid.Row="5" Content="{x:Static res:Resources.QrrTqDCFallRate}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="5" Padding="5" Margin="10"
                           ItemsSource="{Binding Source={StaticResource DataFromQrrTqDcFallRateEnum}}"
                           SelectedItem="{Binding ElementName=qrrTqPage, Path=Parameters.DCFallRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TDcFallRateVFE}}"
                           Style="{StaticResource CComboboxStyle}"/>
-
-                <Label Grid.Column="0" Grid.Row="6" Content="{x:Static res:Resources.QrrTqOffStateVoltage}" Visibility="{Binding Parameters.Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-                <customControls:ValidatingTextBox x:Name="lbOffStateVoltage" Grid.Column="1" Grid.Row="6" Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinOffStateVoltage_QRRTQ}" Maximum="{StaticResource MaxOffStateVoltage_QRRTQ}" Text="{Binding Parameters.OffStateVoltage, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Parameters.Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <Label Grid.Column="0" Grid.Row="7" Content="{x:Static res:Resources.QrrTqOsvRate}" Visibility="{Binding Parameters.Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-                <ComboBox Grid.Column="1" Grid.Row="7" Padding="5" Margin="10,9,10,10"
+                    <Label Grid.Column="0" Grid.Row="6" Content="{x:Static res:Resources.QrrTqOffStateVoltage}" Visibility="{Binding Parameters.Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <customControls:ValidatingTextBox x:Name="lbOffStateVoltage" Grid.Column="1" Grid.Row="6" Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinOffStateVoltage_QRRTQ}" Maximum="{StaticResource MaxOffStateVoltage_QRRTQ}" Text="{Binding Parameters.OffStateVoltage, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Parameters.Mode, ConverterParameter=OffStateVoltage, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="0" Grid.Row="7" Visibility="{Binding Parameters.Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}">
+                        <Label.Content>
+                            <AccessText TextWrapping="Wrap" Text="{x:Static res:Resources.QrrTqOsvRate}"/>
+                        </Label.Content>
+                    </Label>
+                    <ComboBox Grid.Column="1" Grid.Row="7" Padding="5" Margin="10" Height="35"
                           ItemsSource="{Binding Source={StaticResource DataFromQrrTqOsvRateEnum}}"
                           SelectedItem="{Binding ElementName=qrrTqPage, Path=Parameters.OsvRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TOsvRateVFE}}"
                           Style="{StaticResource CComboboxStyle}"
                           Visibility="{Binding Parameters.Mode, ConverterParameter=OsvRate, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-
-
-                <Label Content="{x:Static res:Resources.Height_Prof}" Grid.Column="0" Grid.Row="8" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
-                <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="8" Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinHeightCS}" Maximum="{StaticResource MaxHeightCS}" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}" Text="{Binding ClampParameters.Height, ElementName=qrrTqPage}" />
-
-                <Label Content="{x:Static res:Resources.Temp}" Grid.Column="0" Grid.Row="9" />
-                <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="9" Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinHeightCS}" Maximum="{StaticResource MaxTempCS}" Text="{Binding Temperature, ElementName=qrrTqPage}" />
-
-                <Label Content="{x:Static res:Resources.Force}" Grid.Column="0" Grid.Row="10" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}" />
-                <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="10"  Padding="5" Margin="10,9,10,10" TextBlock.TextAlignment="Right" IsNumeric="True" Maximum="{StaticResource MaxForceCS}" Minimum="{StaticResource MinForceCS}" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}" Text="{Binding ClampParameters.CustomForce, ElementName=qrrTqPage}" />
-
-                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Column="0" Grid.Row="0" Content="{x:Static res:Resources.QrrTqIdc}"/>
-                    <Label Grid.Column="1" Grid.Row="0" Content="0" x:Name="lbIdc" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="0,0,10,0"/>
-
-                    <Label Grid.Column="2" Grid.Row="0" Content="{x:Static res:Resources.QrrTqDCFactFallRate}"/>
-                    <Label Grid.Column="3" Grid.Row="0" Content="0" x:Name="lbDCFactFallRate" FontSize="{StaticResource FontSize26}" Height="Auto" Margin="0,0,10,0"/>
-                    
-                    <Label Grid.Column="4" Grid.Row="0" Content="{x:Static res:Resources.QrrTqTq}" Visibility="{Binding Parameters.Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Label Grid.Column="5" Grid.Row="0" Content="0" x:Name="lbTq" FontSize="{StaticResource FontSize26}" Height="Auto" Visibility="{Binding Parameters.Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
-                    
-                    <Label Grid.Column="0" Grid.Row="1" Content="{x:Static res:Resources.QrrTqQrr}" Visibility="{Binding Parameters.Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Label Grid.Column="1" Grid.Row="1" Content="0" x:Name="lbQrr" FontSize="{StaticResource FontSize26}" Height="Auto" Visibility="{Binding Parameters.Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
-
-                    <Label Grid.Column="2" Grid.Row="1" Content="{x:Static res:Resources.QrrTqTrr}" Visibility="{Binding Parameters.Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Label Grid.Column="3" Grid.Row="1" Content="0" x:Name="lbTrr" FontSize="{StaticResource FontSize26}" Height="Auto" Visibility="{Binding Parameters.Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
-
-                    <Label Grid.Column="4" Grid.Row="1" Content="{x:Static res:Resources.QrrTqIrr}" Visibility="{Binding Parameters.Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Label Grid.Column="5" Grid.Row="1" Content="0" x:Name="lbIrr" FontSize="{StaticResource FontSize26}" Height="Auto" Visibility="{Binding Parameters.Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
+                    <Label Content="{x:Static res:Resources.CommutationType}" Grid.Row="8" Grid.Column="0"/>
+                    <ComboBox Style="{StaticResource CComboboxStyle}" ItemsSource="{Binding Source={StaticResource DataFromCommutationModeEnum}}" SelectedValue="{Binding CommType, ElementName=qrrTqPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Value" DisplayMemberPath="Key" MaxDropDownHeight="1500" Grid.Row="8" Grid.Column="1" Margin="10" Padding="5"/>
+                    <Label Content="{x:Static res:Resources.Position}" Grid.Row="9" Grid.Column="0"/>
+                    <ComboBox Style="{StaticResource CComboboxStyle}" ItemsSource="{Binding Source={StaticResource DataFromModulePositionEnum}}" SelectedItem="{Binding ModPosition, ElementName=qrrTqPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource E2S}}" Grid.Row="9" Grid.Column="1" Margin="10" Padding="5"/>
+                    <Label Content="{x:Static res:Resources.Height_Prof}" Grid.Column="0" Grid.Row="10" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
+                    <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="10" Padding="5" Margin="10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinHeightCS}" Maximum="{StaticResource MaxHeightCS}" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}" Text="{Binding ClampParameters.Height, ElementName=qrrTqPage}" />
+                    <Label Content="{x:Static res:Resources.Force}" Grid.Column="0" Grid.Row="11" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}" />
+                    <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="11"  Padding="5" Margin="10" TextBlock.TextAlignment="Right" IsNumeric="True" Maximum="{StaticResource MaxForceCS}" Minimum="{StaticResource MinForceCS}" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}" Text="{Binding ClampParameters.CustomForce, ElementName=qrrTqPage}" />
+                    <Label Content="{x:Static res:Resources.Temp}" Grid.Column="0" Grid.Row="12" />
+                    <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="12" Padding="5" Margin="10" TextBlock.TextAlignment="Right" IsNumeric="True" Minimum="{StaticResource MinHeightCS}" Maximum="{StaticResource MaxTempCS}" Text="{Binding Temperature, ElementName=qrrTqPage}" />
+                    <Label x:Name="lblTitleTop" Content="{x:Static res:Resources.TopTempName}" Grid.Row="13" Grid.Column="0" HorizontalAlignment="Left"/>
+                    <Label x:Name="TopTempLabel" Content="0" Grid.Row="13" Grid.Column="1" Margin="10,3" HorizontalContentAlignment="Right" Background="LightGreen" FontSize="28" Padding="0,0,10,0"/>
+                    <Label  x:Name="lblTitleBot" Content="{x:Static res:Resources.BotTempName}" Grid.Row="14" Grid.Column="0" HorizontalAlignment="Left"/>
+                    <Label x:Name="BotTempLabel" Content="0" Grid.Row="14" Grid.Column="1" Margin="10,3" HorizontalContentAlignment="Right" Background="LightGreen" FontSize="28" Padding="0,0,10,0"/>
+                    <Label Grid.Column="0" Grid.Row="15" Content="{x:Static res:Resources.QrrTqIdc}"/>
+                    <Label Grid.Column="1" Grid.Row="15" Content="0" x:Name="lbIdc" FontSize="28" HorizontalContentAlignment="Right" Height="Auto" Margin="10,3" Padding="0,0,10,0"/>
+                    <Label Grid.Column="0" Grid.Row="16" Content="{x:Static res:Resources.QrrTqDCFactFallRate}"/>
+                    <Label Grid.Column="1" Grid.Row="16" Content="0" x:Name="lbDCFactFallRate" FontSize="28" HorizontalContentAlignment="Right" Height="Auto" Margin="10,3" Padding="0,0,10,0"/>
+                    <Label Grid.Column="0" Grid.Row="17" Content="{x:Static res:Resources.QrrTqTq}" Visibility="{Binding Parameters.Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="1" Grid.Row="17" Content="0" x:Name="lbTq" FontSize="28" HorizontalContentAlignment="Right" Height="Auto" Margin="10,3" Padding="0,0,10,0" Visibility="{Binding Parameters.Mode, ConverterParameter=Tq, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="0" Grid.Row="18" Content="{x:Static res:Resources.QrrTqQrr}" Visibility="{Binding Parameters.Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="1" Grid.Row="18" Content="0" x:Name="lbQrr" FontSize="28" HorizontalContentAlignment="Right" Height="Auto" Margin="10,3" Padding="0,0,10,0" Visibility="{Binding Parameters.Mode, ConverterParameter=Qrr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="0" Grid.Row="19" Content="{x:Static res:Resources.QrrTqTrr}" Visibility="{Binding Parameters.Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="1" Grid.Row="19" Content="0" x:Name="lbTrr" FontSize="28" HorizontalContentAlignment="Right" Height="Auto" Margin="10,3" Padding="0,0,10,0" Visibility="{Binding Parameters.Mode, ConverterParameter=Trr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="0" Grid.Row="20" Content="{x:Static res:Resources.QrrTqIrr}" Visibility="{Binding Parameters.Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="1" Grid.Row="20" Content="0" x:Name="lbIrr" FontSize="28" HorizontalContentAlignment="Right" Height="Auto" Margin="10,3" Padding="0,0,10,0" Visibility="{Binding Parameters.Mode, ConverterParameter=Irr, Converter={StaticResource QrrTqM2V}, ElementName=qrrTqPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Column="0" Grid.Row="21" Grid.ColumnSpan="2" x:Name="lbFaultReason" Content="FaultReason" FontSize="{StaticResource FontSize26}" Background="Tomato" Height="Auto" Padding="10"/>
+                    <Label Grid.Column="0" Grid.Row="22" Grid.ColumnSpan="2" x:Name="lbWarning" Content="Warning" FontSize="{StaticResource FontSize26}" Background="Gold" Height="Auto" Padding="10"/>
+                    <Label Grid.Column="0" Grid.Row="23" Grid.ColumnSpan="2" x:Name="lbProblem" Content="Problem" FontSize="{StaticResource FontSize26}" Background="LightPink" Height="Auto" Padding="10"/>
                 </Grid>
-
-            </Grid>
-        </Border>
-
-        <Grid Grid.Row="2" Grid.ColumnSpan="4" Margin="0,0,-10,0">
+            </Border>
+        </customControls:ScrollViewerLeftMouseButtonScroll>
+        <Grid Grid.Row="1" Grid.ColumnSpan="4" Margin="0,0,-10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
@@ -172,56 +169,5 @@
             <Button Grid.Column="4" VerticalAlignment="Bottom" Content="{x:Static res:Resources.Stop}" Background="{StaticResource xRed1}" Click="btnStop_OnClick" />
             <Button Grid.Column="6" VerticalAlignment="Bottom" Content="{x:Static res:Resources.Start}" Background="{StaticResource xGreen1}" x:Name="btnStart" Click="btnStart_OnClick"/>
         </Grid>
-
-
-
-        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Margin="10,0,0,0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="9*"/>
-                </Grid.RowDefinitions>
-                <dynamicDataDisplay:ChartPlotter Name="chartPlotter" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,10,20"                                                 
-                         Background="Transparent" Foreground="{StaticResource xBlack1}" BorderBrush="Transparent">
-                    <dynamicDataDisplay:HorizontalAxisTitle Content="{x:Static res:Resources.Graph_TimeUs}" />
-                    <dynamicDataDisplay:VerticalAxisTitle Content="{x:Static res:Resources.Graph_IA}" />
-                    <dynamicDataDisplay:AxisGrid Visibility="Visible" />
-
-                </dynamicDataDisplay:ChartPlotter>
-
-                <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" x:Name="lbFaultReason" Content="FaultReason" FontSize="{StaticResource FontSize26}" Background="Tomato"/>
-                <Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" x:Name="lbWarning" Content="Warning" FontSize="{StaticResource FontSize26}" Background="Gold"/>
-                <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" x:Name="lbProblem" Content="Problem" FontSize="{StaticResource FontSize26}" Background="LightPink"/>
-
-                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Label x:Name="lblTitleTop" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Left" Content="{Binding Source={StaticResource TopTempName}}" Visibility="{Binding Source={StaticResource VisibilityTopTemp}}" />
-                    <Label x:Name="TopTempLabel" Grid.Column="2" Grid.Row="0" Content="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right" VerticalAlignment="Center" Background="LightGreen" Padding="0,0,10,0"/>
-
-                    <Label x:Name="lblTitleBot" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Left" Content="{Binding Source={StaticResource BottomTempName}}" />
-                    <Label x:Name="BotTempLabel" Grid.Column="2" Grid.Row="1" Content="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right" VerticalAlignment="Center" Background="LightGreen" Padding="0,0,10,0"/>
-
-                </Grid>
-            </Grid>
-        </Border>
     </Grid>
 </Page>

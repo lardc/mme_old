@@ -17,6 +17,7 @@
     <ObjectDataProvider x:Key="DvdtModes" MethodName="GetDvdtModes" ObjectType="{x:Type dataProviders:TestTypeEnumDictionary}"/>
     <ObjectDataProvider x:Key="VoltageRates" MethodName="GetVoltageRates" ObjectType="{x:Type dataProviders:TestTypeEnumDictionary}"/>
     <ObjectDataProvider x:Key="TModes" MethodName="GetTModes" ObjectType="{x:Type dataProviders:TestTypeEnumDictionary}"/>
+    <ObjectDataProvider x:Key="TrrModes" MethodName="GetTrrModes" ObjectType="{x:Type dataProviders:TestTypeEnumDictionary}"/>
     <ObjectDataProvider x:Key="TOsvRates" MethodName="GetTOsvRates" ObjectType="{x:Type dataProviders:TestTypeEnumDictionary}"/>
     <ObjectDataProvider x:Key="TDcFallRates" MethodName="GetTDcFallRates" ObjectType="{x:Type dataProviders:TestTypeEnumDictionary}"/>
     <ObjectDataProvider x:Key="ClampingForceTypes" MethodName="GetClampingForceTypes" ObjectType="{x:Type dataProviders:TestTypeEnumDictionary}"/>

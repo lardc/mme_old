@@ -63,11 +63,11 @@ namespace SCME.WpfControlLibrary.DataProviders
         {
             return new Dictionary<string, VoltageRate>()
             {
-                {nameof(VoltageRate.V500), VoltageRate.V500},
-                {nameof(VoltageRate.V1000), VoltageRate.V1000},
-                {nameof(VoltageRate.V1600), VoltageRate.V1600},
-                {nameof(VoltageRate.V2000), VoltageRate.V2000},
-                {nameof(VoltageRate.V2500), VoltageRate.V2500},
+                {"500", VoltageRate.V500},
+                {"1000", VoltageRate.V1000},
+                {"1600", VoltageRate.V1600},
+                {"2000", VoltageRate.V2000},
+                {"2500", VoltageRate.V2500},
             };
         }
 
@@ -76,7 +76,16 @@ namespace SCME.WpfControlLibrary.DataProviders
             return new Dictionary<string, TMode>()
             {
                 {nameof(TMode.Qrr), TMode.Qrr},
-                {nameof(TMode.QrrTq), TMode.QrrTq}
+                {"Tq", TMode.QrrTq}
+            };
+        }
+
+        public static Dictionary<string, bool> GetTrrModes()
+        {
+            return new Dictionary<string, bool>()
+            {
+                {"ГОСТ", false},
+                {"90%-50%", true}
             };
         }
 
@@ -84,15 +93,15 @@ namespace SCME.WpfControlLibrary.DataProviders
         {
             return new Dictionary<string, TDcFallRate>()
             {
-                {nameof(TDcFallRate.r2), TDcFallRate.r2},
-                {nameof(TDcFallRate.r5), TDcFallRate.r5},
-                {nameof(TDcFallRate.r10), TDcFallRate.r10},
-                {nameof(TDcFallRate.r15), TDcFallRate.r15},
-                {nameof(TDcFallRate.r20), TDcFallRate.r20},
-                {nameof(TDcFallRate.r30), TDcFallRate.r30},
-                {nameof(TDcFallRate.r50), TDcFallRate.r50},
-                {nameof(TDcFallRate.r60), TDcFallRate.r60},
-                {nameof(TDcFallRate.r100), TDcFallRate.r100},
+                {"2", TDcFallRate.r2},
+                {"5", TDcFallRate.r5},
+                {"10", TDcFallRate.r10},
+                {"15", TDcFallRate.r15},
+                {"20", TDcFallRate.r20},
+                {"30", TDcFallRate.r30},
+                {"50", TDcFallRate.r50},
+                {"60", TDcFallRate.r60},
+                {"100", TDcFallRate.r100},
             };
         }
 
@@ -101,10 +110,10 @@ namespace SCME.WpfControlLibrary.DataProviders
         {
             return new Dictionary<string, TOsvRate>()
             {
-                {nameof(TOsvRate.r20), TOsvRate.r20},
-                {nameof(TOsvRate.r50), TOsvRate.r50},
-                {nameof(TOsvRate.r100), TOsvRate.r100},
-                {nameof(TOsvRate.r200), TOsvRate.r200},
+                {"20", TOsvRate.r20},
+                {"50", TOsvRate.r50},
+                {"100", TOsvRate.r100},
+                {"200", TOsvRate.r200},
             };
         }
 

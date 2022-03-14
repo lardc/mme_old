@@ -673,19 +673,19 @@
     <value>Скорость спада тока, А/мкс</value>
   </data>
   <data name="QrrTqDCPulseWidth" xml:space="preserve">
-    <value>Длительность импульса прямого тока, мкс</value>
+    <value>Длит. импульса пр. тока, мкс</value>
   </data>
   <data name="QrrTqDCRiseRate" xml:space="preserve">
-    <value>Скорость нарастания прямого тока, А/мкс</value>
+    <value>Скор. нараст. пр. тока, А/мкс</value>
   </data>
   <data name="QrrTqDirectCurrent" xml:space="preserve">
     <value>Амплитуда прямого тока, А</value>
   </data>
   <data name="QrrTqOffStateVoltage" xml:space="preserve">
-    <value>Прямое повторное напряжение, В</value>
+    <value>Пр. повт. напряжение, В</value>
   </data>
   <data name="QrrTqOsvRate" xml:space="preserve">
-    <value>Скорость нарастания прямого повторного напряж., В/мкс</value>
+    <value>Скор. нараст. пр. повт. напряжения, В/мкс</value>
   </data>
   <data name="QrrTqIdc" xml:space="preserve">
     <value>IDC, А</value>

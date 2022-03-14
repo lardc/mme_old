@@ -1222,7 +1222,7 @@ namespace SCME.WpfControlLibrary.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Max. VTM, V.
+        ///   Ищет локализованную строку, похожую на Min. VTM, V.
         /// </summary>
         public static string MinVtm_V {
             get {

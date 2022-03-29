@@ -237,6 +237,13 @@ namespace SCME.Types.BVT
         }
 
         [DataMember]
+        [OnChangedMethod(nameof(OnAutoMeasureUdsmUrsmChanged))]
+        public bool AutoMeasureUdsmUrsm
+        {
+            get; set;
+        }
+
+        [DataMember]
         public int? ClassByProfileName
         {
             get; set;
@@ -343,6 +350,8 @@ namespace SCME.Types.BVT
                 throw new InvalidCastException("OldParameters must be BVTOldParameters");
             if (UseUdsmUrsm != OldTestParameters.UseUdsmUrsm)
                 return true;
+            if (AutoMeasureUdsmUrsm != OldTestParameters.AutoMeasureUdsmUrsm)
+                return true;
             if (PulseFrequency != OldTestParameters.PulseFrequency)
                 return true;
             if (MeasurementMode != OldTestParameters.MeasurementMode)
@@ -407,6 +416,19 @@ namespace SCME.Types.BVT
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        private void OnAutoMeasureUdsmUrsmChanged()
+        {
+            UdsmUrsmTestType = TestType;
+            UdsmUrsmCurrentLimit = CurrentLimit;
+            UdsmUrsmVoltageLimitD = VoltageLimitD;
+            UdsmUrsmVoltageLimitR = VoltageLimitR;
+            UdsmUrsmPlateTime = PlateTime;
+            UdsmUrsmRampUpVoltage = RampUpVoltage;
+            UdsmUrsmStartVoltage = StartVoltage;
+            UdsmUrsmVoltageFrequency = VoltageFrequency;
+            UdsmUrsmFrequencyDivisor = FrequencyDivisor;
         }
     }
 

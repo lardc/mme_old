@@ -233,7 +233,7 @@
                         <Label Name="labelBvtVdrmResult2" Grid.Column="6" Grid.Row="0" Content="0" HorizontalContentAlignment="Right" FontSize="{StaticResource FontSize30}" Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=1}"
                        Height="Auto" Margin="8,0,0,0"/>
 
-                        <customControls:LabelWithIndex Content="IDRM" Grid.Column="0" Grid.Row="1"
+                        <customControls:LabelWithIndex x:Name="labelWithIndexBvtIdrmResult1" Grid.Column="0" Grid.Row="1"
                                                    Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=1}"/>
                         <TextBlock Text="мА" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=1}"/>
                         <Label Name="labelBvtIdrmResult1" Grid.Column="4" Grid.Row="1" Content="0"
@@ -257,7 +257,7 @@
                        Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=2}"
                        Height="Auto" Margin="8,0,0,0"/>
 
-                        <customControls:LabelWithIndex Content="IRRM" Grid.Column="0" Grid.Row="3"
+                        <customControls:LabelWithIndex x:Name="labelWithIndexBvtIrrmResult1" Grid.Column="0" Grid.Row="3"
                                                    Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=2}"/>
                         <TextBlock Text="мА" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding TestType, Converter={StaticResource TT2V}, ConverterParameter=2}"/>
                         <Label Name="labelBvtIrrmResult1"  Grid.Column="4" Grid.Row="3" Content="0"

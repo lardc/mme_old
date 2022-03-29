@@ -341,10 +341,10 @@
     <value>VRRM, В</value>
   </data>
   <data name="Ubr" xml:space="preserve">
-    <value>Ubr, В</value>
+    <value>Ubr</value>
   </data>
   <data name="Ub0" xml:space="preserve">
-    <value>Ub0, В</value>
+    <value>Ub0</value>
   </data>
   <data name="Vms" xml:space="preserve">
     <value>V / ms</value>
@@ -836,7 +836,7 @@
     <value>Class by RT</value>
   </data>
   <data name="DeviceClass" xml:space="preserve">
-    <value>Class</value>
+    <value>Class by Tjmax</value>
   </data>
   <data name="NoResults" xml:space="preserve">
     <value>No results</value>

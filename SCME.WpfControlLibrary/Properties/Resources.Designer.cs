@@ -196,6 +196,15 @@ namespace SCME.WpfControlLibrary.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Automeasurement.
+        /// </summary>
+        public static string AutoMeasureUdsmUrsm {
+            get {
+                return ResourceManager.GetString("AutoMeasureUdsmUrsm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Available profiles.
         /// </summary>
         public static string AvailableProfiles {
@@ -1659,6 +1668,15 @@ namespace SCME.WpfControlLibrary.Properties {
         public static string QrrTqTrrMeasureBy9050Method {
             get {
                 return ResourceManager.GetString("QrrTqTrrMeasureBy9050Method", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Trr measurement method.
+        /// </summary>
+        public static string QrrTqTrrMethod {
+            get {
+                return ResourceManager.GetString("QrrTqTrrMethod", resourceCulture);
             }
         }
         

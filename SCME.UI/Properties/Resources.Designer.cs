@@ -19,7 +19,7 @@ namespace SCME.UI.Properties {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -457,7 +457,7 @@ namespace SCME.UI.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Class.
+        ///   Ищет локализованную строку, похожую на Class by Tjmax.
         /// </summary>
         public static string DeviceClass {
             get {
@@ -2186,7 +2186,7 @@ namespace SCME.UI.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ub0, В.
+        ///   Ищет локализованную строку, похожую на Ub0.
         /// </summary>
         public static string Ub0 {
             get {
@@ -2195,7 +2195,7 @@ namespace SCME.UI.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ubr, В.
+        ///   Ищет локализованную строку, похожую на Ubr.
         /// </summary>
         public static string Ubr {
             get {

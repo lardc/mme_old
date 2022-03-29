@@ -1377,6 +1377,38 @@ namespace SCME.UI.PagesUser
                     ((m_CurrentPos == 1) ? m_Errors1 : m_Errors2).Add("ERR_IRSM");
         }
 
+        internal void SetResultAutoMeasureUdsmUrsm(Types.BVT.TestResults result) //Алгоритм автоопределения (Udsm; Idsm) и (Ursm; Irsm)
+        {
+            if (Profile.Temperature < 60)
+            {
+                ushort Umin;
+                switch (Profile.TestParametersAndNormatives.OfType<Types.BVT.TestParameters>().ToArray()[bvtCounter].TestType)
+                {
+                    case Types.BVT.BVTTestType.Direct:
+                        Umin = result.VDRM;
+                        break;
+                    case Types.BVT.BVTTestType.Reverse:
+                        Umin = result.VRRM;
+                        break;
+                    default:
+                        Umin = result.VDRM > result.VRRM ? result.VDRM : result.VRRM;
+                        break;
+                }
+                //Расчет Vdrm, Vrrm
+                ushort VdrmVrrm;
+                if (Umin >= 2300)
+                    VdrmVrrm = (ushort)(Umin - 200);
+                else if (Umin >= 1600 && Umin <= 2300)
+                    VdrmVrrm = (ushort)(Umin - 150);
+                else
+                    VdrmVrrm = (ushort)(Umin - 125);
+                VdrmVrrm = (ushort)(VdrmVrrm / 100 * 100);
+                //Расчет Vdsm, Vrsm
+                ushort VdsmVrsm;
+                VdsmVrsm = (ushort)(VdrmVrrm + 110);
+            }
+        }
+
         private int dvdtCounter;
 
         private List<DependencyObject> GetDvDtItemContainer()
@@ -2268,7 +2300,24 @@ namespace SCME.UI.PagesUser
                 else
                     labelWithIndexBvtVrrmVResult1.Content = Properties.Resources.VrrmV;
             }
-            
+
+            var labelWithIndexBvtIdrmResult1 = FindChild<LabelWithIndex>(presenter, "labelWithIndexBvtIdrmResult1");
+            if (labelWithIndexBvtIdrmResult1 != null)
+            {
+                if (Profile.Temperature < 60)
+                    labelWithIndexBvtIdrmResult1.Content = "I";
+                else
+                    labelWithIndexBvtIdrmResult1.Content = "IDRM";
+            }
+            var labelWithIndexBvtIrrmResult1 = FindChild<LabelWithIndex>(presenter, "labelWithIndexBvtIrrmResult1");
+            if (labelWithIndexBvtIrrmResult1 != null)
+            {
+                if (Profile.Temperature < 60)
+                    labelWithIndexBvtIrrmResult1.Content = "I";
+                else
+                    labelWithIndexBvtIrrmResult1.Content = "IRRM";
+            }
+
             var labelBvtVdrmResult1 = FindChild<Label>(presenter, "labelBvtVdrmResult" + position);
             if (labelBvtVdrmResult1 != null)
                 ResetLabel(labelBvtVdrmResult1);
@@ -2944,6 +2993,11 @@ namespace SCME.UI.PagesUser
 
         private void UserTestPage_OnLoaded(object Sender, RoutedEventArgs E)
         {
+            //Сброс классов прибора
+            lblRTClass.Content = "-";
+            lblTjClass.Content = "-";
+            lblFPE.Content = "-";
+
             m_TwoPosRequested =
     !(Profile.ParametersComm == Types.Commutation.ModuleCommutationType.MT1 ||
       Profile.ParametersComm == Types.Commutation.ModuleCommutationType.MD1 ||

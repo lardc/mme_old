@@ -8,7 +8,7 @@
       xmlns:res="clr-namespace:SCME.UI.Properties"
       xmlns:customControls="WpfControlLibrary"
       mc:Ignorable="d" x:Name="qrrTqPage"
-      d:DesignWidth="1280" d:DesignHeight="9240"
+      d:DesignWidth="1280" d:DesignHeight="924"
       Title="{x:Static res:Resources.QrrTq}">
 
     <Page.Resources>
@@ -153,6 +153,7 @@
                 </Grid>
             </Border>
         </customControls:ScrollViewerLeftMouseButtonScroll>
+        
         <Grid Grid.Row="1" Grid.ColumnSpan="4" Margin="0,0,-10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />

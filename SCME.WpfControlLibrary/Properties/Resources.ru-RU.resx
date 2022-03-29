@@ -843,4 +843,10 @@
   <data name="MinVtm_V" xml:space="preserve">
     <value>Мин. UTM, В</value>
   </data>
+  <data name="QrrTqTrrMethod" xml:space="preserve">
+    <value>Метод измерения Trr</value>
+  </data>
+  <data name="AutoMeasureUdsmUrsm" xml:space="preserve">
+    <value>Автоопределение</value>
+  </data>
 </root>

@@ -24,34 +24,43 @@
             <ColumnDefinition Width="170" SharedSizeGroup="Column3g" />
             <ColumnDefinition Width="220" SharedSizeGroup="Column4g"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
-            <RowDefinition Height="45" />
-            <RowDefinition Height="45" />
-            <RowDefinition Height="45" />
-            <RowDefinition Height="45" />
-            <RowDefinition Height="45" />
+    <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Foreground="Black" Grid.Column="0" Grid.Row="0" Content="{x:Static res:Resources.TestType}" />
-        <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Source={StaticResource BvtTestTypes}}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding UdsmUrsmTestType}" />
-        <Label Foreground="Black" Grid.Column="3" Grid.Row="0" Content="{x:Static res:Resources.CurrentLimit_mA}" />
-    <customControls:ValidatingTextBox Text="{Binding UdsmUrsmCurrentLimit}" IsNumeric="True" IsFloat="True" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
-        <Label Foreground="Black" Grid.Column="0" Grid.Row="1" Content="{x:Static res:Resources.VoltageLimitD_V}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=1}" />
-    <customControls:ValidatingTextBox Text="{Binding UdsmUrsmVoltageLimitD}" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=1}" IsFloat="True" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
-        <Label Foreground="Black" Grid.Column="3" Grid.Row="1" Content="{x:Static res:Resources.VoltageLimitR_V}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=2}" />
-    <customControls:ValidatingTextBox Text="{Binding UdsmUrsmVoltageLimitR}" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=2}" IsFloat="True" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
-        <Label Foreground="Black" Grid.Column="0" Grid.Row="2" Content="{x:Static res:Resources.PlateTime_ms}" />
-    <customControls:ValidatingTextBox Text="{Binding UdsmUrsmPlateTime}" IsNumeric="True" IsFloat="True" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
-        <Label Foreground="Black" Grid.Column="3" Grid.Row="2" Content="{x:Static res:Resources.Rampup_Vms}" />
-    <customControls:ValidatingTextBox Text="{Binding UdsmUrsmRampUpVoltage}" IsNumeric="True" IsFloat="True" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
-        <Label Foreground="Black" Grid.Column="0" Grid.Row="3" Content="{x:Static res:Resources.StartVoltage_V}" />
-    <customControls:ValidatingTextBox Text="{Binding UdsmUrsmStartVoltage}" IsNumeric="True" IsFloat="True" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
-        <Label Foreground="Black" Grid.Column="3" Grid.Row="3" Content="{x:Static res:Resources.Frequency_Hz}" />
-        <ComboBox Grid.Column="4" Grid.Row="3" ItemsSource="{Binding Source={StaticResource VoltageFrequency}}" SelectedValue="{Binding UdsmUrsmVoltageFrequency}" />
-        <Label Foreground="Black" Grid.Column="0" Grid.Row="4" Content="{x:Static res:Resources.FreqRate_Hz}" />
-        <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Source={StaticResource FrequencyDivisors}}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding UdsmUrsmFrequencyDivisor}" />
-    <Label Foreground="Black" Grid.Column="0" Grid.Row="5" Content="{x:Static res:Resources.MaxIdsm_mA}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIdsmToVisibilityConverter}}" />
-    <customControls:ValidatingTextBox Text="{Binding IDSM}" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIdsmToVisibilityConverter}}" IsFloat="True" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
-    <Label Foreground="Black" Grid.Column="3" Grid.Row="5" Content="{x:Static res:Resources.MaxIrsm_mA}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIrsmToVisibilityConverter}}"/>
-    <customControls:ValidatingTextBox Text="{Binding IRSM}" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIrsmToVisibilityConverter}}" IsFloat="True" Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Label Foreground="Black" Grid.Column="0" Grid.Row="0" Content="{x:Static res:Resources.TestType}" Margin="0,5,0,0" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}"/>
+    <ComboBox Grid.Column="1" Grid.Row="0" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" ItemsSource="{Binding Source={StaticResource BvtTestTypes}}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding UdsmUrsmTestType}" Margin="0,5,0,0" />
+    <Label Foreground="Black" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Grid.Column="3" Grid.Row="0" Content="{x:Static res:Resources.CurrentLimit_mA}" Margin="0,5,0,0" />
+    <customControls:ValidatingTextBox Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Margin="0,5,0,0" Text="{Binding UdsmUrsmCurrentLimit}" IsNumeric="True" IsFloat="True" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Grid Grid.Row="1" Grid.ColumnSpan="5" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180" SharedSizeGroup="Column0g" />
+            <ColumnDefinition Width="220" SharedSizeGroup="Column1g"/>
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition Width="170" SharedSizeGroup="Column3g" />
+            <ColumnDefinition Width="220" SharedSizeGroup="Column4g"/>
+        </Grid.ColumnDefinitions>
+    <Label Foreground="Black" Margin="0,5,0,0" Grid.Column="0" Grid.Row="0" Content="{x:Static res:Resources.VoltageLimitD_V}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=1}" />
+        <customControls:ValidatingTextBox Margin="0,5,0,0" Text="{Binding UdsmUrsmVoltageLimitD}" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=1}" IsFloat="True" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+        <Label Foreground="Black" Margin="0,5,0,0" Grid.Column="3" Grid.Row="0" Content="{x:Static res:Resources.VoltageLimitR_V}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=2}" />
+        <customControls:ValidatingTextBox Text="{Binding UdsmUrsmVoltageLimitR}" Margin="0,5,0,0" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource TT2V}, ConverterParameter=2}" IsFloat="True" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    </Grid>
+    <Label Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Foreground="Black" Margin="0,5,0,0" Grid.Column="0" Grid.Row="2" Content="{x:Static res:Resources.PlateTime_ms}" />
+    <customControls:ValidatingTextBox Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Margin="0,5,0,0" Text="{Binding UdsmUrsmPlateTime}" IsNumeric="True" IsFloat="True" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Label Foreground="Black" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Margin="0,5,0,0" Grid.Column="3" Grid.Row="2" Content="{x:Static res:Resources.Rampup_Vms}" />
+    <customControls:ValidatingTextBox Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Margin="0,5,0,0" Text="{Binding UdsmUrsmRampUpVoltage}" IsNumeric="True" IsFloat="True" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Label Foreground="Black" Margin="0,5,0,0" Grid.Column="0" Grid.Row="3" Content="{x:Static res:Resources.StartVoltage_V}" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}"/>
+    <customControls:ValidatingTextBox Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Margin="0,5,0,0" Text="{Binding UdsmUrsmStartVoltage}" IsNumeric="True" IsFloat="True" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Label Foreground="Black" Margin="0,5,0,0" Grid.Column="3" Grid.Row="3" Content="{x:Static res:Resources.Frequency_Hz}" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}"/>
+    <ComboBox Grid.Column="4" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Margin="0,5,0,0" Grid.Row="3" ItemsSource="{Binding Source={StaticResource VoltageFrequency}}" SelectedValue="{Binding UdsmUrsmVoltageFrequency}" />
+    <Label Foreground="Black" Margin="0,5,0,0" Grid.Column="0" Grid.Row="4" Content="{x:Static res:Resources.FreqRate_Hz}" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}"/>
+    <ComboBox Grid.Column="1" Visibility="{Binding AutoMeasureUdsmUrsm, Converter={StaticResource B2VI}}" Margin="0,5,0,0" Grid.Row="4" ItemsSource="{Binding Source={StaticResource FrequencyDivisors}}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding UdsmUrsmFrequencyDivisor}" />
+    <Label Foreground="Black" Margin="0,5,0,0" Grid.Column="0" Grid.Row="5" Content="{x:Static res:Resources.MaxIdsm_mA}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIdsmToVisibilityConverter}}" />
+    <customControls:ValidatingTextBox Margin="0,5,0,0" Text="{Binding IDSM}" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIdsmToVisibilityConverter}}" IsFloat="True" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
+    <Label Foreground="Black" Margin="0,5,0,0" Grid.Column="3" Grid.Row="5" Content="{x:Static res:Resources.MaxIrsm_mA}" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIrsmToVisibilityConverter}}"/>
+    <customControls:ValidatingTextBox Margin="0,5,0,0" Text="{Binding IRSM}" IsNumeric="True" Visibility="{Binding UdsmUrsmTestType, Converter={StaticResource bvtUdsmUrsmIrsmToVisibilityConverter}}" IsFloat="True" Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>
 </Grid>

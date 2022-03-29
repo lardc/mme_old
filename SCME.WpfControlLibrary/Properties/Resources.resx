@@ -846,4 +846,10 @@
   <data name="MinVtm_V" xml:space="preserve">
     <value>Min. VTM, V</value>
   </data>
+  <data name="QrrTqTrrMethod" xml:space="preserve">
+    <value>Trr measurement method</value>
+  </data>
+  <data name="AutoMeasureUdsmUrsm" xml:space="preserve">
+    <value>Automeasurement</value>
+  </data>
 </root>

@@ -36,7 +36,7 @@
     </Grid.RowDefinitions>
     <Label Foreground="Black" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="{x:Static res:Resources.QrrTqMode}" Margin="0,5,0,0"/>
     <ComboBox Grid.Column="4" Grid.Row="0" Margin="0,5,0,0" ItemsSource="{Binding Source={StaticResource TModes}}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding Mode}" />
-    <Label Visibility="{Binding Mode, ConverterParameter=TrrMeasureBy9050Method, Converter={StaticResource QrrTqM2V}}" Foreground="Black" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="Метод измерения Trr" Margin="0,5,0,0"/>
+    <Label Visibility="{Binding Mode, ConverterParameter=TrrMeasureBy9050Method, Converter={StaticResource QrrTqM2V}}" Foreground="Black" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="{x:Static res:Resources.QrrTqTrrMethod}" Margin="0,5,0,0"/>
     <ComboBox Visibility="{Binding Mode, ConverterParameter=TrrMeasureBy9050Method, Converter={StaticResource QrrTqM2V}}" Grid.Column="4" ItemsSource="{Binding Source={StaticResource TrrModes}}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedValue="{Binding TrrMeasureBy9050Method}" Grid.Row="1" Margin="0,5,0,0"/>
     <TextBlock Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Name="WidthTemplate" Text="{x:Static res:Resources.QrrTqDirectCurrent}" Foreground="Black" VerticalAlignment="Center" Margin="0,5,0,0"/>
     <customControls:ValidatingTextBox Margin="0,5,0,0" Text="{Binding DirectCurrent}" IsNumeric="True" Minimum="{StaticResource MinDirectCurrent_QRRTQ}" Maximum="{StaticResource MaxDirectCurrent_QRRTQ}" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,10,0"/>

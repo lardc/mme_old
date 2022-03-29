@@ -820,7 +820,7 @@
     <value>Ошибка отправки результатов на сервер</value>
   </data>
   <data name="DeviceClass" xml:space="preserve">
-    <value>Класс</value>
+    <value>Класс при Tjmax</value>
   </data>
   <data name="Ubr" xml:space="preserve">
     <value>Ubr</value>

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -714,7 +716,17 @@ namespace SCME.UI.PagesUser
                         {
                             beginTime = DateTime.Now;
                             //сохраняем результаты измерений в центральную базу данных
-                            Cache.Net.WriteResultServer(DataForSave, errors);
+                            long devId = Cache.Net.WriteResultServer(DataForSave, errors);
+                            
+                            //Отправка ВАХ в центральную базу данных
+                            foreach (Types.BVT.TestResults test in DataForSave.BVT)
+                            {
+                                //Отправка эндпоинтов тока
+                                SendResultBvtVoltAmpereCharacteristics(devId, test.TestTypeId, "Current", test.CurrentData);
+                                //Отправка эндпоинтов напряжения
+                                SendResultBvtVoltAmpereCharacteristics(devId, test.TestTypeId, "Voltage", test.VoltageData);
+                            }
+
                             File.AppendAllText("WriteResultTimeSpan.txt", $"{Environment.NewLine}{(DateTime.Now - beginTime).TotalMilliseconds} - write result to remote server MSSql {Environment.NewLine}");
                             DataForSave.IsSentToServer = true;
                             _firstSend = true;
@@ -1407,6 +1419,29 @@ namespace SCME.UI.PagesUser
                 ushort VdsmVrsm;
                 VdsmVrsm = (ushort)(VdrmVrrm + 110);
             }
+        }
+
+        internal async void SendResultBvtVoltAmpereCharacteristics(long devId, long testTypeId, string type, List<short> values) //Отправка ВАХ
+        {
+            string ConnString = @"Data Source=192.168.2.170; Initial Catalog=SCME_ResultsDB; User ID=sa; Password=Hpl1520";
+            await Task.Run(() =>
+            {
+                try
+                {
+                    using (SqlConnection Connection = new SqlConnection(ConnString))
+                    using (SqlCommand Command = Connection.CreateCommand())
+                    {
+                        Connection.Open();
+                        Command.CommandText = "INSERT INTO DEV_VAC (DEV_ID, TEST_TYPE_ID, TYPE, VALUES) VALUES (@DEV_ID, @TEST_TYPE_ID, @TYPE, @VALUES)";
+                        Command.Parameters.AddWithValue("DEV_ID", devId);
+                        Command.Parameters.AddWithValue("TEST_TYPE_ID", testTypeId);
+                        Command.Parameters.AddWithValue("TYPE", type);
+                        Command.Parameters.AddWithValue("VALUES", string.Join(" ", values));
+                        Command.ExecuteNonQuery();
+                    }
+                }
+                catch { }
+            });
         }
 
         private int dvdtCounter;

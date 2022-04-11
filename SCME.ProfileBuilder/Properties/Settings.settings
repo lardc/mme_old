@@ -6,7 +6,7 @@
       <Value Profile="(Default)">ru-RU</Value>
     </Setting>
     <Setting Name="MSSQLServer" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">192.168.0.120\SCME</Value>
+      <Value Profile="(Default)">192.168.2.170</Value>
     </Setting>
     <Setting Name="MSSQLIntegratedSecurity" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
@@ -24,7 +24,7 @@
       <Value Profile="(Default)">Hpl1520</Value>
     </Setting>
     <Setting Name="SQLiteFileName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">D:\Visual Studio Builds\SCME.BaseData\SCME_ResultsDB_Local.sqlite</Value>
+      <Value Profile="(Default)">D:\Visual Studio Builds\scme_software\BaseData\SCME_ResultsDB_Local.sqlite</Value>
     </Setting>
     <Setting Name="TypeDb" Type="SCME.Types.TypeDb" Scope="Application">
       <Value Profile="(Default)">MSSQL</Value>

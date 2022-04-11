@@ -39,7 +39,7 @@ namespace SCME.UI.CustomControl
 
         private void SetFault(string reason)
         {
-            string ConnString = @"Data Source=192.168.0.120\SCME; Initial Catalog=SCME_ResultsDB; User ID=sa; Password=Hpl1520";
+            string ConnString = @"Data Source=192.168.2.170; Initial Catalog=SCME_ResultsDB; User ID=sa; Password=Hpl1520";
             try
             {
                 using (SqlConnection Connection = new SqlConnection(ConnString))

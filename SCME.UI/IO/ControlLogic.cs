@@ -922,11 +922,11 @@ namespace SCME.UI.IO
             }
         }
 
-        public void WriteResultServer(ResultItem item, List<string> errors)
+        public long WriteResultServer(ResultItem item, List<string> errors)
         {
             using (var centralDbClient = new CentralDatabaseServiceClient(Settings.Default.CentralDatabaseService))
             {
-                centralDbClient.SaveResults(item, errors);
+                return centralDbClient.SaveResults(item, errors);
                 //try
                 //{
                 //    centralDbClient.SaveResults(item, errors);

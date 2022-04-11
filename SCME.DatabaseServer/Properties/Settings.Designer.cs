@@ -70,7 +70,7 @@ namespace SCME.DatabaseServer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.120\\SCME")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.2.170")]
         public string DbPath {
             get {
                 return ((string)(this["DbPath"]));

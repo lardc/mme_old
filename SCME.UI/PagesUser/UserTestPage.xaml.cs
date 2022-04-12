@@ -1166,7 +1166,15 @@ namespace SCME.UI.PagesUser
         internal void SetResultBvtAll(Types.DeviceState state)
         {
             if (state == Types.DeviceState.InProcess)
+            {
                 bvtCounter++;
+                
+                //Сброс эндпоинтов для отправки ВАХ
+                ResultsBVT1[bvtCounter].CurrentData.Clear();
+                ResultsBVT1[bvtCounter].VoltageData.Clear();
+                ResultsBVT2[bvtCounter].CurrentData.Clear();
+                ResultsBVT2[bvtCounter].VoltageData.Clear();
+            }
         }
 
         internal void SetResultBvtDirect(Types.DeviceState state, Types.BVT.TestResults result)
@@ -1177,13 +1185,27 @@ namespace SCME.UI.PagesUser
             {
                 ResultsBVT1[bvtCounter].IDRM = result.IDRM;
                 ResultsBVT1[bvtCounter].VDRM = result.VDRM;
+                
+                //Добавление ВАХ к результату
+                if (state == DeviceState.Success)
+                {
+                    ResultsBVT1[bvtCounter].CurrentData.AddRange(result.CurrentData);
+                    ResultsBVT1[bvtCounter].VoltageData.AddRange(result.VoltageData);
+                }
             }
             else
             {
                 ResultsBVT2[bvtCounter].IDRM = result.IDRM;
                 ResultsBVT2[bvtCounter].VDRM = result.VDRM;
-            }
 
+                //Добавление ВАХ к результату
+                if (state == DeviceState.Success)
+                {
+                    ResultsBVT2[bvtCounter].CurrentData.AddRange(result.CurrentData);
+                    ResultsBVT2[bvtCounter].VoltageData.AddRange(result.VoltageData);
+                }
+            }
+            
             var bvtItemContainer = GetBvtItemContainer();
             var presenter = FindVisualChild<ContentPresenter>(bvtItemContainer[bvtCounter]);
 
@@ -1230,11 +1252,25 @@ namespace SCME.UI.PagesUser
             {
                 ResultsBVT1[bvtCounter].IRRM = result.IRRM;
                 ResultsBVT1[bvtCounter].VRRM = result.VRRM;
+
+                //Добавление ВАХ к результату
+                if (state == DeviceState.Success)
+                {
+                    ResultsBVT1[bvtCounter].CurrentData.AddRange(result.CurrentData);
+                    ResultsBVT1[bvtCounter].VoltageData.AddRange(result.VoltageData);
+                }
             }
             else
             {
                 ResultsBVT2[bvtCounter].IRRM = result.IRRM;
                 ResultsBVT2[bvtCounter].VRRM = result.VRRM;
+
+                //Добавление ВАХ к результату
+                if (state == DeviceState.Success)
+                {
+                    ResultsBVT2[bvtCounter].CurrentData.AddRange(result.CurrentData);
+                    ResultsBVT2[bvtCounter].VoltageData.AddRange(result.VoltageData);
+                }
             }
 
             var bvtItemContainer = GetBvtItemContainer();
@@ -1432,7 +1468,7 @@ namespace SCME.UI.PagesUser
                     using (SqlCommand Command = Connection.CreateCommand())
                     {
                         Connection.Open();
-                        Command.CommandText = "INSERT INTO DEV_VAC (DEV_ID, TEST_TYPE_ID, TYPE, VALUES) VALUES (@DEV_ID, @TEST_TYPE_ID, @TYPE, @VALUES)";
+                        Command.CommandText = "INSERT INTO DEV_VAC (DEV_ID, TEST_TYPE_ID, TYPE, [VALUES]) VALUES (@DEV_ID, @TEST_TYPE_ID, @TYPE, @VALUES)";
                         Command.Parameters.AddWithValue("DEV_ID", devId);
                         Command.Parameters.AddWithValue("TEST_TYPE_ID", testTypeId);
                         Command.Parameters.AddWithValue("TYPE", type);
@@ -1440,7 +1476,10 @@ namespace SCME.UI.PagesUser
                         Command.ExecuteNonQuery();
                     }
                 }
-                catch { }
+                catch (Exception error)
+                {
+                    File.AppendAllText("WriteResultTimeSpan.txt", error.Message + "\n");
+                }
             });
         }
 

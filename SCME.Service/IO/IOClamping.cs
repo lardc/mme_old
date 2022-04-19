@@ -604,7 +604,7 @@ namespace SCME.Service.IO
                     WriteRegister(REG_FORCE_VAL, (ushort)(ClampingParameters.CustomForce * 1000));
 #endif
                 */
-
+                
                 CallAction(ACT_START_CLAMPING);
 
                 var result = WaitForEndOfTest(true);
@@ -612,7 +612,7 @@ namespace SCME.Service.IO
                 List<float> arrayF = null;
                 List<float> arrayFd = null;
 
-                if ((result == Types.DeviceState.Success) && !SkipReadingArrays)
+                if ((result == Types.DeviceState.Success) && Settings.Default.ClampReadGraph && !SkipReadingArrays)
                 {
                     arrayF = ReadArrayFast(ARR_FORCE_ACT).Select(Arg => Arg / 1000.0f).ToList();
                     arrayFd = ReadArrayFast(ARR_FORCE_DESIRED).Select(Arg => Arg / 1000.0f).ToList();

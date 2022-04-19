@@ -57,7 +57,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="AccountsPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Users\evgeny\Desktop\SCME.BaseData\UIServiceData\Accounts.xml</Value>
+      <Value Profile="(Default)">D:\Visual Studio Builds\scme_software\BaseData\UIServiceData\Accounts.xml</Value>
     </Setting>
     <Setting Name="ClampIsVisible" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
@@ -330,6 +330,9 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ATUReadGraph" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ClampReadGraph" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

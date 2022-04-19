@@ -71,6 +71,9 @@ namespace SCME.Service
 
         private readonly bool _isDebug = Path.GetFileName(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)) == "Debug";
         private readonly DateTime _lastUpdate = File.GetCreationTime(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+        //Остановка пользователем
+        private bool IsStopped;
         
         public LogicContainer(BroadcastCommunication Communication)
         {
@@ -1126,7 +1129,11 @@ namespace SCME.Service
 
                         try
                         {
-                            res = m_IOClamping.Squeeze(parametersClamp);
+                            //Сжатие только для первой позиции прибора
+                            if (parametersCommutation.Position == HWModulePosition.Position1)
+                                res = m_IOClamping.Squeeze(parametersClamp);
+                            else
+                                res = DeviceState.Success;
                         }
                         catch (Exception ex)
                         {
@@ -1150,7 +1157,7 @@ namespace SCME.Service
 
                         foreach (var baseTestParametersAndNormativese in orderedParameters)
                         {
-                            if (m_Stop) continue;
+                            if (m_Stop || IsStopped) continue;
 
                             var gateParams = baseTestParametersAndNormativese as Types.GTU.TestParameters;
                             if (!ReferenceEquals(gateParams, null))
@@ -1280,12 +1287,27 @@ namespace SCME.Service
                 }
                 finally
                 {
+                    bool OnePosRequested = parametersCommutation.CommutationType == HWModuleCommutationType.MT1 ||
+                                    parametersCommutation.CommutationType == HWModuleCommutationType.MD1 ||
+                                    parametersCommutation.CommutationType == HWModuleCommutationType.Direct ||
+                                    parametersCommutation.CommutationType == HWModuleCommutationType.Reverse;
+
+                    //Сброс остановки пользователем
+                    if (parametersCommutation.Position == HWModulePosition.Position2 || OnePosRequested)
+                        IsStopped = false;
+
                     try
                     {
                         try
                         {
                             if (m_ClampingSystemConnected && m_Param.IsClampEnabled && !parametersClamp.IsHeightMeasureEnabled)
-                                res = m_IOClamping.Unsqueeze(parametersClamp);
+                            {
+                                //Расжатие только для второй позиции или однопозиционного прибора
+                                if (parametersCommutation.Position == HWModulePosition.Position2 || OnePosRequested)
+                                    res = m_IOClamping.Unsqueeze(parametersClamp);
+                                else
+                                    res = DeviceState.Success;
+                            }
                         }
                         finally
                         {
@@ -1521,6 +1543,7 @@ namespace SCME.Service
         internal void Stop()
         {
             m_Stop = true;
+            IsStopped = true;
 
             if (m_ParametersGate.IsEnabled)
                 m_IOGate.Stop();

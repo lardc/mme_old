@@ -12,7 +12,7 @@ namespace SCME.UIServiceConfig.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -187,7 +187,7 @@ namespace SCME.UIServiceConfig.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\evgeny\\Desktop\\SCME.BaseData\\UIServiceData\\Accounts.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Visual Studio Builds\\scme_software\\BaseData\\UIServiceData\\Accounts.xml")]
         public string AccountsPath {
             get {
                 return ((string)(this["AccountsPath"]));
@@ -1010,6 +1010,15 @@ namespace SCME.UIServiceConfig.Properties {
         public bool ATUReadGraph {
             get {
                 return ((bool)(this["ATUReadGraph"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ClampReadGraph {
+            get {
+                return ((bool)(this["ClampReadGraph"]));
             }
         }
     }

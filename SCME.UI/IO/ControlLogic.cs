@@ -1051,6 +1051,38 @@ namespace SCME.UI.IO
             }
         }
 
+        public void AttachAdapter()
+        {
+            try
+            {
+                m_ControlClient.AttachAdapter();
+            }
+            catch (CommunicationException ex)
+            {
+                ProcessCommunicationException(ex);
+            }
+            catch (Exception ex)
+            {
+                ProcessGeneralException(ex);
+            }
+        }
+
+        public void DetachAdapter()
+        {
+            try
+            {
+                m_ControlClient.DetachAdapter();
+            }
+            catch (CommunicationException ex)
+            {
+                ProcessCommunicationException(ex);
+            }
+            catch (Exception ex)
+            {
+                ProcessGeneralException(ex);
+            }
+        }
+        
         public bool RequestRemotePrinting(string GroupName, string CustomerName, string DeviceType,
             ReportSelectionPredicate Predicate)
         {

@@ -9,7 +9,7 @@ namespace SCME.WpfControlLibrary.IValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (ModuleType)value;
+            return (ModuleType)System.Convert.ToInt32(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

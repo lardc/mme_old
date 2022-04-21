@@ -113,6 +113,16 @@ namespace SCME.Types
             Channel.UnsqueezeClamping(ParametersClamping);
         }
 
+        public void AttachAdapter()
+        {
+            Channel.AttachAdapter();
+        }
+
+        public void DetachAdapter()
+        {
+            Channel.DetachAdapter();
+        }
+
         public void ClearFault(ComplexParts Device)
         {
             Channel.ClearFault(Device);
@@ -137,8 +147,6 @@ namespace SCME.Types
         {
             Channel.CallAction(Device, Address);
         }
-
-      
 
         public void WriteResults(ResultItem Item, List<string> Errors)
         {

@@ -1616,6 +1616,30 @@ namespace SCME.Service
             }
         }
 
+        internal void AttachAdapter()
+        {
+            try
+            {
+                m_Thread.StartSingle(Dummy => m_IOClamping.AttachAdapter());
+            }
+            catch (Exception ex)
+            {
+                ThrowFaultException(ComplexParts.Clamping, ex.ToString(), String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name), false);
+            }
+        }
+
+        internal void DetachAdapter()
+        {
+            try
+            {
+                m_Thread.StartSingle(Dummy => m_IOClamping.DetachAdapter());
+            }
+            catch (Exception ex)
+            {
+                ThrowFaultException(ComplexParts.Clamping, ex.ToString(), String.Format(@"{0}.{1}", GetType().Name, MethodBase.GetCurrentMethod().Name), false);
+            }
+        }
+
         internal void WriteResults(ResultItem Item, List<string> Errors)
         {
             try

@@ -34,6 +34,45 @@
             <Setter Property="Padding" Value="5,0" />
         </Style>
 
+        <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Viewbox>
+                            <Border x:Name="Border" CornerRadius="10" Width="40" Height="20" Background="#FFFFFFFF">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0.5" Direction="0" Opacity="0.3"/>
+                                </Border.Effect>
+                                <Ellipse x:Name="Ellipse" StrokeThickness="0.2" Stroke="Gray" Fill="#FFFFFFFF" Stretch="Uniform" Margin="2 1 2 1" HorizontalAlignment="Stretch">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect ShadowDepth="1" BlurRadius="10" Direction="260" Opacity="0.3"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Border>
+                        </Viewbox>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Checked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#FF4CD661" Duration="0"/>
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin" To="20 1 2 1" Duration="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Unchecked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="White" Duration="0"/>
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin" To="2 1 2 1" Duration="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Page.Resources>
 
     <Grid>
@@ -96,8 +135,11 @@
                           IsNumeric="True" 
                           Text="{Binding ElementName=clampPage, Path=ClampParameters.Height}" />
 
-                <Label Content="Тип модуля" Visibility="{Binding Source={StaticResource VisibilityModuleType}}" Grid.Row="1" Grid.Column="0" Margin="0,5,0,0" Foreground="Black"/>
-                <ComboBox ItemsSource="{Binding Source={StaticResource ModuleTypes}}" SelectedValue="{Binding Height, Converter={StaticResource ModuleTypeConverter}}" SelectedValuePath="Value" DisplayMemberPath="Key" Grid.Row="1" Grid.Column="1" Visibility="{Binding Source={StaticResource VisibilityModuleType}}"/>
+                <Label Content="Тип модуля" Visibility="{Binding Source={StaticResource VisibilityModuleType}}" Grid.Row="0" Grid.Column="0" Margin="0,5,0,0" Foreground="Black"/>
+                <ComboBox ItemsSource="{Binding Source={StaticResource ModuleTypes}}" SelectedValue="{Binding ClampParameters.Height, ElementName=clampPage, Converter={StaticResource ModuleTypeConverter}}" SelectedValuePath="Value" DisplayMemberPath="Key" Grid.Row="0" Grid.Column="1" Visibility="{Binding Source={StaticResource VisibilityModuleType}}"/>
+
+                <Label Content="Фиксация адаптера" Visibility="{Binding Source={StaticResource VisibilityModuleType}}" Grid.Row="1" Grid.Column="0" Margin="0,5,0,0" Foreground="Black"/>
+                <ToggleButton x:Name="AttachAdapter" Grid.Row="1" Visibility="{Binding Source={StaticResource VisibilityModuleType}}" Grid.Column="1" Margin="10,5,0,0" Width="50" Height="30" HorizontalAlignment="Left" Checked="AttachAdapter_Checked" Unchecked="AttachAdapter_Unchecked"/>
 
                 <Label Name="lblFault" x:FieldModifier="private" Background="Tomato" Height="Auto" Padding="10"
                        Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="Fault" />

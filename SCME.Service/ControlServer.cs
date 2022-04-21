@@ -217,6 +217,16 @@ namespace SCME.Service
             _IoMain.Unsqueeze(ParametersClamping);
         }
 
+        void IExternalControl.AttachAdapter()
+        {
+            _IoMain.AttachAdapter();
+        }
+
+        void IExternalControl.DetachAdapter()
+        {
+            _IoMain.DetachAdapter();
+        }
+
         void IExternalControl.ClearFault(ComplexParts Device)
         {
             _IoMain.ClearFault(Device);

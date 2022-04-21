@@ -48,6 +48,8 @@ namespace SCME.Service.IO
         private const ushort ACT_RELEASE_CLAMPING = 104;
         private const ushort ACT_HALT = 105;
         private const ushort ACT_SET_TEMPERATURE = 108;
+        private const ushort ACT_RELEASE_ADAPTER = 109;
+        private const ushort ACT_HOLD_ADAPTER = 110;
 
         #region Registers
 
@@ -819,8 +821,46 @@ namespace SCME.Service.IO
             }
         }
 
+        internal void AttachAdapter()
+        {
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Attaching the adapter");
+            if (m_IsClampingEmulation)
+            {
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Adapter attached");
+                return;
+            }
+            try
+            {
+                CallAction(ACT_HOLD_ADAPTER);
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Adapter attached");
+            }
+            catch (Exception ex)
+            {
+                FireExceptionEvent(ex.ToString());
+                return;
+            }
+        }
 
-
+        internal void DetachAdapter()
+        {
+            SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Detaching the adapter");
+            if (m_IsClampingEmulation)
+            {
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Adapter detached");
+                return;
+            }
+            try
+            {
+                CallAction(ACT_RELEASE_ADAPTER);
+                SystemHost.Journal.AppendLog(ComplexParts.Clamping, LogMessageType.Info, "Adapter detached");
+            }
+            catch (Exception ex)
+            {
+                FireExceptionEvent(ex.ToString());
+                return;
+            }
+        }
+        
         private ushort GetDeviceState()
         {
             return ReadRegister(REG_DEVICE_STATE);

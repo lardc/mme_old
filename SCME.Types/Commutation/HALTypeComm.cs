@@ -69,7 +69,8 @@ namespace SCME.Types.Commutation
         E0 = 1003,
         F1 = 1004,
         D0 = 1005,
-        B1 = 1006
+        B1 = 1006,
+        Validation = 1007
     }
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]

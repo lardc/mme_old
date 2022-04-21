@@ -88,7 +88,7 @@ namespace SCME.Types
         [OperationContract]
         [FaultContract(typeof(FaultData))]
         bool StartDynamic(TestParameters parametersCommutation, Clamping.TestParameters parametersClamp, GTU.TestParameters[] parametersGate, VTM.TestParameters[] parametersVtm, BVT.TestParameters[] parametersBvt, dVdt.TestParameters[] parametersDvDt, ATU.TestParameters[] parametersAtu, QrrTq.TestParameters[] parametersQrrTq, SctuTestParameters[] parametersSctu, Types.TOU.TestParameters[] parametersTOU);
-
+                
         [OperationContract]
         [FaultContract(typeof(FaultData))]
         void Stop();
@@ -127,6 +127,14 @@ namespace SCME.Types
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]
+        void AttachAdapter();
+
+        [OperationContract]
+        [FaultContract(typeof(FaultData))]
+        void DetachAdapter();
+
+        [OperationContract]
+        [FaultContract(typeof(FaultData))]
         void ClearFault(ComplexParts Device);
 
         [OperationContract]
@@ -144,8 +152,6 @@ namespace SCME.Types
         [OperationContract]
         [FaultContract(typeof(FaultData))]
         void CallAction(ComplexParts Device, ushort Address);
-
-      
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]

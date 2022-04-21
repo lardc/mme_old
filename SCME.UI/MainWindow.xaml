@@ -182,7 +182,7 @@
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel Width="400">
-                                        <TextBlock Text="Текущая версия ПО: 4.3"/>
+                                        <TextBlock Text="Текущая версия ПО: 4.5"/>
                                         <TextBlock TextWrapping="WrapWithOverflow">
                                         Основные нововведения патча:
                                         <LineBreak/>
@@ -192,21 +192,11 @@
                                         <LineBreak/>
                                         <Run FontSize="16">- Незначительные правки разметки</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Унификация наименования измерений</Run>
+                                        <Run FontSize="16">- Правки в алгоритме работы с двухпозиционными приборами</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Корректный идентификатор текущей версии ПО</Run>
+                                        <Run FontSize="16">- Корректная обработка остановок пользователем</Run>
                                         <LineBreak/>
-                                        <Run FontSize="16">- Валидация полей ПЗ ППЭ и номер ППЭ</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Добавление параметра минимального значения Utm в измерении SL</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Незначительные исправления багов программы</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Корректировки логики измерения QrrTq</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Изменение в панели наладчика QrrTq</Run>
-                                        <LineBreak/>
-                                        <Run FontSize="16">- Добавление таблицы отображения класса при RT, Tjmax и FPE</Run>
+                                        <Run FontSize="16">- Добавление возможности управления фиксацией адаптера у наладчика (принудительно у оператора)</Run>
                                         <LineBreak/>
                                         </TextBlock>
                                     </StackPanel>

@@ -205,7 +205,8 @@ namespace SCME.WpfControlLibrary.DataProviders
                 {nameof(ModuleType.E0), ModuleType.E0},
                 {nameof(ModuleType.F1), ModuleType.F1},
                 {nameof(ModuleType.D0), ModuleType.D0},
-                {nameof(ModuleType.B1), ModuleType.B1}
+                {nameof(ModuleType.B1), ModuleType.B1},
+                {"Аттестация", ModuleType.Validation}
             };
         }
 

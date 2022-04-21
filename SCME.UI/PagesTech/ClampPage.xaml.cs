@@ -10,6 +10,7 @@ using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using SCME.Types;
 using SCME.UI.Annotations;
+using SCME.UIServiceConfig.Properties;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 
@@ -46,7 +47,12 @@ namespace SCME.UI.PagesTech
 
         public ClampPage()
         {
-            ClampParameters = new Types.Clamping.TestParameters { StandardForce = Types.Clamping.ClampingForceInternal.Custom, CustomForce = 5.0f };
+            ClampParameters = new Types.Clamping.TestParameters
+            {
+                StandardForce = Types.Clamping.ClampingForceInternal.Custom,
+                CustomForce = 5.0f,
+                Height = (ushort)(Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? 5 : 1001)
+            };
 
             InitializeComponent();
 
@@ -182,6 +188,16 @@ namespace SCME.UI.PagesTech
         {
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+        }
+
+        private void AttachAdapter_Checked(object sender, RoutedEventArgs e) //Фиксация адаптера
+        {
+            Cache.Net.AttachAdapter();
+        }
+
+        private void AttachAdapter_Unchecked(object sender, RoutedEventArgs e) //Ослабление адаптера
+        {
+            Cache.Net.DetachAdapter();
         }
 
         private void BtnSetTemp_OnClick(object sender, RoutedEventArgs e)

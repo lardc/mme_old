@@ -14,7 +14,7 @@
       d:DesignWidth="1280" d:DesignHeight="924"
       Name="userTestPage" 
       Title="{x:Static res:Resources.UserTestPage_Title}"
-      Loaded="UserTestPage_OnLoaded" PreviewKeyDown="UserTestPage_PreviewKeyDown">
+      Loaded="UserTestPage_OnLoaded" PreviewKeyDown="UserTestPage_PreviewKeyDown" Unloaded="UserTestPage_Unloaded">
 
     <Page.Resources>
         <ui:MultiBooleanToVisibilityConverter x:Key="MB2V" />

@@ -3067,6 +3067,10 @@ namespace SCME.UI.PagesUser
 
         private void UserTestPage_OnLoaded(object Sender, RoutedEventArgs E)
         {
+            //Фиксация адаптера
+            if (Settings.Default.ClampingSystemType == Types.Clamping.ClampingSystemType.Module)
+                Cache.Net.AttachAdapter();
+
             //Сброс классов прибора
             lblRTClass.Content = "-";
             lblTjClass.Content = "-";
@@ -3173,6 +3177,13 @@ namespace SCME.UI.PagesUser
                         throw new InvalidEnumArgumentException($"{nameof(Settings.Default.DUTType)} bad value");
                 }
             }
+        }
+
+        private void UserTestPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            //Ослабление адаптера
+            if (Settings.Default.ClampingSystemType == Types.Clamping.ClampingSystemType.Module)
+                Cache.Net.DetachAdapter();
         }
 
         private void UserTestPage_PreviewKeyDown(object Sender, KeyEventArgs E)

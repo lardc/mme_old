@@ -899,7 +899,7 @@ namespace SCME.Service.IO
 
                         if (m_IOCommutation.Switch( commutation.CommutationType == HWModuleCommutationType.Reverse ?
                             CommutationMode.BVTR : CommutationMode.BVTD
-                                , commutation.CommutationType, commutation.Position) ==
+                                , commutation.CommutationType, commutation.Position, commutation.ModuleType) ==
                             Types.DeviceState.Fault)
                         {
                             m_State = Types.DeviceState.Fault;
@@ -967,7 +967,7 @@ namespace SCME.Service.IO
                         FireBvtEvent(internalState, m_Result, BVTTestType.Reverse, bvtInputParameter.IsUdsmUrsm);
 
                         if (m_IOCommutation.Switch(commutation.CommutationType == HWModuleCommutationType.Reverse ?
-                                CommutationMode.BVTD : CommutationMode.BVTR, commutation.CommutationType, commutation.Position) ==
+                                CommutationMode.BVTD : CommutationMode.BVTR, commutation.CommutationType, commutation.Position, commutation.ModuleType) ==
                             Types.DeviceState.Fault)
                         {
                             m_State = Types.DeviceState.Fault;

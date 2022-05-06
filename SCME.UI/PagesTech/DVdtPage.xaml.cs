@@ -32,7 +32,9 @@ namespace SCME.UI.PagesTech
             {
                 StandardForce = Types.Clamping.ClampingForceInternal.Custom,
                 CustomForce = 5,
-                IsHeightMeasureEnabled = false
+                IsHeightMeasureEnabled = false,
+
+                Height = (ushort)(Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? 5 : 1001)
             };
             Temperature = 25;
             CommType = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
@@ -189,7 +191,9 @@ namespace SCME.UI.PagesTech
             {
                 BlockIndex = !Cache.Clamp.UseTmax ? Types.Commutation.HWBlockIndex.Block1 : Types.Commutation.HWBlockIndex.Block2,
                 CommutationType = ConverterUtil.MapCommutationType(CommType),
-                Position = ConverterUtil.MapModulePosition(ModPosition)
+                Position = ConverterUtil.MapModulePosition(ModPosition),
+
+                ModuleType = ClampParameters.Height
             };
             ClampParameters.SkipClamping = Cache.Clamp.ManualClamping;
             List<BaseTestParametersAndNormatives> ParametersAndNormatives = new List<BaseTestParametersAndNormatives>(1)

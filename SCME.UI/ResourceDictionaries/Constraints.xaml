@@ -17,7 +17,7 @@
     <system:Single x:Key="MinIxRM_BVT">0.5</system:Single>
     
     <system:Single x:Key="MaxVxRM_BVT">8000</system:Single>
-    <system:Single x:Key="MinVxRM_BVT">500</system:Single>
+    <system:Single x:Key="MinVxRM_BVT">200</system:Single>
     
     <system:Single x:Key="MaxPlateVxRM_BVT">10000</system:Single>
     <system:Single x:Key="MinPlateVxRM_BVT">100</system:Single>
@@ -26,7 +26,7 @@
     <system:Single x:Key="MinRampVxRM_BVT">0.5</system:Single>
 
     <system:Single x:Key="MaxStartVxRM_BVT">3000</system:Single>
-    <system:Single x:Key="MinStartVxRM_BVT">300</system:Single>
+    <system:Single x:Key="MinStartVxRM_BVT">100</system:Single>
 
     <!-- Clamping system parameters -->
     <system:Single x:Key="MaxForceCS">100</system:Single>
@@ -48,8 +48,8 @@
     <system:Single x:Key="MaxDCRiseRate_QRRTQ">5</system:Single>
     <system:Single x:Key="MinDCRiseRate_QRRTQ">0.2</system:Single>
 
-    <system:Single x:Key="MaxOffStateVoltage_QRRTQ">5</system:Single>
-    <system:Single x:Key="MinOffStateVoltage_QRRTQ">0.2</system:Single>
+    <system:Single x:Key="MaxOffStateVoltage_QRRTQ">2000</system:Single>
+    <system:Single x:Key="MinOffStateVoltage_QRRTQ">400</system:Single>
 
     <system:Single x:Key="MaxRampTime_SL">10000</system:Single>
     <system:Single x:Key="MinRampTime_SL">200</system:Single>

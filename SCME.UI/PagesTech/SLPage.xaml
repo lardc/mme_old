@@ -159,14 +159,18 @@
                     <ComboBox Style="{StaticResource CComboboxStyle}" ItemsSource="{Binding Source={StaticResource DataFromCommutationModeEnum}}" SelectedValue="{Binding CommType, ElementName=stlsPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Value" DisplayMemberPath="Key" MaxDropDownHeight="1500" Grid.Row="8" Grid.Column="1" Margin="10" Padding="5"/>
                     <Label Content="{x:Static res:Resources.Position}" Grid.Row="9" Grid.Column="0"/>
                     <ComboBox Style="{StaticResource CComboboxStyle}" ItemsSource="{Binding Source={StaticResource DataFromModulePositionEnum}}" SelectedItem="{Binding ModPosition, ElementName=stlsPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource E2S}}" Grid.Row="9" Grid.Column="1" Margin="10" Padding="5"/>
-                    <Label Content="{x:Static res:Resources.Height_Prof}" Grid.Row="10" Grid.Column="0"/>
-                    <customControls:ValidatingTextBox Text="{Binding ClampParameters.Height, ElementName=stlsPage}" IsNumeric="True" Minimum="{StaticResource MinHeightCS}" Maximum="{StaticResource MaxHeightCS}" TextAlignment="Right" Grid.Row="10" Grid.Column="1" Margin="10" Padding="5"/>
-                    <Label Content="{x:Static res:Resources.Force}" Grid.Row="11" Grid.Column="0"/>
-                    <customControls:ValidatingTextBox Text="{Binding ClampParameters.CustomForce, ElementName=stlsPage}" IsNumeric="True" IsFloat="True" Minimum="{StaticResource MinForceCS}" Maximum="{StaticResource MaxForceCS}" TextAlignment="Right" Grid.Row="11" Grid.Column="1" Margin="10" Padding="5"/>
+                    <Label Content="{x:Static res:Resources.Height_Prof}" Grid.Row="10" Grid.Column="0" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
+                    <customControls:ValidatingTextBox Text="{Binding ClampParameters.Height, ElementName=stlsPage}" IsNumeric="True" Minimum="{StaticResource MinHeightCS}" Maximum="{StaticResource MaxHeightCS}" TextAlignment="Right" Grid.Row="10" Grid.Column="1" Margin="10" Padding="5" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
+                    <Label Content="{x:Static res:Resources.Force}" Grid.Row="11" Grid.Column="0" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
+                    <customControls:ValidatingTextBox Text="{Binding ClampParameters.CustomForce, ElementName=stlsPage}" IsNumeric="True" IsFloat="True" Minimum="{StaticResource MinForceCS}" Maximum="{StaticResource MaxForceCS}" TextAlignment="Right" Grid.Row="11" Grid.Column="1" Margin="10" Padding="5" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
+
+                    <Label Content="Тип модуля" Visibility="{Binding Source={StaticResource VisibilityModuleType}}" Grid.Row="11" Grid.Column="0" Foreground="Black"/>
+                    <ComboBox Style="{StaticResource CComboboxStyle}" Margin="10" ItemsSource="{Binding Source={StaticResource ModuleTypes}}" SelectedValue="{Binding ClampParameters.Height, ElementName=stlsPage, Converter={StaticResource ModuleTypeConverter}}" SelectedValuePath="Value" DisplayMemberPath="Key" Grid.Row="11" Grid.Column="1" Visibility="{Binding Source={StaticResource VisibilityModuleType}}"/>
+
                     <Label Content="{x:Static res:Resources.Temp}" Grid.Row="12" Grid.Column="0"/>
                     <customControls:ValidatingTextBox Text="{Binding Temperature, ElementName=stlsPage}" IsNumeric="True" Minimum="{StaticResource MinTempCS}" Maximum="{StaticResource MaxTempCS}" TextAlignment="Right" Grid.Row="12" Grid.Column="1" Margin="10" Padding="5"/>
-                    <Label x:Name="lblTitleTop" Content="{x:Static res:Resources.TopTempName}" Grid.Row="13" Grid.Column="0" HorizontalAlignment="Left"/>
-                    <Label x:Name="TopTempLabel" Content="0" Grid.Row="13" Grid.Column="1" Margin="10,3" HorizontalContentAlignment="Right" Background="LightGreen" Padding="0,0,10,0"/>
+                    <Label x:Name="lblTitleTop" Content="{x:Static res:Resources.TopTempName}" Grid.Row="13" Grid.Column="0" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource VisibilityTopTemp}}"/>
+                    <Label x:Name="TopTempLabel" Content="0" Grid.Row="13" Grid.Column="1" Margin="10,3" HorizontalContentAlignment="Right" Background="LightGreen" Padding="0,0,10,0" Visibility="{Binding Source={StaticResource VisibilityTopTemp}}"/>
                     <Label x:Name="lblTitleBot" Content="{x:Static res:Resources.BotTempName}" Grid.Row="14" Grid.Column="0" HorizontalAlignment="Left"/>
                     <Label x:Name="BotTempLabel" Content="0" Grid.Row="14" Grid.Column="1" Margin="10,3" HorizontalContentAlignment="Right" Background="LightGreen" Padding="0,0,10,0"/>
                     <Label Style="{StaticResource StLblStyle}" Content="{x:Static res:Resources.Vtm_mv}" Grid.Row="15" Grid.Column="0"/>

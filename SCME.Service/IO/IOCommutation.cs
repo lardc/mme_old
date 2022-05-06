@@ -495,7 +495,8 @@ namespace SCME.Service.IO
                                   Types.Commutation.HWModuleCommutationType CommutationType =
                                       Types.Commutation.HWModuleCommutationType.Undefined,
                                   Types.Commutation.HWModulePosition Position =
-                                      Types.Commutation.HWModulePosition.Position1)
+                                      Types.Commutation.HWModulePosition.Position1,
+                                  ushort ModuleType = 0)
         {
             if (m_IsCommutationEmulation)
                 return DeviceState.Success;
@@ -525,6 +526,9 @@ namespace SCME.Service.IO
 
                 WriteRegister(REG_MODULE_TYPE, (ushort)CommutationType);
                 WriteRegister(REG_MODULE_POSITION, (ushort)Position);
+
+                if (Settings.Default.ClampingSystemType == Types.Clamping.ClampingSystemType.Module)
+                    WriteRegister(REG_SC_TYPE, ModuleType);
 
                 switch (Mode)
                 {
@@ -667,6 +671,7 @@ namespace SCME.Service.IO
             REG_WARNING = 99,
             REG_MODULE_TYPE = 70,
             REG_MODULE_POSITION = 71,
+            REG_SC_TYPE = 72,
             SAFETY_REASON_SC1 = 301,
             SAFETY_REASON_SC2 = 302,
 

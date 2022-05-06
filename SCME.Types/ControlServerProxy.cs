@@ -211,14 +211,14 @@ namespace SCME.Types
             return Channel.GateReadCalibrationParameters();
         }
 
-        public CalibrationResultGate GatePulseCalibrationGate(ushort Current)
+        public CalibrationResultGate GatePulseCalibrationGate(ushort Current, Commutation.TestParameters ComParams)
         {
-            return Channel.GatePulseCalibrationGate(Current);
+            return Channel.GatePulseCalibrationGate(Current, ComParams);
         }
 
-        public ushort GatePulseCalibrationMain(ushort Current)
+        public ushort GatePulseCalibrationMain(ushort Current, Commutation.TestParameters ComParams)
         {
-            return Channel.GatePulseCalibrationMain(Current);
+            return Channel.GatePulseCalibrationMain(Current, ComParams);
         }
 
         public void WriteJournal(ComplexParts device, LogMessageType type, DateTime dateTime, string message)

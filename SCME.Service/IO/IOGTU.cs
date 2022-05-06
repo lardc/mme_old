@@ -175,7 +175,7 @@ namespace SCME.Service.IO
                 State = DeviceState.InProcess;
                 AllEvents_Fire(State);
                 //Переключение коммутации
-                DeviceState DevState = ActiveCommutation.Switch(CommutationMode.Gate, commutation.CommutationType, commutation.Position);
+                DeviceState DevState = ActiveCommutation.Switch(CommutationMode.Gate, commutation.CommutationType, commutation.Position, commutation.ModuleType);
                 //Ошибка при переключении коммутации
                 if (DevState == DeviceState.Fault)
                 {
@@ -187,11 +187,11 @@ namespace SCME.Service.IO
                 {
                     Resistance_Start();
                     VGT_Start();
+                    IL_Start();
                     if (!Settings.Default.IHGOST || !Parameter.UseIhGost)
                         IH_Start();
                     else
                         IHGOST_Start();
-                    IL_Start();
                     VGNT_Start();
                 }
                 DevState = ActiveCommutation.Switch(CommutationMode.None);
@@ -291,6 +291,27 @@ namespace SCME.Service.IO
             VGTEvent_Fire(DeviceState.Success, Result);
         }
 
+        private void IL_Start() //IL
+        {
+            if (IsStopped)
+                return;
+            if (!Parameter.IsIlEnabled)
+                return;
+            ILEvent_Fire(DeviceState.InProcess, Result);
+            CallAction(ACT_START_IL);
+            //Эмуляция блока
+            if (IsEmulated)
+            {
+                Result.IL = 270;
+                ILEvent_Fire(DeviceState.Success, Result);
+                return;
+            }
+            //Ожидание окончания тестирования
+            EndOfTest_Wait();
+            Result.IL = ReadRegister(REG_RESULT_IL);
+            ILEvent_Fire(DeviceState.Success, Result);
+        }
+
         private void IH_Start() //IH
         {
             if (IsStopped)
@@ -355,28 +376,6 @@ namespace SCME.Service.IO
             WriteRegister(REG_HOLD_WITH_SL, 0);
             SL.WriteRegister(IOStLs.REG_DISABLE_MATH, 0);
             IHEvent_Fire(DeviceState.Success, Result);
-        }
-
-        private void IL_Start() //IL
-        {
-            if (IsStopped)
-                return;
-            if (!Parameter.IsIlEnabled)
-                return;
-            ILEvent_Fire(DeviceState.InProcess, Result);
-            ActiveCommutation.CallAction(IOCommutation.ACT_COMM2_GATE);
-            CallAction(ACT_START_IL);
-            //Эмуляция блока
-            if (IsEmulated)
-            {
-                Result.IL = 270;
-                ILEvent_Fire(DeviceState.Success, Result);
-                return;
-            }
-            //Ожидание окончания тестирования
-            EndOfTest_Wait();
-            Result.IL = ReadRegister(REG_RESULT_IL);
-            ILEvent_Fire(DeviceState.Success, Result);
         }
 
         private void VGNT_Start() //VGNT
@@ -571,14 +570,14 @@ namespace SCME.Service.IO
             }
         }
 
-        internal Tuple<ushort, ushort> PulseCalibrationGate(ushort current)
+        internal Tuple<ushort, ushort> PulseCalibrationGate(ushort current, TestParameters comParams)
         {
             SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("Calibrate gare, current: {0}", current));
             //Эмуляция блока
             if (IsEmulated)
                 return new Tuple<ushort, ushort>(0, 0);
             //Переключение коммутации
-            if (ActiveCommutation.Switch(CommutationMode.Gate) == DeviceState.Fault)
+            if (ActiveCommutation.Switch(CommutationMode.Gate, comParams.CommutationType, comParams.Position, comParams.ModuleType) == DeviceState.Fault)
                 return new Tuple<ushort, ushort>(0, 0);
             try
             {
@@ -601,14 +600,14 @@ namespace SCME.Service.IO
             }
         }
 
-        internal ushort PulseCalibrationMain(ushort current)
+        internal ushort PulseCalibrationMain(ushort current, TestParameters comParams)
         {
             SystemHost.Journal.AppendLog(ComplexParts.Gate, LogMessageType.Info, string.Format("Calibrate main circuit, current: {0}", current));
             //Эмуляция блока
             if (IsEmulated)
                 return 0;
             //Переключение коммутации
-            if (ActiveCommutation.Switch(CommutationMode.Gate) == DeviceState.Fault)
+            if (ActiveCommutation.Switch(CommutationMode.Gate, comParams.CommutationType, comParams.Position, comParams.ModuleType) == DeviceState.Fault)
                 return 0;
             try
             {

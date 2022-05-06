@@ -22,7 +22,9 @@ namespace SCME.UI.ViewModels
         {
             StandardForce = Types.Clamping.ClampingForceInternal.Custom,
             CustomForce = 5,
-            IsHeightMeasureEnabled = false
+            IsHeightMeasureEnabled = false,
+
+            Height = (ushort)(Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? 5 : 1001)
         };
 
         

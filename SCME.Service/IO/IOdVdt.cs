@@ -330,7 +330,7 @@ namespace SCME.Service.IO
                 WriteRegister(REG_DESIRED_VOLTAGE, m_Parameters.Voltage);
 
                 //перед измерением dVdt исполняем команду включения коммутации см. требование http://elma.pe.local/Tasks/Task/Execute/108699
-                if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.DVDT, Commutation.CommutationType, Commutation.Position) == DeviceState.Fault)
+                if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.DVDT, Commutation.CommutationType, Commutation.Position, Commutation.ModuleType) == DeviceState.Fault)
                 {
                     m_State = DeviceState.Fault;
                     m_Result.Passed = false;

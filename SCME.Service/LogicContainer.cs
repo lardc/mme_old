@@ -437,11 +437,11 @@ namespace SCME.Service
             IsInitialized = false;
         }
 
-        internal Types.GTU.CalibrationResultGate GatePulseCalibrationGate(ushort Current)
+        internal Types.GTU.CalibrationResultGate GatePulseCalibrationGate(ushort Current, TestParameters ComParams)
         {
             try
             {
-                var res = m_IOGate.PulseCalibrationGate(Current);
+                var res = m_IOGate.PulseCalibrationGate(Current, ComParams);
 
                 return new Types.GTU.CalibrationResultGate { Current = res.Item1, Voltage = res.Item2 };
             }
@@ -453,11 +453,11 @@ namespace SCME.Service
         }
 
 
-        internal ushort GatePulseCalibrationMain(ushort Current)
+        internal ushort GatePulseCalibrationMain(ushort Current, TestParameters ComParams)
         {
             try
             {
-                return m_IOGate.PulseCalibrationMain(Current);
+                return m_IOGate.PulseCalibrationMain(Current, ComParams);
             }
             catch (Exception ex)
             {
@@ -1509,6 +1509,8 @@ namespace SCME.Service
                 }
                 finally
                 {
+                    IsStopped = false;
+
                     try
                     {
                         if (m_ClampingSystemConnected && m_Param.IsClampEnabled && !ParametersClamp.IsHeightMeasureEnabled)

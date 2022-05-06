@@ -371,6 +371,9 @@ namespace SCME.UI.IO
                         //сбрасываем состояние SafetyTrig. справедливо и для оптической и механической шторки. только после этого можно разжимать пресс                     
                         Cache.Net.ClearSafetyTrig();
 
+                        //прячем иконку Safety
+                        Cache.Main.VM.IsSafetyBreakIconVisible = false;
+
                         Cache.Clamp.IsRunning = false;
                         //разжимаем зажимное устройство
                         Cache.Clamp.Unclamp();
@@ -382,9 +385,6 @@ namespace SCME.UI.IO
                         Cache.QrrTq.IsRunning = false;
                         Cache.ATU.IsRunning = false;
                         Cache.DVdt.IsRunning = false;
-
-                        //прячем иконку Safety
-                        Cache.Main.VM.IsSafetyBreakIconVisible = false;
 
                         //строим строку с именами устройств, которые не готовы к очередному измерению
                         string NotReadyDevicesToStart = Cache.Net.NotReadyDevicesToStart();

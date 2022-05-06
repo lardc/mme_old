@@ -113,7 +113,9 @@ namespace SCME.UI.PagesTech
             {
                 BlockIndex = (!Cache.Clamp.UseTmax) ? Types.Commutation.HWBlockIndex.Block1 : Types.Commutation.HWBlockIndex.Block2,
                 CommutationType = ConverterUtil.MapCommutationType(VM.CommutationType),
-                Position = ConverterUtil.MapModulePosition(VM.Position)
+                Position = ConverterUtil.MapModulePosition(VM.Position),
+
+                ModuleType = VM.Clamping.Height
             };
 
 

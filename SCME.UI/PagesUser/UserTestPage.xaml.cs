@@ -1168,12 +1168,15 @@ namespace SCME.UI.PagesUser
             if (state == Types.DeviceState.InProcess)
             {
                 bvtCounter++;
-                
+
                 //Сброс эндпоинтов для отправки ВАХ
-                ResultsBVT1[bvtCounter].CurrentData.Clear();
-                ResultsBVT1[bvtCounter].VoltageData.Clear();
-                ResultsBVT2[bvtCounter].CurrentData.Clear();
-                ResultsBVT2[bvtCounter].VoltageData.Clear();
+                if (ResultsBVT1.Count > 0)
+                {
+                    ResultsBVT1[bvtCounter].CurrentData.Clear();
+                    ResultsBVT1[bvtCounter].VoltageData.Clear();
+                    ResultsBVT2[bvtCounter].CurrentData.Clear();
+                    ResultsBVT2[bvtCounter].VoltageData.Clear();
+                }
             }
         }
 
@@ -2799,19 +2802,21 @@ namespace SCME.UI.PagesUser
 
         private void Start_Click(object Sender, RoutedEventArgs E)
         {
-            _HasFault = false;
-            wasCurrentMore = false;
             //Cache.Net.StopMeasuringTemp();
-            ClearStatus(true, true);
-
-            chartPlotter1.Children.RemoveAll(typeof(LineGraph));
-            chartPlotter2.Children.RemoveAll(typeof(LineGraph));
-
+            
             StartFirst();
         }
 
         internal void StartFirst()
         {
+            _HasFault = false;
+            wasCurrentMore = false;
+
+            ClearStatus(true, true);
+            chartPlotter1.Children.RemoveAll(typeof(LineGraph));
+            chartPlotter2.Children.RemoveAll(typeof(LineGraph));
+
+
             if (IsRunning)
                 return;
 
@@ -2937,7 +2942,9 @@ namespace SCME.UI.PagesUser
                 Position =
                         (Position == 1)
                             ? Types.Commutation.HWModulePosition.Position1
-                            : Types.Commutation.HWModulePosition.Position2
+                            : Types.Commutation.HWModulePosition.Position2,
+
+                ModuleType = (ushort)Profile.Height
             };
 
             var paramsClamp = new Types.Clamping.TestParameters
@@ -3075,6 +3082,8 @@ namespace SCME.UI.PagesUser
             lblRTClass.Content = "-";
             lblTjClass.Content = "-";
             lblFPE.Content = "-";
+            chartPlotter1.Children.RemoveAll(typeof(LineGraph));
+            chartPlotter2.Children.RemoveAll(typeof(LineGraph));
 
             m_TwoPosRequested =
     !(Profile.ParametersComm == Types.Commutation.ModuleCommutationType.MT1 ||

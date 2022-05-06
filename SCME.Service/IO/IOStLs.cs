@@ -361,7 +361,7 @@ namespace SCME.Service.IO
                 }
 
                 if (!m_Parameter.IsSelfTest)
-                    if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.VTM, Commutation.CommutationType, Commutation.Position) == DeviceState.Fault)
+                    if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.VTM, Commutation.CommutationType, Commutation.Position, Commutation.ModuleType) == DeviceState.Fault)
                     {
                         m_State = DeviceState.Fault;
                         FireVTMEvent(m_State, m_Result, 0);

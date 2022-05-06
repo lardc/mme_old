@@ -23,6 +23,8 @@ namespace SCME.UI.PagesTech
     {
         private readonly SolidColorBrush m_XRed, m_XGreen, m_XOrange;
         private bool m_IsRunning, m_Clamped;
+        
+        private bool IsAdapterAttached;
 
         public bool UseTmax { get; set; }
         public Types.Clamping.TestParameters ClampParameters { get; set; }
@@ -43,7 +45,6 @@ namespace SCME.UI.PagesTech
                 OnPropertyChanged("IsClamped");
             }
         }
-
 
         public ClampPage()
         {
@@ -164,6 +165,11 @@ namespace SCME.UI.PagesTech
         private void Clamp_Click(object Sender, RoutedEventArgs E)
         {
             Clamp();
+            if (Settings.Default.ClampingSystemType == Types.Clamping.ClampingSystemType.Module)
+            {
+                IsAdapterAttached = true;
+                AttachAdapter.IsChecked = true;
+            }
         }
 
         private void Unclamp_Click(object Sender, RoutedEventArgs E)
@@ -192,12 +198,16 @@ namespace SCME.UI.PagesTech
 
         private void AttachAdapter_Checked(object sender, RoutedEventArgs e) //Фиксация адаптера
         {
-            Cache.Net.AttachAdapter();
+            if (!IsAdapterAttached)
+                Cache.Net.AttachAdapter();
+            IsAdapterAttached = true;
         }
 
         private void AttachAdapter_Unchecked(object sender, RoutedEventArgs e) //Ослабление адаптера
         {
-            Cache.Net.DetachAdapter();
+            if (IsAdapterAttached)
+                Cache.Net.DetachAdapter();
+            IsAdapterAttached = false;
         }
 
         private void BtnSetTemp_OnClick(object sender, RoutedEventArgs e)

@@ -117,5 +117,8 @@ namespace SCME.Types.Commutation
 
         [DataMember]
         public HWModuleCommutationType CommutationType { get; set; }
+
+        [DataMember]
+        public ushort ModuleType { get; set; }
     }
 }

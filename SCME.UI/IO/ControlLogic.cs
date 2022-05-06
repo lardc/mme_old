@@ -206,11 +206,11 @@ namespace SCME.UI.IO
             return parameters;
         }
 
-        public Types.GTU.CalibrationResultGate GatePulseCalibrationGate(ushort Current)
+        public Types.GTU.CalibrationResultGate GatePulseCalibrationGate(ushort Current, TestParameters ComParams)
         {
             try
             {
-                return m_ControlClient.GatePulseCalibrationGate(Current);
+                return m_ControlClient.GatePulseCalibrationGate(Current, ComParams);
             }
             catch (FaultException<FaultData> ex)
             {
@@ -229,11 +229,11 @@ namespace SCME.UI.IO
             }
         }
 
-        public ushort GatePulseCalibrationMain(ushort Current)
+        public ushort GatePulseCalibrationMain(ushort Current, TestParameters ComParams)
         {
             try
             {
-                return m_ControlClient.GatePulseCalibrationMain(Current);
+                return m_ControlClient.GatePulseCalibrationMain(Current, ComParams);
             }
             catch (FaultException<FaultData> ex)
             {

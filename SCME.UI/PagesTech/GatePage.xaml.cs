@@ -34,7 +34,9 @@ namespace SCME.UI.PagesTech
             {
                 StandardForce = Types.Clamping.ClampingForceInternal.Custom,
                 CustomForce = 5,
-                IsHeightMeasureEnabled = false
+                IsHeightMeasureEnabled = false,
+
+                Height = (ushort)(Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? 5 : 1001)
             };
             CommType = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
             Temperature = 25;
@@ -256,7 +258,9 @@ namespace SCME.UI.PagesTech
             {
                 BlockIndex = !Cache.Clamp.clampPage.UseTmax ? Types.Commutation.HWBlockIndex.Block1 : Types.Commutation.HWBlockIndex.Block2,
                 CommutationType = ConverterUtil.MapCommutationType(CommType),
-                Position = ConverterUtil.MapModulePosition(ModPosition)
+                Position = ConverterUtil.MapModulePosition(ModPosition),
+
+                ModuleType = ClampParameters.Height
             };
             Types.VTM.TestParameters ParamSL = new Types.VTM.TestParameters
             {
@@ -336,7 +340,16 @@ namespace SCME.UI.PagesTech
         {
             try
             {
-                Types.GTU.CalibrationResultGate Result = Cache.Net.GatePulseCalibrationGate(ushort.Parse(calibrationCurrent.Text));
+                Types.Commutation.TestParameters ParamCommutation = new Types.Commutation.TestParameters
+                {
+                    BlockIndex = !Cache.Clamp.clampPage.UseTmax ? Types.Commutation.HWBlockIndex.Block1 : Types.Commutation.HWBlockIndex.Block2,
+                    CommutationType = ConverterUtil.MapCommutationType(CommType),
+                    Position = ConverterUtil.MapModulePosition(ModPosition),
+
+                    ModuleType = ClampParameters.Height
+                };
+
+                Types.GTU.CalibrationResultGate Result = Cache.Net.GatePulseCalibrationGate(ushort.Parse(calibrationCurrent.Text), ParamCommutation);
                 actualCurrent.Content = Result.Current.ToString(CultureInfo.InvariantCulture);
                 actualVoltage.Content = Result.Voltage.ToString(CultureInfo.InvariantCulture);
             }
@@ -347,7 +360,16 @@ namespace SCME.UI.PagesTech
         {
             try
             {
-                ushort Result = Cache.Net.GatePulseCalibrationMain(ushort.Parse(calibrationCurrent.Text));
+                Types.Commutation.TestParameters ParamCommutation = new Types.Commutation.TestParameters
+                {
+                    BlockIndex = !Cache.Clamp.clampPage.UseTmax ? Types.Commutation.HWBlockIndex.Block1 : Types.Commutation.HWBlockIndex.Block2,
+                    CommutationType = ConverterUtil.MapCommutationType(CommType),
+                    Position = ConverterUtil.MapModulePosition(ModPosition),
+
+                    ModuleType = ClampParameters.Height
+                };
+
+                ushort Result = Cache.Net.GatePulseCalibrationMain(ushort.Parse(calibrationCurrent.Text), ParamCommutation);
                 actualCurrent.Content = Result.ToString(CultureInfo.InvariantCulture);
                 actualVoltage.Content = "0";
             }

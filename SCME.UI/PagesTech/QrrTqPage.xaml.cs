@@ -36,7 +36,7 @@ namespace SCME.UI.PagesTech
         public QrrTqPage()
         {
             Parameters = new Types.QrrTq.TestParameters { IsEnabled = true };
-            ClampParameters = new Types.Clamping.TestParameters { StandardForce = Types.Clamping.ClampingForceInternal.Custom, CustomForce = 5 };
+            ClampParameters = new Types.Clamping.TestParameters { StandardForce = Types.Clamping.ClampingForceInternal.Custom, CustomForce = 5, Height = (ushort)(Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? 5 : 1001) };
             CommType = Settings.Default.ClampingSystemType != Types.Clamping.ClampingSystemType.Module ? Types.Commutation.ModuleCommutationType.Direct : Types.Commutation.ModuleCommutationType.MD1;
             Temperature = RoomTemp;
 
@@ -261,7 +261,9 @@ namespace SCME.UI.PagesTech
                                  {
                                      BlockIndex = (!Cache.Clamp.clampPage.UseTmax) ? Types.Commutation.HWBlockIndex.Block1 : Types.Commutation.HWBlockIndex.Block2,
                                      CommutationType = ConverterUtil.MapCommutationType(CommType),
-                                     Position = ConverterUtil.MapModulePosition(ModPosition)
+                                     Position = ConverterUtil.MapModulePosition(ModPosition),
+
+                                     ModuleType = ClampParameters.Height
                                  }, ClampParameters, paramTOU))
                 return;
 

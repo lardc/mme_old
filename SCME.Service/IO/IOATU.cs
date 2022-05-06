@@ -278,7 +278,7 @@ namespace SCME.Service.IO
                 else
                 {
                     //перед каждым измерением выполняем включение специальной коммутации для блока ATU для подключения требуемого измерительного блока к испытуемому прибору
-                    if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.ATU, Commutation.CommutationType, Commutation.Position) == Types.DeviceState.Fault)
+                    if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.ATU, Commutation.CommutationType, Commutation.Position, Commutation.ModuleType) == Types.DeviceState.Fault)
                     {
                         m_State = Types.DeviceState.Fault;
                         //раз коммутация не удалась - выставляем значения всех измеряемых параметров в ноль

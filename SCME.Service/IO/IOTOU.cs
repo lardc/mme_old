@@ -316,7 +316,7 @@ namespace SCME.Service.IO
                 }
                 else
                 {
-                    if (ActiveCommutation.Switch(Types.Commutation.CommutationMode.TOU, Commutation.CommutationType, Commutation.Position) == DeviceState.Fault)
+                    if (ActiveCommutation.Switch(Types.Commutation.CommutationMode.TOU, Commutation.CommutationType, Commutation.Position, Commutation.ModuleType) == DeviceState.Fault)
                     {
                         _State = DeviceState.Fault;
                         FireTOUEvent(_State, _Result);

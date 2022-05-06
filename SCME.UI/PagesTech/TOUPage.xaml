@@ -120,24 +120,27 @@
                           ItemsSource="{Binding Source={StaticResource DataFromModulePositionEnum}}"
                           SelectedItem="{Binding Position, Converter={StaticResource E2S}}" />
 
-                <Label Content="{x:Static res:Resources.Height_Prof}" Grid.Column="0" Grid.Row="10" HorizontalAlignment="Left" />
+                    <Label Content="{x:Static res:Resources.Height_Prof}" Grid.Column="0" Grid.Row="10" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
                 <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="10" 
                           TextBlock.TextAlignment="Right" IsNumeric="True" Maximum="{StaticResource MaxHeightCS}" Minimum="{StaticResource MinHeightCS}"
-                          Text="{Binding Clamping.Height}" />
+                          Text="{Binding Clamping.Height}" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
 
-                <Label Grid.Column="0" Grid.Row="11" Content="{x:Static res:Resources.Force}" HorizontalAlignment="Left" />
+                    <Label Grid.Column="0" Grid.Row="11" Content="{x:Static res:Resources.Force}" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
                 <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="11"
                           TextBlock.TextAlignment="Right" Maximum="{StaticResource MaxForceCS}" Minimum="{StaticResource MinForceCS}"
                           IsNumeric="True" IsFloat="True"
-                          Text="{Binding Clamping.CustomForce}" />
+                          Text="{Binding Clamping.CustomForce}" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
 
-                <Label Content="{x:Static res:Resources.Temp}"  Grid.Column="0"  Grid.Row="12" HorizontalAlignment="Left" />
+                    <Label Content="Тип модуля" Visibility="{Binding Source={StaticResource VisibilityModuleType}}" HorizontalAlignment="Left" Grid.Row="11" Grid.Column="0" Foreground="Black"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource ModuleTypes}}" SelectedValue="{Binding Clamping.Height, Converter={StaticResource ModuleTypeConverter}}" SelectedValuePath="Value" DisplayMemberPath="Key" Grid.Row="11" Grid.Column="1" Visibility="{Binding Source={StaticResource VisibilityModuleType}}"/>
+
+                    <Label Content="{x:Static res:Resources.Temp}"  Grid.Column="0"  Grid.Row="12" HorizontalAlignment="Left" />
                 <customControls:ValidatingTextBox Grid.Column="1" Grid.Row="12"  
                           TextBlock.TextAlignment="Right" IsNumeric="True" Maximum="{StaticResource MaxTempCS}" Minimum="{StaticResource MinTempCS}" 
                           Text="{Binding Temperature}" />
 
-                <Label Grid.Column="0" x:Name="lblTitleTop" Grid.Row="13" Content="{x:Static res:Resources.TopTempName}" HorizontalAlignment="Left" />
-                    <Label Grid.Column="1" Grid.Row="13" Content="0" x:Name="TopTempLabel"  Background="LightGreen"  HorizontalContentAlignment="Right"  />
+                    <Label Grid.Column="0" x:Name="lblTitleTop" Grid.Row="13" Content="{x:Static res:Resources.TopTempName}" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource VisibilityTopTemp}}"/>
+                    <Label Grid.Column="1" Grid.Row="13" Content="0" x:Name="TopTempLabel"  Background="LightGreen"  HorizontalContentAlignment="Right" Visibility="{Binding Source={StaticResource VisibilityTopTemp}}"/>
 
                 <Label Grid.Column="0" x:Name="lblTitleBot" Grid.Row="14" Content="{x:Static res:Resources.BotTempName}" HorizontalAlignment="Left"/>
                     <Label Grid.Column="1" x:Name="BotTempLabel" Grid.Row="14" Content="0" Background="LightGreen" HorizontalContentAlignment="Right"  />

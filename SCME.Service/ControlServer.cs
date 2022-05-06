@@ -105,14 +105,14 @@ namespace SCME.Service
 //            return initializationResponse;
         }
 
-        Types.GTU.CalibrationResultGate IExternalControl.GatePulseCalibrationGate(ushort Current)
+        Types.GTU.CalibrationResultGate IExternalControl.GatePulseCalibrationGate(ushort Current, TestParameters ComParams)
         {
-            return _IoMain.GatePulseCalibrationGate(Current);
+            return _IoMain.GatePulseCalibrationGate(Current, ComParams);
         }
 
-        ushort IExternalControl.GatePulseCalibrationMain(ushort Current)
+        ushort IExternalControl.GatePulseCalibrationMain(ushort Current, TestParameters ComParams)
         {
-            return _IoMain.GatePulseCalibrationMain(Current);
+            return _IoMain.GatePulseCalibrationMain(Current, ComParams);
         }
 
         void IExternalControl.GateWriteCalibrationParameters(Types.GTU.CalibrationParameters Parameters)

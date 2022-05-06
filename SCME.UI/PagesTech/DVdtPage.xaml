@@ -99,6 +99,10 @@
                 <customControls:ValidatingTextBox Text="{Binding Temperature, ElementName=dVdtPage}" IsNumeric="True" Minimum="{StaticResource MinTempCS}" Maximum="{StaticResource MaxTempCS}" TextAlignment="Right" Grid.Row="7" Grid.Column="1" Padding="5"/>
                 <Label Content="{x:Static res:Resources.Force}" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource VisibilityHeightForce}}"/>
                 <customControls:ValidatingTextBox Text="{Binding ClampParameters.CustomForce, ElementName=dVdtPage}" IsNumeric="True"  Minimum="{StaticResource MinForceCS}" Maximum="{StaticResource MaxForceCS}" TextAlignment="Right" Grid.Row="8" Grid.Column="1"  Visibility="{Binding Source={StaticResource VisibilityHeightForce}}" Padding="5"/>
+
+                <Label Content="Тип модуля" Visibility="{Binding Source={StaticResource VisibilityModuleType}}" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left" Foreground="Black"/>
+                <ComboBox ItemsSource="{Binding Source={StaticResource ModuleTypes}}" SelectedValue="{Binding ClampParameters.Height, ElementName=dVdtPage, Converter={StaticResource ModuleTypeConverter}}" SelectedValuePath="Value" DisplayMemberPath="Key" Grid.Row="8" Grid.Column="1" Visibility="{Binding Source={StaticResource VisibilityModuleType}}"/>
+
                 <Label x:Name="lblTitleTop" Content="{x:Static res:Resources.TopTempName}" Grid.Row="9" Grid.Column="0" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource VisibilityTopTemp}}"/>
                 <Label x:Name="TopTempLabel" Content="0" Grid.Row="9" Grid.Column="1" Background="LightGreen" Visibility="{Binding Source={StaticResource VisibilityTopTemp}}" Padding="0,0,10,0"/>
                 <Label x:Name="lblTitleBot" Content="{x:Static res:Resources.BotTempName}" Grid.Row="10" Grid.Column="0" HorizontalAlignment="Left"/>

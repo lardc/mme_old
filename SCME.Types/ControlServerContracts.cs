@@ -59,11 +59,11 @@ namespace SCME.Types
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]
-        GTU.CalibrationResultGate GatePulseCalibrationGate(ushort Current);
+        GTU.CalibrationResultGate GatePulseCalibrationGate(ushort Current, TestParameters ComParams);
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]
-        ushort GatePulseCalibrationMain(ushort Current);
+        ushort GatePulseCalibrationMain(ushort Current, TestParameters ComParams);
 
         [OperationContract]
         [FaultContract(typeof(FaultData))]

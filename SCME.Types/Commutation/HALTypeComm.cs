@@ -64,12 +64,19 @@ namespace SCME.Types.Commutation
 
     public enum ModuleType
     {
+        [EnumMember]
         A2 = 1001,
+        [EnumMember]
         C1 = 1002,
+        [EnumMember]
         E0 = 1003,
+        [EnumMember]
         F1 = 1004,
+        [EnumMember]
         D0 = 1005,
+        [EnumMember]
         B1 = 1006,
+        [EnumMember]
         Validation = 1007
     }
 

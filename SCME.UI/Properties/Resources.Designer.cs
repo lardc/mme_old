@@ -70,7 +70,7 @@ namespace SCME.UI.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Actual voltage, V.
+        ///   Ищет локализованную строку, похожую на Actual voltage, mV.
         /// </summary>
         public static string ActualVoltage {
             get {

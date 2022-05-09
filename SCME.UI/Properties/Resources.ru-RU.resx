@@ -859,7 +859,7 @@
     <value>Измеренный ток, мА</value>
   </data>
   <data name="ActualVoltage" xml:space="preserve">
-    <value>Измеренное напряжение, В</value>
+    <value>Измеренное напр., мВ</value>
   </data>
   <data name="NominalCurrent_mA" xml:space="preserve">
     <value>Номинальный ток, мА</value>

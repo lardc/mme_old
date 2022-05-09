@@ -172,6 +172,27 @@ namespace SCME.Service.IO
         {
             try
             {
+                //Прибор MDTx
+                bool MDTDevice = commutation.CommutationType == HWModuleCommutationType.MDT3 ||
+                    commutation.CommutationType == HWModuleCommutationType.MDT4 ||
+                    commutation.CommutationType == HWModuleCommutationType.MDT5;
+                if (MDTDevice && commutation.Position == HWModulePosition.Position1)
+                {
+                    State = DeviceState.Success;
+                    AllEvents_Fire(State);
+                    return;
+                }
+                //Прибор MTDx
+                bool MTDDevice = commutation.CommutationType == HWModuleCommutationType.MTD3 ||
+                    commutation.CommutationType == HWModuleCommutationType.MTD4 ||
+                    commutation.CommutationType == HWModuleCommutationType.MTD5;
+                if (MTDDevice && commutation.Position == HWModulePosition.Position2)
+                {
+                    State = DeviceState.Success;
+                    AllEvents_Fire(State);
+                    return;
+                }
+
                 State = DeviceState.InProcess;
                 AllEvents_Fire(State);
                 //Переключение коммутации
@@ -344,7 +365,7 @@ namespace SCME.Service.IO
             if (!Parameter.IsIhEnabled)
                 return;
             IHEvent_Fire(DeviceState.InProcess, Result);
-            ActiveCommutation.CallAction(IOCommutation.ACT_COMM2_GATE_SL);
+            ActiveCommutation.CallAction(Settings.Default.IsCommutationType6 ? IOCommutation.ACT_COMM6_GATE_SL : IOCommutation.ACT_COMM2_GATE_SL);
             WriteRegister(REG_HOLD_WITH_SL, 1);
             CallAction(ACT_START_IH);
             #region Compatibility Registers

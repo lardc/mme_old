@@ -1174,6 +1174,9 @@ namespace SCME.UI.PagesUser
                 {
                     ResultsBVT1[bvtCounter].CurrentData.Clear();
                     ResultsBVT1[bvtCounter].VoltageData.Clear();
+                }
+                if (ResultsBVT2.Count > 0)
+                {
                     ResultsBVT2[bvtCounter].CurrentData.Clear();
                     ResultsBVT2[bvtCounter].VoltageData.Clear();
                 }

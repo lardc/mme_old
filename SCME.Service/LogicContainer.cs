@@ -911,6 +911,7 @@ namespace SCME.Service
         public bool Start(Types.GTU.TestParameters ParametersGate, Types.VTM.TestParameters ParametersSL, Types.BVT.TestParameters ParametersBvt, Types.ATU.TestParameters ParametersAtu, Types.QrrTq.TestParameters ParametersQrrTq, Types.IH.TestParameters ParametersIH, Types.RCC.TestParameters ParametersRCC, Types.Commutation.TestParameters ParametersComm, Types.Clamping.TestParameters ParametersClamp, Types.TOU.TestParameters ParametersTOU)
         {
             m_Stop = false;
+            IsStopped = false;
 
             if (m_State == DeviceState.InProcess)
             {
@@ -965,7 +966,11 @@ namespace SCME.Service
 
         public bool Start(TestParameters parametersCommutation, Types.Clamping.TestParameters parametersClamp, Types.GTU.TestParameters[] parametersGate, Types.VTM.TestParameters[] parametersSl, Types.BVT.TestParameters[] parametersBvt, Types.dVdt.TestParameters[] parametersDvDt, Types.ATU.TestParameters[] parametersAtu, Types.QrrTq.TestParameters[] parametersQrrTq, SctuTestParameters[] parametersSctu, Types.TOU.TestParameters[] parametersTOU)
         {
-            m_Stop = false;
+            if (parametersCommutation.Position == HWModulePosition.Position1)
+            {
+                m_Stop = false;
+                IsStopped = false;
+            }
 
             //наладчик в принципе не может запускать данную реализацию, но забыть включить систему безопасности он может, поэтому спасём оператора
             SetSafetyState(m_IOCommutation, true);
@@ -1101,6 +1106,11 @@ namespace SCME.Service
 
         private void MeasurementDynamicLogicRoutine(TestParameters parametersCommutation, Types.Clamping.TestParameters parametersClamp)
         {
+            bool OnePosRequested = parametersCommutation.CommutationType == HWModuleCommutationType.MT1 ||
+                                    parametersCommutation.CommutationType == HWModuleCommutationType.MD1 ||
+                                    parametersCommutation.CommutationType == HWModuleCommutationType.Direct ||
+                                    parametersCommutation.CommutationType == HWModuleCommutationType.Reverse;
+
             var res = DeviceState.Success;
 
             IOCommutation m_IOActiveCommutation = null;
@@ -1109,7 +1119,9 @@ namespace SCME.Service
                 m_IOActiveCommutation = m_IOCommutation;
             else m_IOActiveCommutation = m_IOCommutationEx;
 
-            SetSafetyState(m_IOCommutation, true);
+            //Включение шторки безопасности только для первой позиции прибора
+            if (parametersCommutation.Position == HWModulePosition.Position1)
+                SetSafetyState(m_IOCommutation, true);
 
             try
             {
@@ -1157,7 +1169,7 @@ namespace SCME.Service
 
                         foreach (var baseTestParametersAndNormativese in orderedParameters)
                         {
-                            if (m_Stop || IsStopped) continue;
+                            if (m_Stop || IsStopped) break;
 
                             var gateParams = baseTestParametersAndNormativese as Types.GTU.TestParameters;
                             if (!ReferenceEquals(gateParams, null))
@@ -1194,7 +1206,7 @@ namespace SCME.Service
                                 {
                                     if (m_ClampingSystemConnected && m_Param.IsClampEnabled && !m_Stop)
                                         m_IOClamping.ReturnForceToDefault();
-
+                                    
                                     res = m_IOBvt.Start(bvtParameters, parametersCommutation);
                                 }
                                 catch (Exception ex)
@@ -1287,12 +1299,7 @@ namespace SCME.Service
                 }
                 finally
                 {
-                    bool OnePosRequested = parametersCommutation.CommutationType == HWModuleCommutationType.MT1 ||
-                                    parametersCommutation.CommutationType == HWModuleCommutationType.MD1 ||
-                                    parametersCommutation.CommutationType == HWModuleCommutationType.Direct ||
-                                    parametersCommutation.CommutationType == HWModuleCommutationType.Reverse;
-
-                    //Сброс остановки пользователем
+                    //Сброс остановки пользователем только для второй позиции или однопозиционного прибора
                     if (parametersCommutation.Position == HWModulePosition.Position2 || OnePosRequested)
                         IsStopped = false;
 
@@ -1326,7 +1333,9 @@ namespace SCME.Service
             }
             finally
             {
-                SetSafetyState(m_IOActiveCommutation, false);
+                //Отключение шторки безопасности только для второй позиции прибора или однопозиционного прибора
+                if (parametersCommutation.Position == HWModulePosition.Position2 || OnePosRequested)
+                    SetSafetyState(m_IOActiveCommutation, false);
             }
 
             var msg = string.Format("Main testing, state - {0}", res);

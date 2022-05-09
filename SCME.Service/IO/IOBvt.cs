@@ -894,66 +894,82 @@ namespace SCME.Service.IO
                     if (bvtInputParameter.TestType == Types.BVT.BVTTestType.Both ||
                         bvtInputParameter.TestType == Types.BVT.BVTTestType.Direct)
                     {
-                        internalState = Types.DeviceState.InProcess;
-                        FireBvtEvent(internalState, m_Result, BVTTestType.Direct, bvtInputParameter.IsUdsmUrsm);
-
-                        if (m_IOCommutation.Switch( commutation.CommutationType == HWModuleCommutationType.Reverse ?
-                            CommutationMode.BVTR : CommutationMode.BVTD
-                                , commutation.CommutationType, commutation.Position, commutation.ModuleType) ==
-                            Types.DeviceState.Fault)
-                        {
-                            m_State = Types.DeviceState.Fault;
-                            FireBvtAllEvent(m_State);
-                            return;
-                        }
-
-                        WriteRegister(REG_LIMIT_VOLTAGE, bvtInputParameter.VoltageLimitD);
-                        WriteRegister(REG_MEASUREMENT_TYPE, MEASURE_TYPE_AC_D);
-
-                        CallAction(ACT_START_TEST);
-
-                        if (!m_IsBVTEmulation)
-                        {
-                            internalState = WaitForEndOfTest();
-
-                            if (bvtInputParameter.IsUdsmUrsm)
-                            {
-                                m_Result.VDSM = (ushort)Math.Abs(ReadRegisterS(REG_RESULT_V));
-                                m_Result.IDSM = Math.Abs(ReadRegisterS(REG_RESULT_I) / 10.0f);
-                            }
-                            else
-                            {
-                                m_Result.VDRM = (ushort)Math.Abs(ReadRegisterS(REG_RESULT_V));
-                                m_Result.IDRM = Math.Abs(ReadRegisterS(REG_RESULT_I) / 10.0f);
-                            }
-
-                            if (m_ReadGraph)
-                                ReadArrays(m_Result, true);
-                        }
+                        //Прибор MDTx
+                        bool MDTDevice = commutation.CommutationType == HWModuleCommutationType.MDT3 ||
+                            commutation.CommutationType == HWModuleCommutationType.MDT4 ||
+                            commutation.CommutationType == HWModuleCommutationType.MDT5;
+                        //Прибор MTDx
+                        bool MTDDevice = commutation.CommutationType == HWModuleCommutationType.MTD3 ||
+                            commutation.CommutationType == HWModuleCommutationType.MTD4 ||
+                            commutation.CommutationType == HWModuleCommutationType.MTD5;
+                        //Нет необходимости замера прямого теста
+                        if (MDTDevice && commutation.Position == HWModulePosition.Position1 ||
+                            MTDDevice && commutation.Position == HWModulePosition.Position2)
+                            internalState = Types.DeviceState.Success;
+                        
                         else
                         {
-                            internalState = Types.DeviceState.Success;
+                            internalState = Types.DeviceState.InProcess;
+                            FireBvtEvent(internalState, m_Result, BVTTestType.Direct, bvtInputParameter.IsUdsmUrsm);
 
-                            if (bvtInputParameter.IsUdsmUrsm)
+                            if (m_IOCommutation.Switch(commutation.CommutationType == HWModuleCommutationType.Reverse ?
+                                CommutationMode.BVTR : CommutationMode.BVTD
+                                    , commutation.CommutationType, commutation.Position, commutation.ModuleType) ==
+                                Types.DeviceState.Fault)
                             {
-                                m_Result.VDSM = Convert.ToUInt16(EMU_DEFAULT_VDRM * new Random((int)DateTime.Now.Ticks).NextDouble());
-                                m_Result.IDSM = Convert.ToUInt16(EMU_DEFAULT_IDRM * 300 * new Random((int)DateTime.Now.Ticks).NextDouble());
+                                m_State = Types.DeviceState.Fault;
+                                FireBvtAllEvent(m_State);
+                                return;
+                            }
+
+                            WriteRegister(REG_LIMIT_VOLTAGE, bvtInputParameter.VoltageLimitD);
+                            WriteRegister(REG_MEASUREMENT_TYPE, MEASURE_TYPE_AC_D);
+
+                            CallAction(ACT_START_TEST);
+
+                            if (!m_IsBVTEmulation)
+                            {
+                                internalState = WaitForEndOfTest();
+
+                                if (bvtInputParameter.IsUdsmUrsm)
+                                {
+                                    m_Result.VDSM = (ushort)Math.Abs(ReadRegisterS(REG_RESULT_V));
+                                    m_Result.IDSM = Math.Abs(ReadRegisterS(REG_RESULT_I) / 10.0f);
+                                }
+                                else
+                                {
+                                    m_Result.VDRM = (ushort)Math.Abs(ReadRegisterS(REG_RESULT_V));
+                                    m_Result.IDRM = Math.Abs(ReadRegisterS(REG_RESULT_I) / 10.0f);
+                                }
+
+                                if (m_ReadGraph)
+                                    ReadArrays(m_Result, true);
                             }
                             else
                             {
-                                m_Result.VDRM = Convert.ToUInt16(EMU_DEFAULT_VDRM * new Random((int)DateTime.Now.Ticks).NextDouble());
-                                m_Result.IDRM = Convert.ToUInt16(EMU_DEFAULT_IDRM * 300 * new Random((int)DateTime.Now.Ticks).NextDouble());
+                                internalState = Types.DeviceState.Success;
+
+                                if (bvtInputParameter.IsUdsmUrsm)
+                                {
+                                    m_Result.VDSM = Convert.ToUInt16(EMU_DEFAULT_VDRM * new Random((int)DateTime.Now.Ticks).NextDouble());
+                                    m_Result.IDSM = Convert.ToUInt16(EMU_DEFAULT_IDRM * 300 * new Random((int)DateTime.Now.Ticks).NextDouble());
+                                }
+                                else
+                                {
+                                    m_Result.VDRM = Convert.ToUInt16(EMU_DEFAULT_VDRM * new Random((int)DateTime.Now.Ticks).NextDouble());
+                                    m_Result.IDRM = Convert.ToUInt16(EMU_DEFAULT_IDRM * 300 * new Random((int)DateTime.Now.Ticks).NextDouble());
+                                }
                             }
-                        }
 
-                        FireBvtEvent(internalState, m_Result, BVTTestType.Direct, bvtInputParameter.IsUdsmUrsm);
+                            FireBvtEvent(internalState, m_Result, BVTTestType.Direct, bvtInputParameter.IsUdsmUrsm);
 
 
-                        if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.None) == Types.DeviceState.Fault)
-                        {
-                            m_State = Types.DeviceState.Fault;
-                            FireBvtAllEvent(m_State);
-                            return;
+                            if (m_IOCommutation.Switch(Types.Commutation.CommutationMode.None) == Types.DeviceState.Fault)
+                            {
+                                m_State = Types.DeviceState.Fault;
+                                FireBvtAllEvent(m_State);
+                                return;
+                            }
                         }
                     }
                     else

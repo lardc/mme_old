@@ -549,11 +549,11 @@ namespace SCME.Service.IO
                         break;
                     case Types.Commutation.CommutationMode.DVDT:
                         //для dvdt может быть только коммутация ACT_COMM2_DVDT
-                        CallAction(ACT_COMM2_DVDT);
+                        CallAction(m_Type6 ? ACT_COMM6_NO_PE : ACT_COMM2_DVDT);
                         break;
                     case Types.Commutation.CommutationMode.ATU:
                         //для ATU может быть только коммутация ACT_COMM2_ATU
-                        CallAction(ACT_COMM2_ATU);
+                        CallAction(m_Type6 ? ACT_COMM6_NO_PE : ACT_COMM2_ATU);
                         break;
                     case Types.Commutation.CommutationMode.RAC:
                         //для RAC (сделан на блоке BVT) может быть только коммутация ACT_COMM2_BVT_D
@@ -561,7 +561,7 @@ namespace SCME.Service.IO
                         break;
                     case Types.Commutation.CommutationMode.TOU:
                         //для TOU может быть только коммутация ACT_COMM2_TOU
-                        CallAction(ACT_COMM2_TOU);
+                        CallAction(m_Type6 ? ACT_COMM6_NO_PE : ACT_COMM2_TOU);
                         break;
                 }
 
@@ -663,6 +663,8 @@ namespace SCME.Service.IO
             ACT_COMM6_SL = 122,
             ACT_COMM6_BVT_D = 123,
             ACT_COMM6_BVT_R = 124,
+            ACT_COMM6_NO_PE = 125,
+            ACT_COMM6_GATE_SL = 126,
             ACT_COMM2_RCC = 127,
 
             REG_DEVICE_STATE = 96,

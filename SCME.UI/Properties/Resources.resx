@@ -884,7 +884,7 @@
     <value>Actual current, mA</value>
   </data>
   <data name="ActualVoltage" xml:space="preserve">
-    <value>Actual voltage, V</value>
+    <value>Actual voltage, mV</value>
   </data>
   <data name="NominalCurrent_mA" xml:space="preserve">
     <value>Nominal current, mA</value>

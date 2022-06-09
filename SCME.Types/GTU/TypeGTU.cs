@@ -164,6 +164,7 @@ namespace SCME.Types.GTU
             TestParametersType = TestParametersType.GTU;
             IsEnabled = true;
             Resistance = 100;
+            MinIGT = 60;
             IGT = 500;
             VGT = 2.5f;
             IH = 150;

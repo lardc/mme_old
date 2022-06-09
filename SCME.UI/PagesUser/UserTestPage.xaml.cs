@@ -1169,6 +1169,9 @@ namespace SCME.UI.PagesUser
             {
                 bvtCounter++;
 
+                if (!Cache.Main.mainFrame.Content.Equals(Cache.UserTest))
+                    return;
+
                 //Сброс эндпоинтов для отправки ВАХ
                 if (ResultsBVT1.Count > 0)
                 {

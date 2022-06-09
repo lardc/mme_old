@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using PropertyChanged;
 using SCME.Types.BaseTestParams;
 
 namespace SCME.Types.VTM
@@ -151,6 +152,7 @@ namespace SCME.Types.VTM
 
     [DataContract(Name = "Vtm.TestParameters",Namespace = "http://proton-electrotex.com/SCME")]
     [KnownType(typeof(BaseTestParametersAndNormatives))]
+    [AddINotifyPropertyChangedInterface]
     public class TestParameters : BaseTestParametersAndNormatives, ICloneable
     {
         [DataMember]
@@ -202,6 +204,7 @@ namespace SCME.Types.VTM
         public ushort Count { get; set; }
 
         [DataMember]
+        [OnChangedMethod(nameof(OnVTMChanged))]
         public float VTM { get; set; }
 
         [DataMember]
@@ -253,7 +256,6 @@ namespace SCME.Types.VTM
             return false;
         }
 
-
         public TestParameters()
         {
             IsEnabled = false;
@@ -281,7 +283,11 @@ namespace SCME.Types.VTM
             return MemberwiseClone();
         }
 
-
+        private void OnVTMChanged()
+        {
+            if (VTM >= 2)
+                UseFullScale = true;
+        }
     }
 
     [DataContract(Namespace = "http://proton-electrotex.com/SCME")]

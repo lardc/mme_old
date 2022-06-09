@@ -135,8 +135,8 @@ namespace SCME.Types.BVT
             UdsmUrsmVoltageLimitD = VoltageLimitD = 1000;
             UdsmUrsmVoltageLimitR = VoltageLimitR = 1000;
             UdsmUrsmCurrentLimit = CurrentLimit = 5;
-            UdsmUrsmPlateTime = PlateTime = 1000;
-            UdsmUrsmRampUpVoltage = RampUpVoltage = 2;
+            UdsmUrsmPlateTime = PlateTime = 800;
+            UdsmUrsmRampUpVoltage = RampUpVoltage = 1;
             UdsmUrsmStartVoltage = StartVoltage = 500;
             UdsmUrsmVoltageFrequency = VoltageFrequency = 50;
             UdsmUrsmFrequencyDivisor = FrequencyDivisor = 1;

@@ -75,7 +75,7 @@ namespace SCME.Types.Commutation
         [EnumMember]
         D0 = 1005,
         [EnumMember]
-        B1 = 1006,
+        B0 = 1006,
         [EnumMember]
         Validation = 1007
     }

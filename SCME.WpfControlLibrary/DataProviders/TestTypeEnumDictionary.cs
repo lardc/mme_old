@@ -193,7 +193,7 @@ namespace SCME.WpfControlLibrary.DataProviders
 
         public static Visibility GetVisibilityModuleType()
         {
-            return Settings.Default.ClampingSystemType == ClampingSystemType.Module ? Visibility.Visible : Visibility.Collapsed;
+            return Settings.Default.ClampingSystemType == ClampingSystemType.Module || Settings.Default.ClampingSystemType == ClampingSystemType.Ignored ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public static Dictionary<string, ModuleType> GetModuleTypes()
@@ -205,7 +205,7 @@ namespace SCME.WpfControlLibrary.DataProviders
                 {nameof(ModuleType.E0), ModuleType.E0},
                 {nameof(ModuleType.F1), ModuleType.F1},
                 {nameof(ModuleType.D0), ModuleType.D0},
-                {nameof(ModuleType.B1), ModuleType.B1},
+                {nameof(ModuleType.B0), ModuleType.B0},
                 {"Аттестация", ModuleType.Validation}
             };
         }

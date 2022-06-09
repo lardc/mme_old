@@ -394,7 +394,7 @@
     <value>ОК</value>
   </data>
   <data name="ParameterType" xml:space="preserve">
-    <value>Параметр</value>
+    <value>Блок</value>
   </data>
   <data name="PartyNumber" xml:space="preserve">
     <value>Номер ЗНП</value>
